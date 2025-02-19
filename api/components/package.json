@@ -19,6 +19,7 @@
     "js-yaml": "^4.1.0",
     "json-schema-ref-parser": "^9.0.9",
     "node-xlsx": "^0.24.0",
+    "nodemon": "^3.1.9",
     "swagger-cli": "^4.0.4"
   }
 }
