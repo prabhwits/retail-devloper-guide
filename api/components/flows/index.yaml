@@ -1,0 +1,7 @@
+- $ref: "./B2C-Exports/order_delivered.yaml"
+# - $ref: "./B2C-Exports/merchant_cancels_order.yaml"
+# - $ref: "./B2C-Exports/buyer_cancels_order.yaml"
+# - $ref: "./B2C-Exports/incremental_catalog_one_time_push.yaml"
+# - $ref: "./B2C-Exports/incremental_catalog_regular_push.yaml"
+# - $ref: "./B2C-Exports/item_not_in_stock.yaml"
+# - $ref: "./B2C-Exports/location_not_serviceable.yaml"

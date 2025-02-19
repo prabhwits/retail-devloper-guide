@@ -1,0 +1,48 @@
+search:
+  examples:
+    - $ref: ./01_search_full_catalog_refresh.yaml
+
+on_search:
+  examples:
+      - $ref: ./02_on_search_full_catalog_refresh.yaml
+
+select:
+  examples:
+      - $ref: ./03_select.yaml
+
+on_select:
+  examples:
+      - $ref: ./04_on_select.yaml
+
+init:
+  examples:
+      - $ref: ./05_init.yaml
+
+on_init:
+  examples:
+      - $ref: ./06_on_init.yaml
+
+confirm:
+  examples:
+    confirm:
+      - $ref: ./07_confirm.yaml
+
+on_confirm:
+  examples:
+      - $ref: ./08_on_confirm.yaml
+
+on_status:
+  examples:
+      - $ref: ./09_on_status_packed.yaml
+      - $ref: ./10_01_on_status_agent_assigned.yaml
+      - $ref: ./10_on_status_picked.yaml
+      - $ref: ./11_on_status_out_for_delivery.yaml
+      - $ref: ./12_on_status_delivered.yaml
+
+track:
+  examples:
+      - $ref: ./13_track.yaml
+
+on_track:
+  examples:
+      - $ref: ./14_on_track.yaml
