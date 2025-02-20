@@ -1,4 +1,4 @@
-summary: Retail 1.2.0 Exports (Order Delivered)
+summary: Retail 1.2.0 (Order Delivered)
 description: The following is an illustrative flow to perform a transaction of a nature where a buyer from outside India would like to order item from a seller within India. Considering this is an exports the payment will be directly made from buyer to SOR (Seller On Record) through OPGSP. Ref Feature UI (OPGSP Payment Flow) for more details.
 details:
   - description: Buyer Search & Quotation
@@ -19,7 +19,7 @@ details:
         participant B2C BAP
         participant B2C BPP
 
-        B2C BAP ->> B2C BPP: **/select** - Buyer adds the item(s) to the card.
+        B2C BAP ->> B2C BPP: **/select** - Buyer adds the item(s) to the cart.
         B2C BPP ->> B2C BAP: **/on_select** - Returns quote breakup (adding offers if any) when item is in stock 
 
         B2C BAP ->> B2C BPP: **/init** - Buyer initializes the order and proceeds to checkout.
@@ -45,6 +45,31 @@ details:
         B2C BPP ->> B2C BAP: **/on_status** - Status Updates - At Destination Hub
         B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Out for Delivery
         B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Delivered
+  - description: Status updates till Product Delivery
+    mermaidGraph: >-
+      sequenceDiagram
+        participant Buyer NP
+        participant Seller NP
+
+        %% Pre-order APIs
+        Buyer NP->>Seller NP: **/search** - Specifies search intent
+        Seller NP->>Buyer NP: **/on_search** - Responds with catalog
+        Buyer NP->>Seller NP: **/select** - Specifies selected items & quantity
+        Seller NP->>Buyer NP: **/on_select** - Responds with serviceability info, quote & O2D TAT
+        Buyer NP->>Seller NP: **/init** - Specifies order terms & conditions
+        Seller NP->>Buyer NP: **/on_init** - Agrees to terms & conditions
+        Buyer NP->>Seller NP: **/confirm** - Places order on behalf of buyer
+        Seller NP->>Buyer NP: **/on_confirm** - Responds with acceptance or rejection
+
+        %% Post-order APIs
+        Buyer NP->>Seller NP: **/status** - Requests order status
+        Seller NP->>Buyer NP: **/on_status** - Provides current order status
+        Buyer NP->>Seller NP: **/cancel** - Places cancellation request
+        Seller NP->>Buyer NP: **/on_cancel** - Responds to cancellation request
+        Buyer NP->>Seller NP: **/update** - Initiates part return/cancel request
+        Seller NP->>Buyer NP: **/on_update** - Responds to part return/cancel request
+        Buyer NP->>Seller NP: **/track** - Requests live tracking
+        Seller NP->>Buyer NP: **/on_track** - Provides live tracking details
 
 reference: if any
 # steps:

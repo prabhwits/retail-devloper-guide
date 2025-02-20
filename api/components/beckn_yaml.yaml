@@ -401,53 +401,52 @@ paths:
                     $ref: '#/components/schemas/Error'
                 required:
                   - message
-  /support:
-    post:
-      tags:
-        - ONDC Seller App
-      description: Contact support
-      requestBody:
-        description: Buyer searches for Support Contact details
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    ref_id:
-                      type: string
-                      description: ID of the element for which support is needed
-              required:
-                - context
-                - message
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
+  # /support:
+  #   post:
+  #     tags:
+  #       - ONDC Seller App
+  #     description: Contact support
+  #     requestBody:
+  #       description: Buyer searches for Support Contact details
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                 $ref: '#/components/schemas/Context'
+  #               message:
+  #                 type: object
+  #                 properties:
+  #                   ref_id:
+  #                     type: string
+  #                     description: ID of the element for which support is needed
+  #             required:
+  #               - context
+  #               - message
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
   /on_search:
     post:
       tags:
         - ONDC Buyer App
-        - ONDC Gateway
       description: Send catalog
       requestBody:
         description: Sellers provide their catalog in response to buyer search
@@ -835,413 +834,414 @@ paths:
                     $ref: '#/components/schemas/Error'
                 required:
                   - message
-  /on_support:
-    post:
-      tags:
-        - ONDC Buyer App
-      description: Contact Support
-      requestBody:
-        description: Seller provides Contact Support details
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    phone:
-                      type: string
-                      format: phone
-                    email:
-                      type: string
-                      format: email
-                    uri:
-                      type: string
-                      format: uri
-                error:
-                  $ref: '#/components/schemas/Error'
-              required:
-                - context
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
-  /get_cancellation_reasons:
-    post:
-      tags:
-        - Seller App Meta APIs
-      description: Get cancellation reasons from the Seller App
-      requestBody:
-        description: Context header is sent as the request
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
-  /cancellation_reasons:
-    post:
-      tags:
-        - Buyer App Meta APIs
-      description: Get cancellation reasons from the Seller App
-      requestBody:
-        description: List of cancellation reasons.
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                    $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    cancellation_reasons:
-                      type: array
-                      items:
-                          $ref: '#/components/schemas/Option'
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
-  /get_return_reasons:
-    post:
-      tags:
-        - Seller App Meta APIs
-      description: Get return reasons from the Seller App
-      requestBody:
-        description: Context header is sent as the request
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
-  /return_reasons:
-    post:
-      tags:
-        - Buyer App Meta APIs
-      description: Get return reasons from the Seller App
-      requestBody:
-        description: List of return reasons
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                    $ref: '#/components/schemas/Context'
-                return_reasons:
-                  type: array
-                  items:
-                      $ref: '#/components/schemas/Option'
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
-  /get_rating_categories:
-    post:
-      tags:
-        - Seller App Meta APIs
-      description: Get a list of categories that can be rated by the Seller App
-      requestBody:
-        description: Context header is sent as the request
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                    $ref: '#/components/schemas/Context'
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
-  /rating_categories:
-    post:
-      tags:
-        - Buyer App Meta APIs
-      description: Get a list of categories that can be rated by the Buyer App
-      requestBody:
-        description: Array of categories which can be rated
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                    $ref: '#/components/schemas/Context'
-                rating_categories:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Rating/properties/rating_category'
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
-  /get_feedback_categories:
-    post:
-      tags:
-        - Seller Meta APIs
-      description: Get a list of categories for which feedback can be given by the Buyer App
-      requestBody:
-        description: Context header is sent as the request
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                    $ref: '#/components/schemas/Context'
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
-  /feedback_categories:
-    post:
-      tags:
-        - Buyer App Meta APIs
-      description: Get a list of categories for which feedback can be given by the Buyer App
-      requestBody:
-        description: Array of categories for which feedback can be given by the Buyer App
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                    $ref: '#/components/schemas/Context'
-                feedback_categories:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Rating/properties/rating_category'
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
-  /get_feedback_form:
-    post:
-      tags:
-        - Seller App Meta APIs
-      description: Request a feedback form from the Seller App
-      requestBody:
-        description: The rating value and category is sent by the Buyer App
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    rating_value:
-                      $ref: '#/components/schemas/Rating/properties/value'
-                    rating_category:
-                      $ref: '#/components/schemas/Rating/properties/rating_category'
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
-  /feedback_form:
-    post:
-      tags:
-        - Buyer App Meta APIs
-      description: Get a feedback form from the Seller App
-      requestBody:
-        description: Feedback form sent by the Buyer App
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                    $ref: '#/components/schemas/Feedback'
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
+  # /on_support:
+  #   post:
+  #     tags:
+  #       - ONDC Buyer App
+  #     description: Contact Support
+  #     requestBody:
+  #       description: Seller provides Contact Support details
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                 $ref: '#/components/schemas/Context'
+  #               message:
+  #                 type: object
+  #                 properties:
+  #                   phone:
+  #                     type: string
+  #                     format: phone
+  #                   email:
+  #                     type: string
+  #                     format: email
+  #                   uri:
+  #                     type: string
+  #                     format: uri
+  #               error:
+  #                 $ref: '#/components/schemas/Error'
+  #             required:
+  #               - context
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
+  # /get_cancellation_reasons:
+  #   post:
+  #     tags:
+  #       - Seller App Meta APIs
+  #     description: Get cancellation reasons from the Seller App
+  #     requestBody:
+  #       description: Context header is sent as the request
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                 $ref: '#/components/schemas/Context'
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
+  # /cancellation_reasons:
+  #   post:
+  #     tags:
+  #       - Buyer App Meta APIs
+  #     description: Get cancellation reasons from the Seller App
+  #     requestBody:
+  #       description: List of cancellation reasons.
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                   $ref: '#/components/schemas/Context'
+  #               message:
+  #                 type: object
+  #                 properties:
+  #                   cancellation_reasons:
+  #                     type: array
+  #                     items:
+  #                         $ref: '#/components/schemas/Option'
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
+  # /get_return_reasons:
+  #   post:
+  #     tags:
+  #       - Seller App Meta APIs
+  #     description: Get return reasons from the Seller App
+  #     requestBody:
+  #       description: Context header is sent as the request
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                 $ref: '#/components/schemas/Context'
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
+  # /return_reasons:
+  #   post:
+  #     tags:
+  #       - Buyer App Meta APIs
+  #     description: Get return reasons from the Seller App
+  #     requestBody:
+  #       description: List of return reasons
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                   $ref: '#/components/schemas/Context'
+  #               return_reasons:
+  #                 type: array
+  #                 items:
+  #                     $ref: '#/components/schemas/Option'
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
+  # /get_rating_categories:
+  #   post:
+  #     tags:
+  #       - Seller App Meta APIs
+  #     description: Get a list of categories that can be rated by the Seller App
+  #     requestBody:
+  #       description: Context header is sent as the request
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                   $ref: '#/components/schemas/Context'
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
+  # /rating_categories:
+  #   post:
+  #     tags:
+  #       - Buyer App Meta APIs
+  #     description: Get a list of categories that can be rated by the Buyer App
+  #     requestBody:
+  #       description: Array of categories which can be rated
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                   $ref: '#/components/schemas/Context'
+  #               rating_categories:
+  #                   type: array
+  #                   items:
+  #                     $ref: '#/components/schemas/Rating/properties/rating_category'
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
+  # /get_feedback_categories:
+  #   post:
+  #     tags:
+  #       - Seller Meta APIs
+  #     description: Get a list of categories for which feedback can be given by the Buyer App
+  #     requestBody:
+  #       description: Context header is sent as the request
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                   $ref: '#/components/schemas/Context'
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
+  # /feedback_categories:
+  #   post:
+  #     tags:
+  #       - Buyer App Meta APIs
+  #     description: Get a list of categories for which feedback can be given by the Buyer App
+  #     requestBody:
+  #       description: Array of categories for which feedback can be given by the Buyer App
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                   $ref: '#/components/schemas/Context'
+  #               feedback_categories:
+  #                 type: array
+  #                 items:
+  #                   $ref: '#/components/schemas/Rating/properties/rating_category'
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
+  # /get_feedback_form:
+  #   post:
+  #     tags:
+  #       - Seller App Meta APIs
+  #     description: Request a feedback form from the Seller App
+  #     requestBody:
+  #       description: The rating value and category is sent by the Buyer App
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                 $ref: '#/components/schemas/Context'
+  #               message:
+  #                 type: object
+  #                 properties:
+  #                   rating_value:
+  #                     $ref: '#/components/schemas/Rating/properties/value'
+  #                   rating_category:
+  #                     $ref: '#/components/schemas/Rating/properties/rating_category'
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
+  # /feedback_form:
+  #   post:
+  #     tags:
+  #       - Buyer App Meta APIs
+  #     description: Get a feedback form from the Seller App
+  #     requestBody:
+  #       description: Feedback form sent by the Buyer App
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               context:
+  #                 $ref: '#/components/schemas/Context'
+  #               message:
+  #                   $ref: '#/components/schemas/Feedback'
+  #     responses:
+  #       '200':
+  #         description: Acknowledgement of message received
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: object
+  #                   properties:
+  #                     ack:
+  #                       $ref: '#/components/schemas/Ack'
+  #                   required:
+  #                     - ack
+  #                 error:
+  #                   $ref: '#/components/schemas/Error'
+  #               required:
+  #                 - message
+
 components:
   securitySchemes:
     SubscriberAuth:

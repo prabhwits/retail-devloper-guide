@@ -1,0 +1,74 @@
+summary: Retail 1.2.0 (flow - 6)
+description: Retail platforms connect buyers and sellers for smooth transactions. Search and on_search handle catalog retrieval, select and on_select manage item selection, and init and on_init confirm agreements. Confirm and on_confirm process orders, on_status provides real-time updates, and track and on_track enable live tracking.
+details:
+  - description: Buyer Search & Quotation
+    mermaidGraph: >-
+      sequenceDiagram
+
+        participant B2C BAP
+        participant Gateway
+        participant B2C BPP
+
+        B2C BAP->>Gateway: **/search**  - Buyer searches for full catalog refresh
+        Gateway->>B2C BPP: **/search**  - Buyer searches for full catalog refresh
+        B2C BPP->>B2C BAP: **/on_search** - Returns the item or catalog for the specific domain
+
+  - description: Product Selection and Confirmation
+    mermaidGraph: >-
+      sequenceDiagram
+
+        participant B2C BAP
+        participant B2C BPP
+
+        B2C BAP ->> B2C BPP: **/select** - Buyer adds the item(s) to the cart.
+        B2C BPP ->> B2C BAP: **/on_select** - Returns quote breakup (adding offers if any) when item is in stock 
+
+        B2C BAP ->> B2C BPP: **/init** - Buyer initializes the order and proceeds to checkout.
+        B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
+        
+        B2C BAP ->> B2C BPP: **/confirm** - Buyer confirms order
+        B2C BPP ->> B2C BAP: **/on_confirm** - Seller Accepts order
+  - description: Status updates till Product Delivery
+    mermaidGraph: >-
+      sequenceDiagram
+
+        participant B2C BAP
+        participant B2C BPP
+        
+        B2C BAP ->> B2C BPP: **/status** - Buyer requests for a Status update
+
+        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Packed
+        B2C BPP ->> B2C BAP: /on_status - Status Updates - Agent Assigned
+        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Picked Up
+        B2C BPP ->> B2C BAP: /on_status - Status Updates - Out for Delivery
+        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Delivered
+        B2C BPP ->> B2C BAP: /track - Tracking Initiated
+        B2C BPP ->> B2C BAP: /on_track - Real-time Tracking Updates
+
+  - description: Status updates till Product Delivery
+    mermaidGraph: >-
+      sequenceDiagram
+        participant Buyer NP
+        participant Seller NP
+
+        %% Pre-order APIs
+        Buyer NP->>Seller NP: **/search** - Specifies search intent
+        Seller NP->>Buyer NP: **/on_search** - Responds with catalog
+        Buyer NP->>Seller NP: **/select** - Specifies selected items & quantity
+        Seller NP->>Buyer NP: **/on_select** - Responds with serviceability info, quote & O2D TAT
+        Buyer NP->>Seller NP: **/init** - Specifies order terms & conditions
+        Seller NP->>Buyer NP: **/on_init** - Agrees to terms & conditions
+        Buyer NP->>Seller NP: **/confirm** - Places order on behalf of buyer
+        Seller NP->>Buyer NP: **/on_confirm** - Responds with acceptance or rejection
+
+        %% Post-order APIs
+        Buyer NP->>Seller NP: **/status** - Requests order status
+        Seller NP->>Buyer NP: **/on_status** - Provides current order status
+        Buyer NP->>Seller NP: **/cancel** - Places cancellation request
+        Seller NP->>Buyer NP: **/on_cancel** - Responds to cancellation request
+        Buyer NP->>Seller NP: **/update** - Initiates part return/cancel request
+        Seller NP->>Buyer NP: **/on_update** - Responds to part return/cancel request
+        Buyer NP->>Seller NP: **/track** - Requests live tracking
+        Seller NP->>Buyer NP: **/on_track** - Provides live tracking details
+
+reference: if any
