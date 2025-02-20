@@ -1,0 +1,16 @@
+value:
+  context:
+    domain: ONDC:RET10
+    action: track
+    country: IND
+    core_version: 1.2.0
+    bap_id: buyerNP.com
+    bap_uri: https://buyerNP.com/ondc
+    transaction_id: T1
+    message_id: M1
+    timestamp: '2024-12-10T08:49:33.284Z'
+    bpp_id: sellerNP.com
+    ttl: PT30S
+    city: std:022
+  message:
+    order_id: O1

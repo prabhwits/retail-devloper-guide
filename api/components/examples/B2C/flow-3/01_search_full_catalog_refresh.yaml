@@ -1,0 +1,20 @@
+value:
+  context:
+    domain: ONDC:RET10
+    action: search
+    country: IND
+    core_version: 1.2.0
+    bap_id: buyerNP.com
+    bap_uri: https://buyerNP.com/ondc
+    transaction_id: T1
+    message_id: M1
+    timestamp: '2024-12-19T07:09:08.876Z'
+    ttl: PT30S
+    city: std:022
+  message:
+    intent:
+      fulfillment:
+        type: Delivery
+      payment:
+        '@ondc/org/buyer_app_finder_fee_type': percent
+        '@ondc/org/buyer_app_finder_fee_amount': '3'
