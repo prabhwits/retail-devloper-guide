@@ -6,9 +6,9 @@ value:
     core_version: 1.2.0
     bap_id: buyerNP.com
     bap_uri: https://buyerNP.com/ondc
-    transaction_id: T1
+    transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
     message_id: M1
-    timestamp: '2024-12-23T06:58:35.754Z'
+    timestamp: "2024-12-23T06:58:35.754Z"
     bpp_id: sellerNP.com
     ttl: PT30S
     city: std:022
@@ -19,49 +19,49 @@ value:
         locations:
           - id: L1
       fulfillments:
-        - id: '1'
+        - id: "1"
           type: Delivery
-          '@ondc/org/provider_name': LSP or Provider Name
+          "@ondc/org/provider_name": LSP or Provider Name
           tracking: true
-          '@ondc/org/category': Immediate Delivery
-          '@ondc/org/TAT': PT60M
+          "@ondc/org/category": Immediate Delivery
+          "@ondc/org/TAT": PT60M
           state:
             descriptor:
               code: Serviceable
       quote:
         price:
-          value: '100.00'
+          value: "100.00"
           currency: INR
         breakup:
-          - '@ondc/org/item_id': P1
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": P1
+            "@ondc/org/item_quantity":
               count: 1
             title: Plain Atta
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '100.00'
+              value: "100.00"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '100.00'
-          - '@ondc/org/item_id': P1
+                value: "100.00"
+          - "@ondc/org/item_id": P1
             title: Delivery charges
-            '@ondc/org/title_type': delivery
+            "@ondc/org/title_type": delivery
             price:
               currency: INR
-              value: '00.00'
-          - '@ondc/org/item_id': P1
+              value: "00.00"
+          - "@ondc/org/item_id": P1
             title: Convenience Fee
-            '@ondc/org/title_type': misc
+            "@ondc/org/title_type": misc
             price:
               currency: INR
-              value: '00.00'
+              value: "00.00"
         ttl: P1D
       items:
         - id: P1

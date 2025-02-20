@@ -2749,7 +2749,7 @@ components:
             type: string
 x-enum:
   search:
-    context: &ref_2
+    context: &ref_1
       domain:
         - code: ONDC:RET10
           description: Grocery
@@ -2784,7 +2784,7 @@ x-enum:
     message:
       intent:
         fulfillments: &ref_0
-          type: &ref_4
+          type: &ref_3
             - code: Delivery
               description: about the enum
               reference: <PR/Issue/Discussion Links md format text>
@@ -2802,7 +2802,7 @@ x-enum:
           fulfillments: *ref_0
           items:
             quantity:
-              unitized: &ref_1
+              unitized:
                 measure:
                   unit:
                     - code: unit
@@ -2826,9 +2826,7 @@ x-enum:
                     - code: millilitre
                       description: about the enum
                       reference: <PR/Issue/Discussion Links md format text>
-              available: *ref_1
-              maximum: *ref_1
-          offers: &ref_3
+          offers: &ref_2
             descriptor:
               code:
                 - code: Disc_Pct
@@ -2844,11 +2842,11 @@ x-enum:
                   description: about the enum
                   reference: <PR/Issue/Discussion Links md format text>
   select:
-    context: *ref_2
+    context: *ref_1
     message:
       order:
-        offers: *ref_3
-        payment: &ref_7
+        offers: *ref_2
+        payment: &ref_5
           - code: ON-ORDER
             description: about the enum
             reference: <PR/Issue/Discussion Links md format text>
@@ -2859,45 +2857,82 @@ x-enum:
             description: about the enum
             reference: <PR/Issue/Discussion Links md format text>
   on_select:
-    context: *ref_2
+    context: *ref_1
     message:
       order:
         fulfillments:
-          type: *ref_4
-          instructions: &ref_10
-            code:
-              - code: 1
-                description: buyer contact no (for self-pickup)
+          state:
+            descriptor:
+              code:
+                - code: Serviceable
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: Non-Serviceable
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+        quote:
+          breakup: &ref_4
+            '@ondc/org/title_type':
+              - code: item
+                description: about the enum
                 reference: <PR/Issue/Discussion Links md format text>
-              - code: 2
-                description: merchant order no
+              - code: delivery
+                description: about the enum
                 reference: <PR/Issue/Discussion Links md format text>
-              - code: 3
-                description: other pickup confirmation code
+              - code: packing
+                description: about the enum
                 reference: <PR/Issue/Discussion Links md format text>
-              - code: 4
-                description: (OTP) required when order is "Packed"
+              - code: tax
+                description: about the enum
                 reference: <PR/Issue/Discussion Links md format text>
-          '@ondc/org/category':
-            - code: Takeaway
-              description: about the enum
-              reference: <PR/Issue/Discussion Links md format text>
-            - code: Kerbside
-              description: about the enum
-              reference: <PR/Issue/Discussion Links md format text>
-            - code: Express Delivery
-              description: about the enum
-              reference: <PR/Issue/Discussion Links md format text>
-            - code: Immediate Delivery
-              description: about the enum
-              reference: <PR/Issue/Discussion Links md format text>
-            - code: Same Day Delivery
-              description: about the enum
-              reference: <PR/Issue/Discussion Links md format text>
-            - code: Next Day Delivery
-              description: about the enum
-              reference: <PR/Issue/Discussion Links md format text>
-          state: &ref_6
+              - code: misc
+                description: about the enum
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: discount
+                description: about the enum
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: discount_f
+                description: about the enum
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: tax_f
+                description: about the enum
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: 0
+                description: about the enum
+                reference: <PR/Issue/Discussion Links md format text>
+            quantity:
+              available:
+                count:
+                  - code: 0
+                    description: about the enum
+                    reference: <PR/Issue/Discussion Links md format text>
+                  - code: 99
+                    description: about the enum
+                    reference: <PR/Issue/Discussion Links md format text>
+              maximum:
+                count:
+                  - code: 0
+                    description: about the enum
+                    reference: <PR/Issue/Discussion Links md format text>
+                  - code: 10
+                    description: it will be reasonable number count
+                    reference: <PR/Issue/Discussion Links md format text>
+  init:
+    context: *ref_1
+    message:
+      order:
+        fulfillments:
+          type: *ref_3
+  on_init:
+    context: *ref_1
+    message:
+      order:
+        fulfillment:
+          type: *ref_3
+        quote:
+          breakup: *ref_4
+        cancellation_terms:
+          fulfillment_state: &ref_6
             descriptor:
               code:
                 - code: Pending
@@ -2960,79 +2995,101 @@ x-enum:
                 - code: RTO-Disposed
                   description: about the enum
                   reference: <PR/Issue/Discussion Links md format text>
-        quote:
-          breakup: &ref_5
-            '@ondc/org/title_type':
-              - code: item
+        payment: &ref_7
+          type: *ref_5
+          '@ondc/org/settlement_details':
+            settlement_type:
+              - code: upi
                 description: about the enum
                 reference: <PR/Issue/Discussion Links md format text>
-              - code: delivery
+              - code: neft
                 description: about the enum
                 reference: <PR/Issue/Discussion Links md format text>
-              - code: packing
+              - code: rtgs
                 description: about the enum
                 reference: <PR/Issue/Discussion Links md format text>
-              - code: tax
-                description: about the enum
-                reference: <PR/Issue/Discussion Links md format text>
-              - code: misc
-                description: about the enum
-                reference: <PR/Issue/Discussion Links md format text>
-              - code: discount
-                description: about the enum
-                reference: <PR/Issue/Discussion Links md format text>
-              - code: discount_f
-                description: about the enum
-                reference: <PR/Issue/Discussion Links md format text>
-              - code: tax_f
-                description: about the enum
-                reference: <PR/Issue/Discussion Links md format text>
-  init:
-    context: *ref_2
-    message:
-      order:
-        fulfillments:
-          type: *ref_4
-  on_init:
-    context: *ref_2
-    message:
-      order:
-        fulfillment:
-          type: *ref_4
-        quote:
-          breakup: *ref_5
-        cancellation_terms:
-          fulfillment_state: *ref_6
-        payment: &ref_8
-          payment:
-            type: *ref_7
-            '@ondc/org/settlement_details':
-              settlement_type:
-                - code: SWIFT
-                  description: about the enum
-                  reference: <PR/Issue/Discussion Links md format text>
-                - code: OPGSP
-                  description: about the enum
-                  reference: <PR/Issue/Discussion Links md format text>
-            collected_by:
-              - code: BAP
-                description: Collected by BAP
-                reference: <PR/Issue/Discussion Links md format text>
-              - code: BPP
-                description: Collected by BPP
-                reference: <PR/Issue/Discussion Links md format text>
-              - code: SOR
-                description: Collected by Seller on Record
-                reference: <PR/Issue/Discussion Links md format text>
+          '@ondc/org/buyer_app_finder_fee_type':
+            - code: percent
+              description: finder fee type
+              reference: <PR/Issue/Discussion Links md format text>
+            - code: amount
+              description: finder fee type
+              reference: <PR/Issue/Discussion Links md format text>
+          collected_by:
+            - code: BAP
+              description: Collected by BAP
+              reference: <PR/Issue/Discussion Links md format text>
+            - code: BPP
+              description: Collected by BPP
+              reference: <PR/Issue/Discussion Links md format text>
+            - code: SOR
+              description: Collected by Seller on Record
+              reference: <PR/Issue/Discussion Links md format text>
   confirm:
-    context: *ref_2
+    context: *ref_1
     message:
       order:
         fulfillment:
-          type: *ref_4
+          type: *ref_3
         quote:
-          breakup: *ref_5
-        payment: *ref_8
+          breakup: *ref_4
+        payment: &ref_8
+          payment_confirm: null
+          type:
+            - code: ON-ORDER
+              description: about the enum
+              reference: <PR/Issue/Discussion Links md format text>
+            - code: ON-FULFILLMENT
+              description: about the enum
+              reference: <PR/Issue/Discussion Links md format text>
+            - code: POST-FULFILLMENT
+              description: about the enum
+              reference: <PR/Issue/Discussion Links md format text>
+          '@ondc/org/settlement_details':
+            settlement_type:
+              - code: upi
+                description: about the enum
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: neft
+                description: about the enum
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: rtgs
+                description: about the enum
+                reference: <PR/Issue/Discussion Links md format text>
+          '@ondc/org/buyer_app_finder_fee_type':
+            - code: percent
+              description: finder fee type
+              reference: <PR/Issue/Discussion Links md format text>
+            - code: amount
+              description: finder fee type
+              reference: <PR/Issue/Discussion Links md format text>
+          collected_by:
+            - code: BAP
+              description: Collected by BAP
+              reference: <PR/Issue/Discussion Links md format text>
+            - code: BPP
+              description: Collected by BPP
+              reference: <PR/Issue/Discussion Links md format text>
+            - code: SOR
+              description: Collected by Seller on Record
+              reference: <PR/Issue/Discussion Links md format text>
+          status:
+            - code: PAID
+              description: Payment status
+              reference: <PR/Issue/Discussion Links md format text>
+            - code: NOT-PAID
+              description: Payment status
+              reference: <PR/Issue/Discussion Links md format text>
+          '@ondc/org/settlement_basis':
+            - code: shipment
+              description: settlement_basis
+              reference: <PR/Issue/Discussion Links md format text>
+            - code: delivery
+              description: settlement_basis
+              reference: <PR/Issue/Discussion Links md format text>
+            - code: return_window_expiry
+              description: settlement_basis
+              reference: <PR/Issue/Discussion Links md format text>
         state: &ref_9
           - code: Created
             description: about the enum
@@ -3050,63 +3107,78 @@ x-enum:
             description: about the enum
             reference: <PR/Issue/Discussion Links md format text>
   on_confirm:
-    context: *ref_2
+    context: *ref_1
     message:
       order:
         fulfillments:
-          type: *ref_4
+          type: *ref_3
           state: *ref_6
         quote:
-          breakup: *ref_5
+          breakup: *ref_4
         cancellation_terms:
           fulfillment_state: *ref_6
-        payment: *ref_8
+        payment: &ref_10
+          payment: *ref_7
+          payment2: *ref_8
         state: *ref_9
   update:
-    context: *ref_2
+    context: *ref_1
     message:
       order:
-        payment: *ref_8
+        payment: *ref_10
   on_update:
-    context: *ref_2
+    context: *ref_1
     message:
       order:
         fulfillments:
           state: *ref_6
-          instructions: *ref_10
+          instructions: &ref_11
+            code:
+              - code: 1
+                description: buyer contact no (for self-pickup)
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: 2
+                description: merchant order no
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: 3
+                description: other pickup confirmation code
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: 4
+                description: (OTP) required when order is "Packed"
+                reference: <PR/Issue/Discussion Links md format text>
         quote:
-          breakup: *ref_5
-        payment: *ref_8
+          breakup: *ref_4
+        payment: *ref_10
         state: *ref_9
   status:
-    context: *ref_2
+    context: *ref_1
   on_status:
-    context: *ref_2
+    context: *ref_1
     message:
       order:
         fulfillments:
           state: *ref_6
-          instructions: *ref_10
+          instructions: *ref_11
         quote:
-          breakup: *ref_5
-        payment: *ref_8
+          breakup: *ref_4
+        payment: *ref_10
         state: *ref_9
   cancel:
-    context: *ref_2
+    context: *ref_1
   on_cancel:
-    context: *ref_2
+    context: *ref_1
     message:
       order:
         fulfillments:
-          type: *ref_4
+          type: *ref_3
           state: *ref_6
         quote:
-          breakup: *ref_5
-        payment: *ref_8
+          breakup: *ref_4
+        payment: *ref_10
   track:
-    context: *ref_2
+    context: *ref_1
   on_track:
-    context: *ref_2
+    context: *ref_1
     message:
       tracking:
         status:
@@ -3215,7 +3287,7 @@ x-tags:
               reference: <PR/Issue/Discussion Links md format text>
               list:
                 allOf:
-                  - &ref_11
+                  - &ref_12
                     - code: TYPE
                       description: >-
                         timing for fulfillment type, enum - "Order" (online
@@ -3256,7 +3328,7 @@ x-tags:
               - code: TYPE
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
-                list: &ref_12
+                list: &ref_13
                   - code: TYPE
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
@@ -3265,7 +3337,7 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: *ref_11
+                list: *ref_12
               - code: DISPLAY
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
@@ -3341,7 +3413,7 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: *ref_11
+                list: *ref_12
               - code: VEG_NONVEG
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
@@ -3357,7 +3429,7 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: &ref_14
+                list: &ref_15
                   - code: ID
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
@@ -3368,7 +3440,7 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: &ref_15
+                list: &ref_16
                   - code: ID
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
@@ -3376,7 +3448,7 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: *ref_12
+                list: *ref_13
               - code: ATTRIBUTE
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
@@ -3759,7 +3831,7 @@ x-tags:
                   - code: EXTENSION_COLOUR
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
-                    value: &ref_13
+                    value: &ref_14
                       - code: black
                         description: about the enum
                         reference: <pr/issue/discussion links md format text>
@@ -4614,7 +4686,7 @@ x-tags:
                   - code: COLOUR
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
-                    value: *ref_13
+                    value: *ref_14
                   - code: GENDER
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
@@ -5817,12 +5889,12 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: *ref_14
+                list: *ref_15
               - code: TYPE
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: *ref_12
+                list: *ref_13
           creds:
             tags:
               - code: VERIFICATION
@@ -5839,31 +5911,30 @@ x-tags:
                   - code: VALID_TO
                     description: Valid Date and Time, only if available
                     reference: <PR/Issue/Discussion Links md format text>
-  select: &ref_16
+  on_select: &ref_17
     message:
-      order: &ref_17
+      order: &ref_18
         tags:
           - code: TYPE
             description: Description about the tags
             reference: <PR/Issue/Discussion Links md format text>
             required: required
-            list: *ref_12
+            list: *ref_13
           - code: CHILD
             description: Description about the tags
             reference: <PR/Issue/Discussion Links md format text>
             required: required
-            list: *ref_15
+            list: *ref_16
           - code: PARENT
             description: Description about the tags
             reference: <PR/Issue/Discussion Links md format text>
             required: required
-            list: *ref_14
-  on_select: *ref_16
-  init: *ref_16
-  on_init: &ref_18
+            list: *ref_15
+  init: *ref_17
+  on_init: &ref_19
     message:
       order:
-        items: *ref_17
+        items: *ref_18
         tags:
           - code: BUYER_ID
             description: Description about the tags
@@ -6024,23 +6095,23 @@ x-tags:
                 - code: INITIATED_BY
                   description: Description about the tags
                   reference: <PR/Issue/Discussion Links md format text>
-        quote: &ref_19
+        quote: &ref_20
           tags:
             - code: TYPE
               description: Description about the tags
               reference: <PR/Issue/Discussion Links md format text>
               required: required
-              list: *ref_12
+              list: *ref_13
             - code: PARENT
               description: Description about the tags
               reference: <PR/Issue/Discussion Links md format text>
               required: required
-              list: *ref_14
-  confirm: *ref_18
-  on_confirm: *ref_18
-  update: *ref_18
-  on_update: *ref_18
-  on_cancel: *ref_18
+              list: *ref_15
+  confirm: *ref_19
+  on_confirm: *ref_19
+  update: *ref_19
+  on_update: *ref_19
+  on_cancel: *ref_19
   on_track:
     message:
       tracking:
@@ -6058,7 +6129,7 @@ x-tags:
                 reference: <PR/Issue/Discussion Links md format text>
   on_status:
     message:
-      order: *ref_19
+      order: *ref_20
 x-flows:
   - summary: Retail 1.2.0 (flow - 1)
     description: >-
@@ -6088,7 +6159,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_20
+        example: &ref_21
           value:
             context:
               domain: ONDC:RET10
@@ -6097,7 +6168,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 169c2fd2-d34a-4757-a80c-c7d3131f2c20
               message_id: M1
               timestamp: '2024-12-19T07:09:08.876Z'
               ttl: PT30S
@@ -6113,7 +6184,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_22
+        example: &ref_23
           value:
             context:
               domain: ONDC:RET10
@@ -6122,7 +6193,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 169c2fd2-d34a-4757-a80c-c7d3131f2c20
               message_id: M1
               timestamp: '2025-01-14T18:30:01.247Z'
               bpp_id: sellerNP.com
@@ -6291,7 +6362,7 @@ x-flows:
         api: search - inc
         description: Bap sends search for incremental changes
         reference: if any
-        example: &ref_21
+        example: &ref_22
           value:
             context:
               domain: ONDC:RET10
@@ -6300,7 +6371,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 169c2fd2-d34a-4757-a80c-c7d3131f2c20
               message_id: M1
               timestamp: '2024-12-10T06:22:12.094Z'
               ttl: PT30S
@@ -6319,7 +6390,7 @@ x-flows:
         api: on_search - inc
         description: BPP returns the incremental changes
         reference: if any
-        example: &ref_23
+        example: &ref_24
           value:
             context:
               domain: ONDC:RET10
@@ -6328,7 +6399,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 169c2fd2-d34a-4757-a80c-c7d3131f2c20
               message_id: M1
               timestamp: '2024-12-10T06:24:32.623Z'
               bpp_id: sellerNP.com
@@ -6452,7 +6523,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_24
+        example: &ref_25
           value:
             context:
               domain: ONDC:RET10
@@ -6461,7 +6532,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2024-12-19T07:09:08.876Z'
               ttl: PT30S
@@ -6477,7 +6548,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_25
+        example: &ref_26
           value:
             context:
               domain: ONDC:RET10
@@ -6486,7 +6557,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2025-01-14T18:30:01.247Z'
               bpp_id: sellerNP.com
@@ -6655,7 +6726,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_26
+        example: &ref_27
           value:
             context:
               domain: ONDC:RET10
@@ -6665,7 +6736,7 @@ x-flows:
               bap_uri: https://buyerNP.com/ondc
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/ondc
-              transaction_id: T2
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M2
               city: std:080
               country: IND
@@ -6696,7 +6767,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_27
+        example: &ref_28
           value:
             context:
               domain: ONDC:RET10
@@ -6705,7 +6776,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2024-12-23T06:58:35.754Z'
               bpp_id: sellerNP.com
@@ -6769,7 +6840,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_28
+        example: &ref_29
           value:
             context:
               domain: ONDC:RET10
@@ -6778,7 +6849,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2024-12-23T07:01:43.145Z'
               bpp_id: sellerNP.com
@@ -6831,7 +6902,7 @@ x-flows:
         api: on_init
         description: null
         reference: if any
-        example: &ref_29
+        example: &ref_30
           value:
             context:
               domain: ONDC:RET10
@@ -6840,7 +6911,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2024-12-23T07:01:44.759Z'
               bpp_id: sellerNP.com
@@ -6949,7 +7020,7 @@ x-flows:
         api: confirm
         description: null
         reference: if any
-        example: &ref_30
+        example: &ref_31
           value:
             context:
               domain: ONDC:RET10
@@ -6958,7 +7029,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2024-12-23T07:03:30.516Z'
               bpp_id: sellerNP.com
@@ -7018,7 +7089,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -7070,7 +7141,7 @@ x-flows:
         api: on_confirm
         description: null
         reference: if any
-        example: &ref_31
+        example: &ref_32
           value:
             context:
               domain: ONDC:RET10
@@ -7079,7 +7150,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2024-12-23T07:03:32.230Z'
               bpp_id: sellerNP.com
@@ -7186,7 +7257,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -7220,7 +7291,7 @@ x-flows:
         api: on_status
         description: Status updates - order packed
         reference: if any
-        example: &ref_32
+        example: &ref_33
           value:
             context:
               domain: ONDC:RET10
@@ -7229,7 +7300,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2024-12-23T07:08:25.389Z'
               bpp_id: sellerNP.com
@@ -7336,7 +7407,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -7357,7 +7428,7 @@ x-flows:
         api: on_status
         description: Status updates - agent assigned
         reference: if any
-        example: &ref_33
+        example: &ref_34
           value:
             context:
               domain: ONDC:RET10
@@ -7366,7 +7437,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2024-12-23T07:10:00.413Z'
               bpp_id: sellerNP.com
@@ -7473,7 +7544,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -7494,7 +7565,7 @@ x-flows:
         api: on_status
         description: Status updates - order picked up
         reference: if any
-        example: &ref_34
+        example: &ref_35
           value:
             context:
               domain: ONDC:RET10
@@ -7503,7 +7574,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2025-01-14T18:30:01.247Z'
               bpp_id: sellerNP.com
@@ -7610,7 +7681,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -7634,7 +7705,7 @@ x-flows:
         api: on_status
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_35
+        example: &ref_36
           value:
             context:
               domain: ONDC:RET10
@@ -7643,7 +7714,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2024-12-23T07:10:00.413Z'
               bpp_id: sellerNP.com
@@ -7750,7 +7821,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -7774,7 +7845,7 @@ x-flows:
         api: on_status
         description: Status updates - order delivered
         reference: if any
-        example: &ref_36
+        example: &ref_37
           value:
             context:
               domain: ONDC:RET10
@@ -7783,7 +7854,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2025-01-14T18:30:01.247Z'
               bpp_id: sellerNP.com
@@ -7890,7 +7961,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -7914,7 +7985,7 @@ x-flows:
         api: track
         description: BAP request to track the order
         reference: if any
-        example: &ref_37
+        example: &ref_38
           value:
             context:
               domain: ONDC:RET10
@@ -7923,7 +7994,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2024-12-23T07:10:00.413Z'
               bpp_id: sellerNP.com
@@ -7935,7 +8006,7 @@ x-flows:
         api: on_track
         description: BPP sends the tracking information
         reference: if any
-        example: &ref_38
+        example: &ref_39
           value:
             context:
               domain: ONDC:RET10
@@ -7944,7 +8015,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
               message_id: M1
               timestamp: '2024-12-23T07:10:00.413Z'
               bpp_id: sellerNP.com
@@ -8020,7 +8091,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_39
+        example: &ref_40
           value:
             context:
               domain: ONDC:RET10
@@ -8029,7 +8100,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-19T07:09:08.876Z'
               ttl: PT30S
@@ -8045,7 +8116,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_40
+        example: &ref_41
           value:
             context:
               domain: ONDC:RET10
@@ -8054,7 +8125,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2025-01-14T18:30:01.247Z'
               bpp_id: sellerNP.com
@@ -8223,7 +8294,7 @@ x-flows:
         api: select - out of stock
         description: BAP may add unavailable or out-of-stock items to the cart
         reference: if any
-        example: &ref_41
+        example: &ref_42
           value:
             context:
               domain: ONDC:RET10
@@ -8233,7 +8304,7 @@ x-flows:
               bap_uri: https://buyerNP.com/ondc
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/ondc
-              transaction_id: T2
+              transaction_id: 202eb43f-4af3-4565-b034-6e15ff9d17b6
               message_id: M2
               city: std:080
               country: IND
@@ -8260,7 +8331,7 @@ x-flows:
         api: on_select - out of stock
         description: BPP returns item breakup when item is out of stock
         reference: if any
-        example: &ref_43
+        example: &ref_44
           value:
             context:
               domain: ONDC:RET10
@@ -8269,7 +8340,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 202eb43f-4af3-4565-b034-6e15ff9d17b6
               message_id: M1
               timestamp: '2024-12-10T08:41:29.390Z'
               bpp_id: sellerNP.com
@@ -8337,7 +8408,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_42
+        example: &ref_43
           value:
             context:
               domain: ONDC:RET10
@@ -8347,7 +8418,7 @@ x-flows:
               bap_uri: https://buyerNP.com/ondc
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/ondc
-              transaction_id: T2
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M2
               city: std:080
               country: IND
@@ -8378,7 +8449,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_44
+        example: &ref_45
           value:
             context:
               domain: ONDC:RET10
@@ -8387,7 +8458,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:42:13.689Z'
               bpp_id: sellerNP.com
@@ -8451,7 +8522,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_45
+        example: &ref_46
           value:
             context:
               domain: ONDC:RET10
@@ -8460,7 +8531,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:42:13.689Z'
               bpp_id: sellerNP.com
@@ -8513,7 +8584,7 @@ x-flows:
         api: on_init
         description: null
         reference: if any
-        example: &ref_46
+        example: &ref_47
           value:
             context:
               domain: ONDC:RET10
@@ -8522,7 +8593,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:42:13.689Z'
               bpp_id: sellerNP.com
@@ -8631,7 +8702,7 @@ x-flows:
         api: confirm
         description: null
         reference: if any
-        example: &ref_47
+        example: &ref_48
           value:
             context:
               domain: ONDC:RET10
@@ -8640,7 +8711,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:43:13.689Z'
               bpp_id: sellerNP.com
@@ -8700,7 +8771,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -8752,7 +8823,7 @@ x-flows:
         api: on_confirm
         description: null
         reference: if any
-        example: &ref_48
+        example: &ref_49
           value:
             context:
               domain: ONDC:RET10
@@ -8761,7 +8832,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:43:44.131Z'
               bpp_id: sellerNP.com
@@ -8868,7 +8939,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -8902,7 +8973,7 @@ x-flows:
         api: on_status
         description: Status updates - order packed
         reference: if any
-        example: &ref_49
+        example: &ref_50
           value:
             context:
               domain: ONDC:RET10
@@ -8911,7 +8982,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:46:38.216Z'
               bpp_id: sellerNP.com
@@ -9018,7 +9089,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -9039,7 +9110,7 @@ x-flows:
         api: on_status
         description: Status updates - agent assigned
         reference: if any
-        example: &ref_50
+        example: &ref_51
           value:
             context:
               domain: ONDC:RET10
@@ -9048,7 +9119,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:45:48.199Z'
               bpp_id: sellerNP.com
@@ -9155,7 +9226,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -9176,7 +9247,7 @@ x-flows:
         api: on_status
         description: Status updates - order picked up
         reference: if any
-        example: &ref_51
+        example: &ref_52
           value:
             context:
               domain: ONDC:RET10
@@ -9185,7 +9256,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:48:38.261Z'
               bpp_id: sellerNP.com
@@ -9292,7 +9363,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -9316,7 +9387,7 @@ x-flows:
         api: on_status
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_52
+        example: &ref_53
           value:
             context:
               domain: ONDC:RET10
@@ -9325,7 +9396,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:49:08.272Z'
               bpp_id: sellerNP.com
@@ -9432,7 +9503,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -9456,7 +9527,7 @@ x-flows:
         api: on_status
         description: Status updates - order delivered
         reference: if any
-        example: &ref_53
+        example: &ref_54
           value:
             context:
               domain: ONDC:RET10
@@ -9465,7 +9536,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:49:33.284Z'
               bpp_id: sellerNP.com
@@ -9572,7 +9643,7 @@ x-flows:
                   params:
                     amount: '100.00'
                     currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
+                    transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -9596,7 +9667,7 @@ x-flows:
         api: track
         description: BAP request to track the order
         reference: if any
-        example: &ref_54
+        example: &ref_55
           value:
             context:
               domain: ONDC:RET10
@@ -9605,7 +9676,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:49:33.284Z'
               bpp_id: sellerNP.com
@@ -9617,7 +9688,7 @@ x-flows:
         api: on_track
         description: BPP sends the tracking information
         reference: if any
-        example: &ref_55
+        example: &ref_56
           value:
             context:
               domain: ONDC:RET10
@@ -9626,7 +9697,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: T1
+              transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
               message_id: M1
               timestamp: '2024-12-10T08:49:33.284Z'
               bpp_id: sellerNP.com
@@ -9690,7 +9761,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_56
+        example: &ref_57
           value:
             context:
               domain: ONDC:RET12
@@ -9700,7 +9771,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: 96ed8600-c578-4760-a325-8d6d0e874239
+              transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
               message_id: e5613b45-9e29-42ee-8dab-7e9a2de12eac
               timestamp: '2024-08-07T12:00:01.619Z'
               ttl: PT30S
@@ -9715,7 +9786,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_57
+        example: &ref_58
           value:
             context:
               domain: ONDC:RET12
@@ -9725,7 +9796,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: 96ed8600-c578-4760-a325-8d6d0e874239
+              transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
               message_id: e5613b45-9e29-42ee-8dab-7e9a2de12eac
               timestamp: '2024-08-07T12:06:35.975Z'
               bpp_id: sellerNP.com
@@ -9992,7 +10063,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_58
+        example: &ref_59
           value:
             context:
               domain: ONDC:RET12
@@ -10003,7 +10074,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 7e3e6120-7568-4348-921d-663637013fac
+              transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
               message_id: 01d1e763-4486-4811-80d0-02e7571e2169
               timestamp: '2024-08-08T07:40:13.669Z'
               bpp_id: sellerNP.com
@@ -10033,7 +10104,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_59
+        example: &ref_60
           value:
             context:
               domain: ONDC:RET12
@@ -10044,7 +10115,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 7e3e6120-7568-4348-921d-663637013fac
+              transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
               message_id: 01d1e763-4486-4811-80d0-02e7571e2169
               timestamp: '2024-08-08T07:40:14.453Z'
               bpp_id: sellerNP.com
@@ -10106,7 +10177,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_60
+        example: &ref_61
           value:
             context:
               domain: ONDC:RET12
@@ -10117,7 +10188,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 7e3e6120-7568-4348-921d-663637013fac
+              transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
               message_id: 782d1186-aab3-410c-99fe-549d9c1bf1c4
               timestamp: '2024-08-08T07:40:37.071Z'
               bpp_id: sellerNP.com
@@ -10169,7 +10240,7 @@ x-flows:
         api: on_init
         description: null
         reference: if any
-        example: &ref_61
+        example: &ref_62
           value:
             context:
               domain: ONDC:RET12
@@ -10180,7 +10251,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 7e3e6120-7568-4348-921d-663637013fac
+              transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
               message_id: 782d1186-aab3-410c-99fe-549d9c1bf1c4
               timestamp: '2024-08-08T07:40:37.396Z'
               bpp_id: sellerNP.com
@@ -10283,7 +10354,7 @@ x-flows:
         api: confirm
         description: null
         reference: if any
-        example: &ref_62
+        example: &ref_63
           value:
             context:
               domain: ONDC:RET12
@@ -10294,7 +10365,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 7e3e6120-7568-4348-921d-663637013fac
+              transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
               message_id: 18d815c7-b47f-4453-9051-01be4356c2ed
               timestamp: '2024-08-08T07:41:04.771Z'
               bpp_id: sellerNP.com
@@ -10353,7 +10424,7 @@ x-flows:
                   params:
                     amount: '2853.75'
                     currency: INR
-                    transaction_id: order_OiKGyOJe7OE49J
+                    transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -10418,7 +10489,7 @@ x-flows:
         api: on_confirm
         description: null
         reference: if any
-        example: &ref_63
+        example: &ref_64
           value:
             context:
               domain: ONDC:RET12
@@ -10429,7 +10500,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 7e3e6120-7568-4348-921d-663637013fac
+              transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
               message_id: 18d815c7-b47f-4453-9051-01be4356c2ed
               timestamp: '2024-08-08T07:41:05.125Z'
               bpp_id: sellerNP.com
@@ -10535,7 +10606,7 @@ x-flows:
                   params:
                     amount: '2853.75'
                     currency: INR
-                    transaction_id: order_OiKGyOJe7OE49J
+                    transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -10570,7 +10641,7 @@ x-flows:
         api: cancel
         description: Buyer request for the cancellation of the order
         reference: if any
-        example: &ref_64
+        example: &ref_65
           value:
             context:
               domain: ONDC:RET12
@@ -10581,7 +10652,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 7e3e6120-7568-4348-921d-663637013fac
+              transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
               message_id: b1b518a9-f81d-4a3f-bfcb-7d3668af3dd1
               timestamp: '2024-08-08T07:41:39.592Z'
               bpp_id: sellerNP.com
@@ -10593,7 +10664,7 @@ x-flows:
         api: on_cancel
         description: Seller confirms the cancellation of the order
         reference: if any
-        example: &ref_65
+        example: &ref_66
           value:
             context:
               domain: ONDC:RET12
@@ -10604,7 +10675,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 7e3e6120-7568-4348-921d-663637013fac
+              transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
               message_id: b1b518a9-f81d-4a3f-bfcb-7d3668af3dd1
               timestamp: '2024-08-08T07:41:39.871Z'
               bpp_id: sellerNP.com
@@ -10763,7 +10834,7 @@ x-flows:
                   params:
                     amount: '2853.75'
                     currency: INR
-                    transaction_id: order_OiKGyOJe7OE49J
+                    transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -10842,7 +10913,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_66
+        example: &ref_67
           value:
             context:
               domain: ONDC:RET12
@@ -10852,7 +10923,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: 96ed8600-c578-4760-a325-8d6d0e874239
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               message_id: e5613b45-9e29-42ee-8dab-7e9a2de12eac
               timestamp: '2024-08-07T12:00:01.619Z'
               ttl: PT30S
@@ -10867,7 +10938,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_67
+        example: &ref_68
           value:
             context:
               domain: ONDC:RET12
@@ -10877,7 +10948,7 @@ x-flows:
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
-              transaction_id: 96ed8600-c578-4760-a325-8d6d0e874239
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               message_id: e5613b45-9e29-42ee-8dab-7e9a2de12eac
               timestamp: '2024-08-07T12:06:35.975Z'
               bpp_id: sellerNP.com
@@ -11144,7 +11215,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_68
+        example: &ref_69
           value:
             context:
               domain: ONDC:RET12
@@ -11155,7 +11226,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               message_id: b8772264-1709-451b-8dcf-acb2b6ffe588
               timestamp: '2024-08-08T10:01:11.813Z'
               bpp_id: sellerNP.com
@@ -11185,7 +11256,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_69
+        example: &ref_70
           value:
             context:
               domain: ONDC:RET12
@@ -11196,7 +11267,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               message_id: b8772264-1709-451b-8dcf-acb2b6ffe588
               timestamp: '2024-08-08T10:01:12.392Z'
               bpp_id: sellerNP.com
@@ -11258,7 +11329,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_70
+        example: &ref_71
           value:
             context:
               domain: ONDC:RET12
@@ -11269,7 +11340,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               message_id: 839ab1b2-4fff-4858-94ce-ffcbcaaa124e
               timestamp: '2024-08-08T10:01:24.650Z'
               bpp_id: sellerNP.com
@@ -11321,7 +11392,7 @@ x-flows:
         api: on_init
         description: null
         reference: if any
-        example: &ref_71
+        example: &ref_72
           value:
             context:
               domain: ONDC:RET12
@@ -11332,7 +11403,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               message_id: 839ab1b2-4fff-4858-94ce-ffcbcaaa124e
               timestamp: '2024-08-08T10:01:24.930Z'
               bpp_id: sellerNP.com
@@ -11435,7 +11506,7 @@ x-flows:
         api: confirm
         description: null
         reference: if any
-        example: &ref_72
+        example: &ref_73
           value:
             context:
               domain: ONDC:RET12
@@ -11446,7 +11517,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               message_id: 6f9fa4e2-1487-4af4-b4ef-a9ea0957d648
               timestamp: '2024-08-08T10:01:50.601Z'
               bpp_id: sellerNP.com
@@ -11505,7 +11576,7 @@ x-flows:
                   params:
                     amount: '2853.75'
                     currency: INR
-                    transaction_id: order_OiMfhAfykqLKyg
+                    transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -11570,7 +11641,7 @@ x-flows:
         api: on_confirm
         description: null
         reference: if any
-        example: &ref_73
+        example: &ref_74
           value:
             context:
               domain: ONDC:RET12
@@ -11581,7 +11652,7 @@ x-flows:
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: sellerNP.com
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               message_id: 6f9fa4e2-1487-4af4-b4ef-a9ea0957d648
               timestamp: '2024-08-08T10:01:50.921Z'
               bpp_id: sellerNP.com
@@ -11687,7 +11758,7 @@ x-flows:
                   params:
                     amount: '2853.75'
                     currency: INR
-                    transaction_id: order_OiMfhAfykqLKyg
+                    transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -11722,7 +11793,7 @@ x-flows:
         api: on_status
         description: Status updates - order pending
         reference: if any
-        example: &ref_74
+        example: &ref_75
           value:
             context:
               city: std:080
@@ -11736,7 +11807,7 @@ x-flows:
               timestamp: '2024-08-08T10:09:54.212Z'
               message_id: ac749c93-97e2-4a47-b0f6-38fad620feff
               core_version: 1.2.0
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               ttl: PT30S
             message:
               order:
@@ -11852,7 +11923,7 @@ x-flows:
                   params:
                     amount: '2853.75'
                     currency: INR
-                    transaction_id: order_OiMfhAfykqLKyg
+                    transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -11875,7 +11946,7 @@ x-flows:
         api: on_status
         description: Status updates - order packed
         reference: if any
-        example: &ref_75
+        example: &ref_76
           value:
             context:
               city: std:080
@@ -11889,7 +11960,7 @@ x-flows:
               timestamp: '2024-08-08T10:10:12.444Z'
               message_id: ff3f270e-98d3-4ace-8cc6-478e065cb1df
               core_version: 1.2.0
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               ttl: PT30S
             message:
               order:
@@ -12005,7 +12076,7 @@ x-flows:
                   params:
                     amount: '2853.75'
                     currency: INR
-                    transaction_id: order_OiMfhAfykqLKyg
+                    transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -12028,7 +12099,7 @@ x-flows:
         api: on_status
         description: Status updates - order picked up
         reference: if any
-        example: &ref_76
+        example: &ref_77
           value:
             context:
               city: std:080
@@ -12042,7 +12113,7 @@ x-flows:
               timestamp: '2024-08-08T10:10:54.462Z'
               message_id: 847a9541-bd30-4b8f-b090-fe96041b8995
               core_version: 1.2.0
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               ttl: PT30S
             message:
               order:
@@ -12159,7 +12230,7 @@ x-flows:
                   params:
                     amount: '2853.75'
                     currency: INR
-                    transaction_id: order_OiMfhAfykqLKyg
+                    transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -12186,7 +12257,7 @@ x-flows:
         api: on_status
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_77
+        example: &ref_78
           value:
             context:
               city: std:080
@@ -12200,7 +12271,7 @@ x-flows:
               timestamp: '2024-08-08T10:11:08.163Z'
               message_id: 1045bb7b-3cb5-4eff-9834-b124427a710a
               core_version: 1.2.0
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               ttl: PT30S
             message:
               order:
@@ -12317,7 +12388,7 @@ x-flows:
                   params:
                     amount: '2853.75'
                     currency: INR
-                    transaction_id: order_OiMfhAfykqLKyg
+                    transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -12344,7 +12415,7 @@ x-flows:
         api: on_status
         description: Order updates - seller side full-order cancellation
         reference: if any
-        example: &ref_79
+        example: &ref_80
           value:
             context:
               city: std:080
@@ -12358,7 +12429,7 @@ x-flows:
               timestamp: '2024-08-08T10:11:24.790Z'
               message_id: 49552161-1c34-4ebe-9f46-00361d11cbe4
               core_version: 1.2.0
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               ttl: PT30S
             message:
               order:
@@ -12537,7 +12608,7 @@ x-flows:
                   params:
                     amount: '2853.75'
                     currency: INR
-                    transaction_id: order_OiMfhAfykqLKyg
+                    transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -12560,7 +12631,7 @@ x-flows:
         api: on_status
         description: Status updates - rto order delivered
         reference: if any
-        example: &ref_78
+        example: &ref_79
           value:
             context:
               city: std:080
@@ -12574,7 +12645,7 @@ x-flows:
               timestamp: '2024-08-08T10:14:29.467Z'
               message_id: 71602bde-0307-45a5-94c8-f337db8b9257
               core_version: 1.2.0
-              transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+              transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
               ttl: PT30S
             message:
               order:
@@ -12755,7 +12826,7 @@ x-flows:
                   params:
                     amount: '2853.75'
                     currency: INR
-                    transaction_id: order_OiMfhAfykqLKyg
+                    transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
                   status: PAID
                   type: ON-ORDER
                   collected_by: BAP
@@ -12865,12 +12936,12 @@ x-examples:
     example_set:
       search:
         examples:
-          search - full catalog refresh: *ref_20
-          search - incremental refresh: *ref_21
+          search - full catalog refresh: *ref_21
+          search - incremental refresh: *ref_22
       on_search:
         examples:
-          on_search - on full catalog refresh: *ref_22
-          on_search - on incremental refresh: *ref_23
+          on_search - on full catalog refresh: *ref_23
+          on_search - on incremental refresh: *ref_24
   B2C - flow 2:
     summary: B2C flow-2 Use Case Specification
     description: >-
@@ -12883,41 +12954,41 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_24
+          search: *ref_25
       on_search:
         examples:
-          on_search: *ref_25
+          on_search: *ref_26
       select:
         examples:
-          select: *ref_26
+          select: *ref_27
       on_select:
         examples:
-          on_select: *ref_27
+          on_select: *ref_28
       init:
         examples:
-          init: *ref_28
+          init: *ref_29
       on_init:
         examples:
-          on_init: *ref_29
+          on_init: *ref_30
       confirm:
         examples:
-          confirm: *ref_30
+          confirm: *ref_31
       on_confirm:
         examples:
-          on_confirm: *ref_31
+          on_confirm: *ref_32
       on_status:
         examples:
-          on_status - packed: *ref_32
-          on_status - agent assigned: *ref_33
-          on_status - picked: *ref_34
-          on_status - out for delivery: *ref_35
-          on_status - delivered: *ref_36
+          on_status - packed: *ref_33
+          on_status - agent assigned: *ref_34
+          on_status - picked: *ref_35
+          on_status - out for delivery: *ref_36
+          on_status - delivered: *ref_37
       track:
         examples:
-          track: *ref_37
+          track: *ref_38
       on_track:
         examples:
-          on_track: *ref_38
+          on_track: *ref_39
   B2C - flow 3:
     summary: B2C flow-3 Use Case Specification
     description: >-
@@ -12929,43 +13000,43 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_39
+          search: *ref_40
       on_search:
         examples:
-          on_search: *ref_40
+          on_search: *ref_41
       select:
         examples:
-          select - out of stock: *ref_41
-          select: *ref_42
+          select - out of stock: *ref_42
+          select: *ref_43
       on_select:
         examples:
-          on_select - out of stock: *ref_43
-          on_select: *ref_44
+          on_select - out of stock: *ref_44
+          on_select: *ref_45
       init:
         examples:
-          init: *ref_45
+          init: *ref_46
       on_init:
         examples:
-          on_init: *ref_46
+          on_init: *ref_47
       confirm:
         examples:
-          confirm: *ref_47
+          confirm: *ref_48
       on_confirm:
         examples:
-          on_confirm: *ref_48
+          on_confirm: *ref_49
       on_status:
         examples:
-          on_status - packed: *ref_49
-          on_status - agent assigned: *ref_50
-          on_status - picked: *ref_51
-          on_status - out for delivery: *ref_52
-          on_status - delivered: *ref_53
+          on_status - packed: *ref_50
+          on_status - agent assigned: *ref_51
+          on_status - picked: *ref_52
+          on_status - out for delivery: *ref_53
+          on_status - delivered: *ref_54
       track:
         examples:
-          track: *ref_54
+          track: *ref_55
       on_track:
         examples:
-          on_track: *ref_55
+          on_track: *ref_56
   B2C - flow 4:
     summary: B2C flow-4 Use Case Specification
     description: >-
@@ -12978,34 +13049,34 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_56
+          search: *ref_57
       on_search:
         examples:
-          on_search: *ref_57
+          on_search: *ref_58
       select:
         examples:
-          select: *ref_58
+          select: *ref_59
       on_select:
         examples:
-          on_select: *ref_59
+          on_select: *ref_60
       init:
         examples:
-          init: *ref_60
+          init: *ref_61
       on_init:
         examples:
-          on_init: *ref_61
+          on_init: *ref_62
       confirm:
         examples:
-          confirm: *ref_62
+          confirm: *ref_63
       on_confirm:
         examples:
-          on_confirm: *ref_63
+          on_confirm: *ref_64
       cancel:
         examples:
-          cancel: *ref_64
+          cancel: *ref_65
       on_cancel:
         examples:
-          on_cancel: *ref_65
+          on_cancel: *ref_66
   B2C - flow 5:
     summary: B2C flow-5 Use Case Specification
     description: >-
@@ -13017,38 +13088,38 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_66
+          search: *ref_67
       on_search:
         examples:
-          on_search: *ref_67
+          on_search: *ref_68
       select:
         examples:
-          select: *ref_68
+          select: *ref_69
       on_select:
         examples:
-          on_select: *ref_69
+          on_select: *ref_70
       init:
         examples:
-          init: *ref_70
+          init: *ref_71
       on_init:
         examples:
-          on_init: *ref_71
+          on_init: *ref_72
       confirm:
         examples:
-          confirm: *ref_72
+          confirm: *ref_73
       on_confirm:
         examples:
-          on_confirm: *ref_73
+          on_confirm: *ref_74
       on_status:
         examples:
-          on_status - pending: *ref_74
-          on_status - packed: *ref_75
-          on_status - picked: *ref_76
-          on_status - out for delivery: *ref_77
-          on_status - RTO delivered: *ref_78
+          on_status - pending: *ref_75
+          on_status - packed: *ref_76
+          on_status - picked: *ref_77
+          on_status - out for delivery: *ref_78
+          on_status - RTO delivered: *ref_79
       on_cancel:
         examples:
-          on_cancel: *ref_79
+          on_cancel: *ref_80
   B2C - flow 6:
     summary: B2C flow-6 Use Case Specification
     description: >-
@@ -13070,7 +13141,7 @@ x-examples:
                 core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
-                transaction_id: ce667f79-2f0a-46c3-a0ce-78db78fda908
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: f7f11f65-2e77-46d8-a2ea-0553054c666b
                 timestamp: '2025-02-06T07:25:58.000Z'
                 ttl: PT30S
@@ -13095,7 +13166,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: ce667f79-2f0a-46c3-a0ce-78db78fda908
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: f7f11f65-2e77-46d8-a2ea-0553054c666b
                 timestamp: '2025-02-06T07:26:35.000Z'
                 ttl: PT30S
@@ -13349,7 +13420,7 @@ x-examples:
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 2e7a5eb2-4d81-4664-9c70-2da7df08794b
                 timestamp: '2025-02-10T07:26:54.268Z'
                 bpp_id: sellerNP.com
@@ -13385,7 +13456,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 2e7a5eb2-4d81-4664-9c70-2da7df08794b
                 timestamp: '2025-02-10T07:26:57.000Z'
               message:
@@ -13449,7 +13520,7 @@ x-examples:
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: cce32175-9fce-48ae-83e3-7d9817bca45a
                 timestamp: '2025-02-10T07:27:02.436Z'
                 bpp_id: sellerNP.com
@@ -13509,7 +13580,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: cce32175-9fce-48ae-83e3-7d9817bca45a
                 city: std:080
                 country: IND
@@ -13617,7 +13688,7 @@ x-examples:
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 3faf4c2d-4e61-48da-92a7-fd833374bbcc
                 timestamp: '2025-02-10T07:27:24.809Z'
                 bpp_id: sellerNP.com
@@ -13676,7 +13747,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -13742,7 +13813,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 3faf4c2d-4e61-48da-92a7-fd833374bbcc
                 timestamp: '2025-02-10T07:27:27.000Z'
               message:
@@ -13859,7 +13930,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -13890,7 +13961,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: e4fbeadd-6c0b-40d2-8844-94ff36970ww8
                 timestamp: '2025-02-10T07:32:10.000Z'
               message:
@@ -14020,7 +14091,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -14049,7 +14120,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: f6af1bf6-da3f-4f29-bf3b-a00fbb89c73e
                 timestamp: '2025-02-10T08:40:54.000Z'
               message:
@@ -14225,7 +14296,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -14257,7 +14328,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 54241877e04674c0abb87fb08e7cd758
                 city: std:080
                 country: IND
@@ -14467,7 +14538,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -14499,7 +14570,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: a944ad16342ddf91bff4adf078e527e0
                 city: std:080
                 country: IND
@@ -14710,7 +14781,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -14742,7 +14813,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 01f13bbb66083be929f5f1da9dc4cb28
                 city: std:080
                 country: IND
@@ -14955,7 +15026,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -14994,7 +15065,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 04f7aa06-972f-4c1e-9990-c40406fd0801
                 timestamp: '2025-02-10T09:59:11.000Z'
               message:
@@ -15232,7 +15303,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -15269,7 +15340,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 0e13aa2f5db83c4484abed6fd4c76328
                 city: std:080
                 country: IND
@@ -15526,7 +15597,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -15565,7 +15636,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: e6cea520-470f-40f3-b94e-71698157774c
                 city: std:080
                 country: IND
@@ -15594,7 +15665,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: ef80c388-1fdd-4273-83de-1c2295dc8241
                 city: std:080
                 country: IND
@@ -15623,7 +15694,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 0d0144ca-4e39-4b5e-bc01-179f8de19226
                 city: std:080
                 country: IND
@@ -15653,7 +15724,7 @@ x-examples:
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: f6af1bf6-da3f-4f29-bf3b-a00fbb89c73e
                 timestamp: '2025-02-10T08:40:49.316Z'
                 bpp_id: sellerNP.com
@@ -15697,7 +15768,7 @@ x-examples:
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 04f7aa06-972f-4c1e-9990-c40406fd0801
                 timestamp: '2025-02-10T09:59:06.589Z'
                 bpp_id: sellerNP.com
@@ -15744,7 +15815,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: d6a0d858a293ca97899faae6839a8d7b
                 timestamp: '2025-02-10T07:38:14.000Z'
                 ttl: PT30S
@@ -15883,7 +15954,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -15917,7 +15988,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 551d070b21982011f350460cb5f1a57c
                 timestamp: '2025-02-10T07:38:38.000Z'
                 ttl: PT30S
@@ -16065,7 +16136,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -16099,7 +16170,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 6469bf7c3b77c30dca0d32bd4035fb4b
                 timestamp: '2025-02-10T07:38:56.000Z'
                 ttl: PT30S
@@ -16252,7 +16323,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -16286,7 +16357,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: 0f13ce40e6d955d655bf3c3b64de6cb3
                 timestamp: '2025-02-10T07:39:19.000Z'
                 ttl: PT30S
@@ -16439,7 +16510,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP
@@ -16473,7 +16544,7 @@ x-examples:
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
                 bpp_uri: sellerNP.com
-                transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+                transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                 message_id: a0d52c46247b7829f83aeb0a2e9d4186
                 timestamp: '2025-02-10T08:29:54.000Z'
                 ttl: PT30S
@@ -16627,7 +16698,7 @@ x-examples:
                     params:
                       amount: '2500.00'
                       currency: INR
-                      transaction_id: order_PtvP46pnns76NE
+                      transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
                     status: PAID
                     type: ON-ORDER
                     collected_by: BAP

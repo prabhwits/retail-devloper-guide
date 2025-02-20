@@ -6,7 +6,7 @@ value:
     core_version: 1.2.0
     bap_id: buyerNP.com
     bap_uri: https://buyerNP.com/ondc
-    transaction_id: T1
+    transaction_id: 202eb43f-4af3-4565-b034-6e15ff9d17b6
     message_id: M1
     timestamp: '2024-12-10T08:41:29.390Z'
     bpp_id: sellerNP.com

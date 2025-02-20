@@ -7,7 +7,7 @@ value:
     bap_uri: https://buyerNP.com/ondc
     bpp_id: sellerNP.com
     bpp_uri: https://sellerNP.com/ondc
-    transaction_id: T2
+    transaction_id: 202eb43f-4af3-4565-b034-6e15ff9d17b6
     message_id: M2
     city: std:080
     country: IND

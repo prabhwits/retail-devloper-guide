@@ -24,3 +24,24 @@ breakup:
       - code: tax_f
         description: about the enum
         reference: <PR/Issue/Discussion Links md format text> 
+      - code: 0
+        description: about the enum
+        reference: <PR/Issue/Discussion Links md format text>
+  quantity:
+    available:
+      count:
+        - code: 0
+          description: about the enum
+          reference: <PR/Issue/Discussion Links md format text>
+        - code: 99
+          description: about the enum
+          reference: <PR/Issue/Discussion Links md format text>
+    maximum:
+      count:
+      - code: 0
+        description: about the enum
+        reference: <PR/Issue/Discussion Links md format text>
+      - code: 10
+        description: it will be reasonable number count
+        reference: <PR/Issue/Discussion Links md format text>
+    

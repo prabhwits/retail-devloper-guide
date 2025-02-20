@@ -8,9 +8,9 @@ value:
     bap_id: buyerNP.com
     bap_uri: https://buyerNP.com/ondc
     bpp_uri: sellerNP.com
-    transaction_id: 60fbc969-cd0c-4a9d-9220-8c1fb6f8b29d
+    transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
     message_id: 839ab1b2-4fff-4858-94ce-ffcbcaaa124e
-    timestamp: '2024-08-08T10:01:24.650Z'
+    timestamp: "2024-08-08T10:01:24.650Z"
     bpp_id: sellerNP.com
     ttl: PT30S
   message:
@@ -31,21 +31,21 @@ value:
           city: Bengaluru
           state: Karnataka
           country: IND
-          area_code: '560027'
+          area_code: "560027"
           locality: 6th Cross Road
           name: Tanishq Mishra
-        phone: '9399788618'
+        phone: "9399788618"
         name: Tanishq Mishra
         email: mishratanishq619@gmail.com
-        created_at: '2024-08-08T10:01:24.650Z'
-        updated_at: '2024-08-08T10:01:24.650Z'
+        created_at: "2024-08-08T10:01:24.650Z"
+        updated_at: "2024-08-08T10:01:24.650Z"
       fulfillments:
         - id: 3ac6a056-ceba-4c14-8e5d-ab5dd72d5239
           type: Delivery
           end:
             contact:
               email: mishratanishq619@gmail.com
-              phone: '9399788618'
+              phone: "9399788618"
             location:
               gps: 12.966545,77.592074
               address:
@@ -53,6 +53,6 @@ value:
                 city: Bengaluru
                 state: Karnataka
                 country: IND
-                area_code: '560027'
+                area_code: "560027"
                 locality: 6th Cross Road
                 name: Tanishq Mishra

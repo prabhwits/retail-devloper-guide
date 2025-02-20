@@ -7,15 +7,15 @@ value:
     core_version: 1.2.0
     bap_id: buyerNP.com
     bap_uri: https://buyerNP.com/ondc
-    transaction_id: 96ed8600-c578-4760-a325-8d6d0e874239
+    transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
     message_id: e5613b45-9e29-42ee-8dab-7e9a2de12eac
-    timestamp: '2024-08-07T12:06:35.975Z'
+    timestamp: "2024-08-07T12:06:35.975Z"
     bpp_id: sellerNP.com
     bpp_uri: sellerNP.com
   message:
     catalog:
       bpp/fulfillments:
-        - id: '1'
+        - id: "1"
           type: Delivery
       bpp/descriptor:
         name: Seller Business
@@ -44,7 +44,7 @@ value:
                 https://aurika-seller-app.s3-ap-south-1.amazonaws.com/71bdd8f8-2d3b-4d03-b006-31cda8cec36c/logo/Designer_updated.png
           time:
             label: enable
-            timestamp: '2024-08-07T11:08:26.142Z'
+            timestamp: "2024-08-07T11:08:26.142Z"
           categories:
             - id: HI9YrS
               descriptor:
@@ -59,36 +59,36 @@ value:
                     - code: name
                       value: item.tags.attribute.plating
                     - code: seq
-                      value: '1'
+                      value: "1"
           locations:
             - id: 668e238e1b106d310473ddb0
               gps: 12.92580970146639,77.58362409712942
               address:
                 city: Bengaluru
                 state: Karnataka
-                area_code: '560011'
+                area_code: "560011"
                 street: Jayanagar
                 locality: Jayanagar
               time:
                 label: enable
-                timestamp: '2024-07-10T06:00:46.650Z'
+                timestamp: "2024-07-10T06:00:46.650Z"
                 days: 1,2,3,4,5
                 schedule:
                   holidays: []
                 range:
-                  start: '1000'
-                  end: '2000'
+                  start: "1000"
+                  end: "2000"
               circle:
                 gps: 12.92580970146639,77.58362409712942
                 radius:
                   unit: km
-                  value: '5'
+                  value: "5"
           ttl: PT24H
           items:
             - id: 839cb128-34bd-444d-9ffc-05903e62b35a
               time:
                 label: enable
-                timestamp: '2024-08-07T10:41:58.265Z'
+                timestamp: "2024-08-07T10:41:58.265Z"
               parent_item_id: HI9YrS
               descriptor:
                 name: Butterfly Beutiful 11 Gold Necklace
@@ -110,31 +110,31 @@ value:
                     https://aurika-seller-app.s3-ap-south-1.amazonaws.com/4e4b2a75-0759-4f56-b8fd-8487c1e247ae/product_image/2.png
                   - >-
                     https://aurika-seller-app.s3-ap-south-1.amazonaws.com/4068e709-5641-406c-878e-55fffea5004f/product_image/3.png
-                code: '4:7113'
+                code: "4:7113"
               quantity:
                 unitized:
                   measure:
                     unit: unit
-                    value: '1'
+                    value: "1"
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '8'
+                  count: "8"
               price:
                 currency: INR
-                value: '2260'
-                maximum_value: '2260'
+                value: "2260"
+                maximum_value: "2260"
               category_id: Necklaces
               location_id: 668e238e1b106d310473ddb0
-              fulfillment_id: '1'
-              '@ondc/org/returnable': true
-              '@ondc/org/cancellable': true
-              '@ondc/org/available_on_cod': false
-              '@ondc/org/time_to_ship': PT1H
-              '@ondc/org/seller_pickup_return': true
-              '@ondc/org/return_window': PT168H
-              '@ondc/org/contact_details_consumer_care': Seller Business,test@gmail.com,9876543210
-              '@ondc/org/statutory_reqs_packaged_commodities':
+              fulfillment_id: "1"
+              "@ondc/org/returnable": true
+              "@ondc/org/cancellable": true
+              "@ondc/org/available_on_cod": false
+              "@ondc/org/time_to_ship": PT1H
+              "@ondc/org/seller_pickup_return": true
+              "@ondc/org/return_window": PT168H
+              "@ondc/org/contact_details_consumer_care": Seller Business,test@gmail.com,9876543210
+              "@ondc/org/statutory_reqs_packaged_commodities":
                 manufacturer_or_packer_name: Seller Business
                 manufacturer_or_packer_address: >-
                   Seller Building Address, Jayanagar, Bengaluru, Karnataka,
@@ -153,19 +153,19 @@ value:
                     - code: gender
                       value: female
                     - code: colour
-                      value: '#C0C0C0'
+                      value: "#C0C0C0"
                     - code: base_metal
                       value: silver
                     - code: plating
                       value: gold
                     - code: size
-                      value: '5'
+                      value: "5"
                     - code: brand
                       value: jewellery brand
             - id: 561b2ff7-a8b3-4849-a086-79438b55f5d1
               time:
                 label: enable
-                timestamp: '2024-08-07T11:08:26.142Z'
+                timestamp: "2024-08-07T11:08:26.142Z"
               parent_item_id: HI9YrS
               descriptor:
                 name: Butterfly Necklace 2nd
@@ -183,31 +183,31 @@ value:
                     from 2024-07-11 14-16-08.png
                   - >-
                     https://aurika-seller-app.s3-ap-south-1.amazonaws.com/36982660-69da-47e5-ad41-88c671dd6732/product_image/1.png
-                code: '4:7113'
+                code: "4:7113"
               quantity:
                 unitized:
                   measure:
                     unit: unit
-                    value: '1'
+                    value: "1"
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '10'
+                  count: "10"
               price:
                 currency: INR
-                value: '2360'
-                maximum_value: '2360'
+                value: "2360"
+                maximum_value: "2360"
               category_id: Necklaces
               location_id: 668e238e1b106d310473ddb0
-              fulfillment_id: '1'
-              '@ondc/org/returnable': true
-              '@ondc/org/cancellable': true
-              '@ondc/org/available_on_cod': false
-              '@ondc/org/time_to_ship': PT1H
-              '@ondc/org/seller_pickup_return': true
-              '@ondc/org/return_window': PT168H
-              '@ondc/org/contact_details_consumer_care': Seller Business,test@gmail.com,9876543210
-              '@ondc/org/statutory_reqs_packaged_commodities':
+              fulfillment_id: "1"
+              "@ondc/org/returnable": true
+              "@ondc/org/cancellable": true
+              "@ondc/org/available_on_cod": false
+              "@ondc/org/time_to_ship": PT1H
+              "@ondc/org/seller_pickup_return": true
+              "@ondc/org/return_window": PT168H
+              "@ondc/org/contact_details_consumer_care": Seller Business,test@gmail.com,9876543210
+              "@ondc/org/statutory_reqs_packaged_commodities":
                 manufacturer_or_packer_name: Seller Business
                 manufacturer_or_packer_address: >-
                   Seller Building Address, Jayanagar, Bengaluru, Karnataka,
@@ -226,20 +226,20 @@ value:
                     - code: gender
                       value: female
                     - code: colour
-                      value: '#C0C0C0'
+                      value: "#C0C0C0"
                     - code: base_metal
                       value: silver
                     - code: plating
                       value: silver
                     - code: size
-                      value: '5'
+                      value: "5"
                     - code: brand
                       value: jewellery brand
           fulfillments:
-            - id: '1'
+            - id: "1"
               type: Delivery
               contact:
-                phone: '9876543210'
+                phone: "9876543210"
                 email: test@gmail.com
           tags:
             - code: serviceability
@@ -249,7 +249,7 @@ value:
                 - code: category
                   value: Necklaces
                 - code: type
-                  value: '12'
+                  value: "12"
                 - code: unit
                   value: country
                 - code: val
@@ -261,10 +261,10 @@ value:
                 - code: location
                   value: 668e238e1b106d310473ddb0
                 - code: day_from
-                  value: '1'
+                  value: "1"
                 - code: day_to
-                  value: '5'
+                  value: "5"
                 - code: time_from
-                  value: '1000'
+                  value: "1000"
                 - code: time_to
-                  value: '2000'
+                  value: "2000"
