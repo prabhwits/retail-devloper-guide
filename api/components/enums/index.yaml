@@ -16,8 +16,6 @@ on_search:
           quantity:
             unitized: &measure
               $ref: "./measure.yaml"
-            available: *measure
-            maximum: *measure
         offers:
           $ref: "./offers.yaml#/offers"
 select:
@@ -25,15 +23,17 @@ select:
   message:
     order: 
       offers:
-          $ref: "./offers.yaml#/offers"
+        $ref: "./offers.yaml#/offers"
       payment:
         $ref: "./payment.yaml#/payment/type" 
+      # quote:
+      #   $ref: "./quote.yaml#/quote"
 on_select:
   context: *context
   message:
     order:
       fulfillments:
-        $ref: "./fulfillments.yaml#/fulfillments"
+        $ref: "./fulfillments_state_select.yaml#/fulfillments"
       quote:
         breakup:
           $ref: "./title_type.yaml#/breakup"   
@@ -58,7 +58,7 @@ on_init:
         fulfillment_state:
           $ref: "./fulfillments.yaml#/fulfillments/state"
       payment:
-        $ref: "./payment.yaml"
+        $ref: "./payment.yaml#/payment"
 confirm:
   context: *context
   message:
@@ -70,8 +70,8 @@ confirm:
       quote:
         breakup:
           $ref: "./title_type.yaml#/breakup"
-      payment:
-        $ref: "./payment.yaml"
+      payment: &payment
+        $ref: "./payment.yaml#/payment2"
 on_confirm:
   context: *context
   message:

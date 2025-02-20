@@ -6,16 +6,16 @@ value:
     core_version: 1.2.0
     bap_id: buyerNP.com
     bap_uri: https://buyerNP.com/ondc
-    transaction_id: T1
+    transaction_id: 169c2fd2-d34a-4757-a80c-c7d3131f2c20
     message_id: M1
-    timestamp: '2024-12-10T06:22:12.094Z'
+    timestamp: "2024-12-10T06:22:12.094Z"
     ttl: PT30S
     city: std:022
   message:
     intent:
       payment:
-        '@ondc/org/buyer_app_finder_fee_type': percent
-        '@ondc/org/buyer_app_finder_fee_amount': '3'
+        "@ondc/org/buyer_app_finder_fee_type": percent
+        "@ondc/org/buyer_app_finder_fee_amount": "3"
       tags:
         - code: catalog_inc
           list:

@@ -7,7 +7,7 @@ value:
     bap_uri: https://buyerNP.com/ondc
     bpp_id: sellerNP.com
     bpp_uri: sellerNP.com
-    transaction_id: e1ef592c-5ccf-476b-97c8-85f276f07b53
+    transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
     message_id: 01f13bbb66083be929f5f1da9dc4cb28
     city: std:080
     country: IND
@@ -220,7 +220,7 @@ value:
         params:
           amount: "2500.00"
           currency: INR
-          transaction_id: order_PtvP46pnns76NE
+          transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
         status: PAID
         type: ON-ORDER
         collected_by: BAP

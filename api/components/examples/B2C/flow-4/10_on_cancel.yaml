@@ -8,9 +8,9 @@ value:
     bap_id: buyerNP.com
     bap_uri: https://buyerNP.com/ondc
     bpp_uri: sellerNP.com
-    transaction_id: 7e3e6120-7568-4348-921d-663637013fac
+    transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
     message_id: b1b518a9-f81d-4a3f-bfcb-7d3668af3dd1
-    timestamp: '2024-08-08T07:41:39.871Z'
+    timestamp: "2024-08-08T07:41:39.871Z"
     bpp_id: sellerNP.com
     ttl: PT30S
   message:
@@ -37,16 +37,16 @@ value:
           city: Bengaluru
           state: Karnataka
           country: IND
-          area_code: '560027'
-        phone: '9399788618'
+          area_code: "560027"
+        phone: "9399788618"
         name: Tanishq Mishra
         email: mishratanishq619@gmail.com
-        created_at: '2024-08-08T07:40:37.071Z'
-        updated_at: '2024-08-08T07:40:37.071Z'
+        created_at: "2024-08-08T07:40:37.071Z"
+        updated_at: "2024-08-08T07:40:37.071Z"
       fulfillments:
         - id: c4b2dd74-9ccd-4ec1-b8f8-58d36dd8ce33
-          '@ondc/org/provider_name': Seller Business
-          '@ondc/org/TAT': PT96H
+          "@ondc/org/provider_name": Seller Business
+          "@ondc/org/TAT": PT96H
           state:
             descriptor:
               code: Cancelled
@@ -61,17 +61,17 @@ value:
               address:
                 locality: Jayanagar
                 city: Bengaluru
-                area_code: '560011'
+                area_code: "560011"
                 state: Karnataka
             contact:
               email: test@gmail.com
-              phone: '9876543210'
+              phone: "9876543210"
           end:
             person:
               name: Tanishq Mishra
             contact:
               email: mishratanishq619@gmail.com
-              phone: '9399788618'
+              phone: "9399788618"
             location:
               gps: 12.966545,77.592074
               address:
@@ -81,12 +81,12 @@ value:
                 city: Bengaluru
                 state: Karnataka
                 country: IND
-                area_code: '560027'
+                area_code: "560027"
           tags:
             - code: cancel_request
               list:
                 - code: reason_id
-                  value: '001'
+                  value: "001"
                 - code: initiated_by
                   value: buyerNP.com
             - code: precancel_state
@@ -94,7 +94,7 @@ value:
                 - code: fulfillment_state
                   value: Pending
                 - code: updated_at
-                  value: '2024-08-08T07:41:05.125Z'
+                  value: "2024-08-08T07:41:05.125Z"
         - id: 0b562bd4-57fa-452b-8573-142d18ad326e
           type: Cancel
           state:
@@ -110,7 +110,7 @@ value:
                 - code: currency
                   value: INR
                 - code: value
-                  value: '-100.00'
+                  value: "-100.00"
             - code: quote_trail
               list:
                 - code: type
@@ -120,7 +120,7 @@ value:
                 - code: currency
                   value: INR
                 - code: value
-                  value: '-493.75'
+                  value: "-493.75"
             - code: quote_trail
               list:
                 - code: type
@@ -130,63 +130,63 @@ value:
                 - code: currency
                   value: INR
                 - code: value
-                  value: '-2260.00'
+                  value: "-2260.00"
       quote:
         price:
           currency: INR
-          value: '0'
+          value: "0"
         breakup:
-          - '@ondc/org/item_id': 839cb128-34bd-444d-9ffc-05903e62b35a
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": 839cb128-34bd-444d-9ffc-05903e62b35a
+            "@ondc/org/item_quantity":
               count: 0
             title: Butterfly Beutiful 12 Gold Necklace
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '0'
+              value: "0"
             item:
               price:
                 currency: INR
-                value: '2260.00'
-          - '@ondc/org/item_id': c4b2dd74-9ccd-4ec1-b8f8-58d36dd8ce33
+                value: "2260.00"
+          - "@ondc/org/item_id": c4b2dd74-9ccd-4ec1-b8f8-58d36dd8ce33
             title: Delivery charges
-            '@ondc/org/title_type': delivery
+            "@ondc/org/title_type": delivery
             price:
               currency: INR
-              value: '0'
-          - '@ondc/org/item_id': c4b2dd74-9ccd-4ec1-b8f8-58d36dd8ce33
+              value: "0"
+          - "@ondc/org/item_id": c4b2dd74-9ccd-4ec1-b8f8-58d36dd8ce33
             title: Convenience Fee
-            '@ondc/org/title_type': misc
+            "@ondc/org/title_type": misc
             price:
               currency: INR
-              value: '0'
+              value: "0"
         ttl: P1D
       payment:
         uri: https://razorpay.com/
         tl_method: http/get
         params:
-          amount: '2853.75'
+          amount: "2853.75"
           currency: INR
-          transaction_id: order_OiKGyOJe7OE49J
+          transaction_id: 043e401b-8dc8-457a-b4cd-5a32180c4e05
         status: PAID
         type: ON-ORDER
         collected_by: BAP
-        '@ondc/org/buyer_app_finder_fee_type': percent
-        '@ondc/org/buyer_app_finder_fee_amount': '3.0'
-        '@ondc/org/settlement_details':
+        "@ondc/org/buyer_app_finder_fee_type": percent
+        "@ondc/org/buyer_app_finder_fee_amount": "3.0"
+        "@ondc/org/settlement_details":
           - settlement_counterparty: seller-app
             settlement_phase: sale-amount
             settlement_type: neft
             upi_address: gft@oksbi
-            settlement_bank_account_no: '34234343434'
+            settlement_bank_account_no: "34234343434"
             settlement_ifsc_code: SBIN0000123
             beneficiary_name: Seller Name
             bank_name: SBI
             branch_name: Nellore
       id: 2024-08-08-250723
-      created_at: '2024-08-08T07:41:04.771Z'
-      updated_at: '2024-08-08T07:41:39.871Z'
+      created_at: "2024-08-08T07:41:04.771Z"
+      updated_at: "2024-08-08T07:41:39.871Z"
       cancellation:
         cancelled_by: buyerNP.com
         reason:
-          id: '001'
+          id: "001"

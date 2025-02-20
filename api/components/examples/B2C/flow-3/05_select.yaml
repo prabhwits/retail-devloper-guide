@@ -7,11 +7,11 @@ value:
     bap_uri: https://buyerNP.com/ondc
     bpp_id: sellerNP.com
     bpp_uri: https://sellerNP.com/ondc
-    transaction_id: T2
+    transaction_id: 553de205-7609-46a3-9cfd-6a8d448705d1
     message_id: M2
     city: std:080
     country: IND
-    timestamp: '2024-12-10T08:42:12.091Z'
+    timestamp: "2024-12-10T08:42:12.091Z"
     ttl: PT30S
   message:
     order:
@@ -29,4 +29,4 @@ value:
             location:
               gps: 13.077430,77.591444
               address:
-                area_code: '560065'
+                area_code: "560065"

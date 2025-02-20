@@ -7,11 +7,10 @@ on_search:
     catalog:
       providers:
         $ref: "./tag-group.yaml#/providers"
-select: &ref0
+on_select: &ref0
   message:
     order:
       $ref: "./tag-group.yaml#/order/items"
-on_select: *ref0
 init: *ref0
 on_init: &ref0
   message:
