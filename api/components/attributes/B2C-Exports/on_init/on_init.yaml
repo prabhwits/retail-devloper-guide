@@ -96,7 +96,7 @@ message:
           usage: "-"
           reference: if any
         settlement_type:
-          description: enum; will be OPGSP for B2C Exports
+          description: enum; will be OPGSP for B2C
           required: required if parent is present
           usage: OPGSP
           reference: if any
