@@ -1,0 +1,77 @@
+B2C - Discovery phase:
+  summary: B2C flow-1 Use Case Specification
+  description: >-
+    Retail networks facilitate product and service offerings by connecting buyers and sellers. Consumer platforms use APIs for key e-commerce operations, such as searching and retrieving inventory from providers. The search and on_search APIs support full or incremental catalog refreshes.
+  example_set:
+    $ref: "./B2C/flow-1/index.yaml"
+
+B2C - Delivery:
+  summary: B2C flow-2 Use Case Specification
+  description: >-
+    Retail platforms enable seamless e-commerce, allowing buyers to search, select, and track products while sellers manage inventory. The search and on_search APIs retrieve catalog details, select and on_select manage item selection, and init and on_init establish agreements. Confirm and on_confirm process orders, on_status tracks progress, and track and on_track enable live tracking.
+  example_set:
+    $ref: "./B2C/flow-2/index.yaml"
+
+B2C - Item Out-of-stock:
+  summary: B2C flow-3 Use Case Specification
+  description: >-
+    Retail platforms connect buyers and sellers for smooth transactions. Search and on_search handle catalog retrieval, select and on_select manage item selection, and init and on_init confirm agreements. Confirm and on_confirm process orders, on_status provides real-time updates, and track and on_track enable live tracking.
+  example_set:
+    $ref: "./B2C/flow-3/index.yaml"
+
+B2C - Buyer Side Cancellation:
+  summary: B2C flow-4 Use Case Specification
+  description: >-
+    Retail platforms enable seamless e-commerce, allowing buyers to search, select, and track products while sellers manage inventory. The search and on_search APIs retrieve catalog details, select and on_select manage item selection, and init and on_init establish agreements. Confirm and on_confirm process orders, on_status tracks progress, and track and on_track enable live tracking.
+  example_set:
+    $ref: "./B2C/flow-4/index.yaml"
+
+B2C - Seller side Cancellation:
+  summary: B2C flow-5 Use Case Specification
+  description: >-
+    Retail platforms connect buyers and sellers for smooth transactions. Search and on_search handle catalog retrieval, select and on_select manage item selection, and init and on_init confirm agreements. Confirm and on_confirm process orders, on_status provides real-time updates, and track and on_track enable live tracking.
+  example_set:
+    $ref: "./B2C/flow-5/index.yaml"
+
+B2C - Part-cancellation/ Reverse QC/ Liquidation:
+  summary: B2C flow-6 Use Case Specification
+  description: >-
+    Retail platforms connect buyers and sellers for smooth transactions. Search and on_search handle catalog retrieval, select and on_select manage item selection, and init and on_init confirm agreements. Confirm and on_confirm process orders, on_status provides real-time updates, and track and on_track enable live tracking.
+  example_set:
+    $ref: "./B2C/flow-6/index.yaml"
+
+
+B2C - Discovery phase F&B:
+  summary: B2C flow-1 Use Case Specification
+  description: >-
+    Retail networks facilitate product and service offerings by connecting buyers and sellers. Consumer platforms use APIs for key e-commerce operations, such as searching and retrieving inventory from providers. The search and on_search APIs support full or incremental catalog refreshes.
+  example_set:
+    $ref: "./B2C-F&B/flow-1/index.yaml"
+
+B2C - Delivery F&B:
+  summary: B2C flow-2 Use Case Specification
+  description: >-
+    Retail platforms enable seamless e-commerce, allowing buyers to search, select, and track products while sellers manage inventory. The search and on_search APIs retrieve catalog details, select and on_select manage item selection, and init and on_init establish agreements. Confirm and on_confirm process orders, on_status tracks progress, and track and on_track enable live tracking.
+  example_set:
+    $ref: "./B2C-F&B/flow-2/index.yaml"
+
+B2C - Item Out-of-stock F&B:
+  summary: B2C flow-3 Use Case Specification
+  description: >-
+    Retail platforms connect buyers and sellers for smooth transactions. Search and on_search handle catalog retrieval, select and on_select manage item selection, and init and on_init confirm agreements. Confirm and on_confirm process orders, on_status provides real-time updates, and track and on_track enable live tracking.
+  example_set:
+    $ref: "./B2C-F&B/flow-3/index.yaml"
+
+B2C - Buyer Side Cancellation F&B:
+  summary: B2C flow-4 Use Case Specification
+  description: >-
+    Retail platforms enable seamless e-commerce, allowing buyers to search, select, and track products while sellers manage inventory. The search and on_search APIs retrieve catalog details, select and on_select manage item selection, and init and on_init establish agreements. Confirm and on_confirm process orders, on_status tracks progress, and track and on_track enable live tracking.
+  example_set:
+    $ref: "./B2C-F&B/flow-4/index.yaml"
+
+B2C - Seller side Cancellation F&B:
+  summary: B2C flow-5 Use Case Specification
+  description: >-
+    Retail platforms connect buyers and sellers for smooth transactions. Search and on_search handle catalog retrieval, select and on_select manage item selection, and init and on_init confirm agreements. Confirm and on_confirm process orders, on_status provides real-time updates, and track and on_track enable live tracking.
+  example_set:
+    $ref: "./B2C-F&B/flow-5/index.yaml"

@@ -19,7 +19,7 @@ details:
         participant B2C BAP
         participant B2C BPP
 
-        B2C BAP ->> B2C BPP: **/select** - Buyer adds the item(s) to the card.
+        B2C BAP ->> B2C BPP: **/select** - Buyer adds the item(s) to the cart.
         B2C BPP ->> B2C BAP: **/on_select** - Returns quote breakup (adding offers if any) when item is in stock 
 
         B2C BAP ->> B2C BPP: **/init** - Buyer initializes the order and proceeds to checkout.
