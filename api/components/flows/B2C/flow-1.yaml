@@ -1,4 +1,4 @@
-summary: Retail 1.2.0 (flow - 1)
+summary: Retail 1.2.0 (Discovery Flow)
 description: Retail networks facilitate product and service offerings by connecting buyers and sellers. Consumer platforms use APIs for key e-commerce operations, such as searching and retrieving inventory from providers. The search and on_search APIs support full or incremental catalog refreshes.
 details:
   - description: Buyer Search For Full Catalog Refresh and Incremental Changes

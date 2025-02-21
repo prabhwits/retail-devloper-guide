@@ -1,4 +1,4 @@
-summary: Retail 1.2.0 (flow - 3)
+summary: Retail 1.2.0 (Out Of Stock)
 description: Retail platforms connect buyers and sellers for smooth transactions. Search and on_search handle catalog retrieval, select and on_select manage item selection, and init and on_init confirm agreements. Confirm and on_confirm process orders, on_status provides real-time updates, and track and on_track enable live tracking.
 details:
   - description: Buyer Search & Quotation

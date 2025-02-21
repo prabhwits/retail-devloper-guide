@@ -1,4 +1,4 @@
-summary: Retail 1.2.0 (flow - 5)
+summary: Retail 1.2.0 (Seller Side Order Cancellation)
 description: Retail platforms connect buyers and sellers for smooth transactions. search and on_search handle catalog retrieval, select and on_select manage item selection, and init and on_init confirm agreements. confirm and on_confirm process orders, while on_status provides real-time updates at various stages, including pending, packed, picked, out for delivery, and RTO delivered. on_cancel manages order cancellations efficiently.
 details:
   - description: Buyer Search & Quotation
