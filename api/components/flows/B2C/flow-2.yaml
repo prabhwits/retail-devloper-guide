@@ -1,4 +1,4 @@
-summary: Retail 1.2.0 (flow - 2)
+summary: Retail 1.2.0 (Delivery)
 description: Retail platforms enable seamless e-commerce, allowing buyers to search, select, and track products while sellers manage inventory. The search and on_search APIs retrieve catalog details, select and on_select manage item selection, and init and on_init establish agreements. Confirm and on_confirm process orders, on_status tracks progress, and track and on_track enable live tracking.
 details:
   - description: Buyer Search & Quotation

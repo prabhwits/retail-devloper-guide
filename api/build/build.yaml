@@ -368,44 +368,6 @@ paths:
                     $ref: '#/components/schemas/Error'
                 required:
                   - message
-  /rating:
-    post:
-      tags:
-        - ONDC Seller App
-      description: Provide feedback on a service
-      requestBody:
-        description: Buyer rates for one or more rating categories
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  $ref: '#/components/schemas/Rating'
-              required:
-                - context
-                - message
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
   /on_search:
     post:
       tags:
@@ -737,45 +699,6 @@ paths:
                       $ref: '#/components/schemas/Order'
                   required:
                     - order
-                error:
-                  $ref: '#/components/schemas/Error'
-              required:
-                - context
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
-  /on_rating:
-    post:
-      tags:
-        - ONDC Buyer App
-      description: Provide feedback on a service
-      requestBody:
-        description: Seller provides response to rating provided by buyer
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  $ref: '#/components/schemas/RatingAck'
                 error:
                   $ref: '#/components/schemas/Error'
               required:
@@ -2950,33 +2873,6 @@ x-enum:
                 - code: Order-picked-up
                   description: about the enum
                   reference: <PR/Issue/Discussion Links md format text>
-                - code: In-transit
-                  description: about the enum
-                  reference: <PR/Issue/Discussion Links md format text>
-                - code: At-domestic-hub
-                  description: about the enum
-                  reference: <PR/Issue/Discussion Links md format text>
-                - code: Custom-cleared-domestic
-                  description: about the enum
-                  reference: <PR/Issue/Discussion Links md format text>
-                - code: Custom-rejected-domestic
-                  description: about the enum
-                  reference: <PR/Issue/Discussion Links md format text>
-                - code: Shipped
-                  description: about the enum
-                  reference: <PR/Issue/Discussion Links md format text>
-                - code: Reached-destination-country
-                  description: about the enum
-                  reference: <PR/Issue/Discussion Links md format text>
-                - code: Custom-cleared-destination
-                  description: about the enum
-                  reference: <PR/Issue/Discussion Links md format text>
-                - code: Custom-rejected-destination
-                  description: about the enum
-                  reference: <PR/Issue/Discussion Links md format text>
-                - code: At-destination-hub
-                  description: about the enum
-                  reference: <PR/Issue/Discussion Links md format text>
                 - code: Out-for-delivery
                   description: about the enum
                   reference: <PR/Issue/Discussion Links md format text>
@@ -2995,7 +2891,7 @@ x-enum:
                 - code: RTO-Disposed
                   description: about the enum
                   reference: <PR/Issue/Discussion Links md format text>
-        payment: &ref_7
+        payment:
           type: *ref_5
           '@ondc/org/settlement_details':
             settlement_type:
@@ -3033,8 +2929,7 @@ x-enum:
           type: *ref_3
         quote:
           breakup: *ref_4
-        payment: &ref_8
-          payment_confirm: null
+        payment: &ref_7
           type:
             - code: ON-ORDER
               description: about the enum
@@ -3056,6 +2951,15 @@ x-enum:
               - code: rtgs
                 description: about the enum
                 reference: <PR/Issue/Discussion Links md format text>
+              - code: wallet
+                description: about the enum
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: netbanking
+                description: about the enum
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: paylater
+                description: about the enum
+                reference: <PR/Issue/Discussion Links md format text>
           '@ondc/org/buyer_app_finder_fee_type':
             - code: percent
               description: finder fee type
@@ -3069,9 +2973,6 @@ x-enum:
               reference: <PR/Issue/Discussion Links md format text>
             - code: BPP
               description: Collected by BPP
-              reference: <PR/Issue/Discussion Links md format text>
-            - code: SOR
-              description: Collected by Seller on Record
               reference: <PR/Issue/Discussion Links md format text>
           status:
             - code: PAID
@@ -3090,7 +2991,7 @@ x-enum:
             - code: return_window_expiry
               description: settlement_basis
               reference: <PR/Issue/Discussion Links md format text>
-        state: &ref_9
+        state: &ref_8
           - code: Created
             description: about the enum
             reference: <PR/Issue/Discussion Links md format text>
@@ -3117,22 +3018,74 @@ x-enum:
           breakup: *ref_4
         cancellation_terms:
           fulfillment_state: *ref_6
-        payment: &ref_10
-          payment: *ref_7
-          payment2: *ref_8
-        state: *ref_9
+        payment: *ref_7
+        state: *ref_8
   update:
     context: *ref_1
     message:
+      update_target:
+        - code: payment
+          description: about the enum
+          reference: <PR/Issue/Discussion Links md format text>
+        - code: item
+          description: about the enum
+          reference: <PR/Issue/Discussion Links md format text>
       order:
-        payment: *ref_10
+        payment: *ref_7
+      fulfillments:
+        type: &ref_9
+          - code: Cancel
+            description: about the enum
+            reference: <PR/Issue/Discussion Links md format text>
+          - code: Delivery
+            description: about the enum
+            reference: <PR/Issue/Discussion Links md format text>
+          - code: Return
+            description: about the enum
+            reference: <PR/Issue/Discussion Links md format text>
   on_update:
     context: *ref_1
     message:
       order:
         fulfillments:
-          state: *ref_6
-          instructions: &ref_11
+          state:
+            descriptor:
+              code:
+                - code: Accepted
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: Cancelled
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: Pending
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: Order-delivered
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: Return_Initiated
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: Return_Pick_Failed
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: Return_Approved
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: Return_Picked
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: Return_Delivered
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: Liquidated
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: Return_Rejected
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+          type: *ref_9
+          instructions: &ref_10
             code:
               - code: 1
                 description: buyer contact no (for self-pickup)
@@ -3148,8 +3101,8 @@ x-enum:
                 reference: <PR/Issue/Discussion Links md format text>
         quote:
           breakup: *ref_4
-        payment: *ref_10
-        state: *ref_9
+        payment: *ref_7
+        state: *ref_8
   status:
     context: *ref_1
   on_status:
@@ -3158,23 +3111,41 @@ x-enum:
       order:
         fulfillments:
           state: *ref_6
-          instructions: *ref_11
+          instructions: *ref_10
         quote:
           breakup: *ref_4
-        payment: *ref_10
-        state: *ref_9
+        payment: *ref_7
+        state: *ref_8
   cancel:
     context: *ref_1
   on_cancel:
     context: *ref_1
     message:
       order:
+        state:
+          - code: Cancelled
+            description: about the enum
+            reference: <PR/Issue/Discussion Links md format text>
         fulfillments:
           type: *ref_3
-          state: *ref_6
+          state:
+            descriptor:
+              code:
+                - code: Cancelled
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: RTO-Initiated
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: RTO-Delivered
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: RTO-Disposed
+                  description: about the enum
+                  reference: <PR/Issue/Discussion Links md format text>
         quote:
           breakup: *ref_4
-        payment: *ref_10
+        payment: *ref_7
   track:
     context: *ref_1
   on_track:
@@ -3225,6 +3196,26 @@ x-tags:
   on_search:
     message:
       catalog:
+        bpp/descriptor:
+          tags:
+            - code: BPP_TERMS
+              description: Description about the tags
+              reference: <PR/Issue/Discussion Links md format text>
+              required: required
+              list:
+                - code: NP_TYPE
+                  description: Allowed Values - [ISN, MSN]
+                  reference: <PR/Issue/Discussion Links md format text>
+        bpp/providers:
+          tags:
+            - code: TYPE
+              description: Description about the tags
+              reference: <PR/Issue/Discussion Links md format text>
+              required: required
+              list:
+                - code: TYPE
+                  description: Allowed Values - [variant_group, custom_group, custom_menu]
+                  reference: <PR/Issue/Discussion Links md format text>
         providers:
           tags:
             - code: SERVICEABILITY
@@ -3287,7 +3278,7 @@ x-tags:
               reference: <PR/Issue/Discussion Links md format text>
               list:
                 allOf:
-                  - &ref_12
+                  - &ref_11
                     - code: TYPE
                       description: >-
                         timing for fulfillment type, enum - "Order" (online
@@ -3328,7 +3319,7 @@ x-tags:
               - code: TYPE
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
-                list: &ref_13
+                list: &ref_12
                   - code: TYPE
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
@@ -3337,7 +3328,7 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: *ref_12
+                list: *ref_11
               - code: DISPLAY
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
@@ -3413,7 +3404,7 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: *ref_12
+                list: *ref_11
               - code: VEG_NONVEG
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
@@ -3429,7 +3420,7 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: &ref_15
+                list: &ref_14
                   - code: ID
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
@@ -3440,7 +3431,7 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: &ref_16
+                list: &ref_15
                   - code: ID
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
@@ -3448,7 +3439,7 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: *ref_13
+                list: *ref_12
               - code: ATTRIBUTE
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
@@ -3831,7 +3822,7 @@ x-tags:
                   - code: EXTENSION_COLOUR
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
-                    value: &ref_14
+                    value: &ref_13
                       - code: black
                         description: about the enum
                         reference: <pr/issue/discussion links md format text>
@@ -4686,7 +4677,7 @@ x-tags:
                   - code: COLOUR
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
-                    value: *ref_14
+                    value: *ref_13
                   - code: GENDER
                     description: Description about the tags
                     reference: <PR/Issue/Discussion Links md format text>
@@ -5889,12 +5880,12 @@ x-tags:
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: *ref_15
+                list: *ref_14
               - code: TYPE
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
                 required: required
-                list: *ref_13
+                list: *ref_12
           creds:
             tags:
               - code: VERIFICATION
@@ -5911,31 +5902,31 @@ x-tags:
                   - code: VALID_TO
                     description: Valid Date and Time, only if available
                     reference: <PR/Issue/Discussion Links md format text>
-  on_select: &ref_17
+  on_select: &ref_16
     message:
-      order: &ref_18
+      order: &ref_17
         tags:
           - code: TYPE
             description: Description about the tags
             reference: <PR/Issue/Discussion Links md format text>
             required: required
-            list: *ref_13
+            list: *ref_12
           - code: CHILD
             description: Description about the tags
             reference: <PR/Issue/Discussion Links md format text>
             required: required
-            list: *ref_16
+            list: *ref_15
           - code: PARENT
             description: Description about the tags
             reference: <PR/Issue/Discussion Links md format text>
             required: required
-            list: *ref_15
-  init: *ref_17
-  on_init: &ref_19
+            list: *ref_14
+  init: *ref_16
+  on_init: &ref_23
     message:
       order:
-        items: *ref_18
-        tags:
+        items: *ref_17
+        tags: &ref_22
           - code: BUYER_ID
             description: Description about the tags
             reference: <PR/Issue/Discussion Links md format text>
@@ -5991,8 +5982,14 @@ x-tags:
                   multiple states, the GST no for HQ for the provider legal
                   entity should be provided
                 reference: <PR/Issue/Discussion Links md format text>
+              - code: PROVIDER_TAX_NUMBER
+                description: Provider tax number
+                reference: <PR/Issue/Discussion Links md format text>
               - code: ACCEPT_BAP_TERMS
                 description: Description about the tags
+                reference: <PR/Issue/Discussion Links md format text>
+              - code: NP_TYPE
+                description: Allowed Values - [ISN, MSN]
                 reference: <PR/Issue/Discussion Links md format text>
           - code: BAP_TERMS
             description: Description about the tags
@@ -6008,7 +6005,7 @@ x-tags:
               - code: TAX_NUMBER
                 description: Description about the tags
                 reference: <PR/Issue/Discussion Links md format text>
-        fulfillments:
+        fulfillments: &ref_24
           tags:
             - code: CANCEL_REQUEST
               description: Description about the tags
@@ -6028,6 +6025,12 @@ x-tags:
                     registry lookup
                   reference: <PR/Issue/Discussion Links md format text>
                 - code: CANCELLED_BY
+                  description: Description about the tags
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: PRECANCEL_STATE
+                  description: Description about the tags
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: UPDATED_AT
                   description: Description about the tags
                   reference: <PR/Issue/Discussion Links md format text>
                 - code: RTO_ID
@@ -6095,23 +6098,77 @@ x-tags:
                 - code: INITIATED_BY
                   description: Description about the tags
                   reference: <PR/Issue/Discussion Links md format text>
-        quote: &ref_20
+            - code: IGM_REQUEST
+              description: Description about the tags
+              reference: <PR/Issue/Discussion Links md format text>
+              required: optional
+              list: &ref_18
+                - code: ID
+                  description: id for the igm issue
+                  reference: <PR/Issue/Discussion Links md format text>
+            - code: ROUTING
+              description: Description about the tags
+              reference: <PR/Issue/Discussion Links md format text>
+              required: optional
+              list: &ref_19
+                - code: TYPE
+                  description:
+                    - P2P
+                    - P2H2P
+                  reference: <PR/Issue/Discussion Links md format text>
+            - code: TRACKING
+              description: Description about the tags
+              reference: <PR/Issue/Discussion Links md format text>
+              required: optional
+              list: &ref_20
+                - code: GPS_ENABLED
+                  description: Description about the tags
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: URL_ENABLED
+                  description: Description about the tags
+                  reference: <PR/Issue/Discussion Links md format text>
+                - code: URL
+                  description: Description about the tags
+                  reference: <PR/Issue/Discussion Links md format text>
+        quote: &ref_21
           tags:
             - code: TYPE
               description: Description about the tags
               reference: <PR/Issue/Discussion Links md format text>
               required: required
-              list: *ref_13
+              list: *ref_12
             - code: PARENT
               description: Description about the tags
               reference: <PR/Issue/Discussion Links md format text>
               required: required
-              list: *ref_15
-  confirm: *ref_19
-  on_confirm: *ref_19
-  update: *ref_19
-  on_update: *ref_19
-  on_cancel: *ref_19
+              list: *ref_14
+  confirm:
+    message:
+      order:
+        items: *ref_17
+        fulfillments:
+          tags:
+            - code: IGM_REQUEST
+              description: Description about the tags
+              reference: <PR/Issue/Discussion Links md format text>
+              required: optional
+              list: *ref_18
+            - code: ROUTING
+              description: Description about the tags
+              reference: <PR/Issue/Discussion Links md format text>
+              required: optional
+              list: *ref_19
+            - code: TRACKING
+              description: Description about the tags
+              reference: <PR/Issue/Discussion Links md format text>
+              required: optional
+              list: *ref_20
+        quote: *ref_21
+        tags: *ref_22
+  on_confirm: *ref_23
+  update: *ref_23
+  on_update: *ref_23
+  on_cancel: *ref_23
   on_track:
     message:
       tracking:
@@ -6129,9 +6186,11 @@ x-tags:
                 reference: <PR/Issue/Discussion Links md format text>
   on_status:
     message:
-      order: *ref_20
+      order:
+        fulfillments: *ref_24
+        quote: *ref_21
 x-flows:
-  - summary: Retail 1.2.0 (flow - 1)
+  - summary: Retail 1.2.0 (Discovery Flow)
     description: >-
       Retail networks facilitate product and service offerings by connecting
       buyers and sellers. Consumer platforms use APIs for key e-commerce
@@ -6159,7 +6218,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_21
+        example: &ref_25
           value:
             context:
               domain: ONDC:RET10
@@ -6184,7 +6243,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_23
+        example: &ref_27
           value:
             context:
               domain: ONDC:RET10
@@ -6362,7 +6421,7 @@ x-flows:
         api: search - inc
         description: Bap sends search for incremental changes
         reference: if any
-        example: &ref_22
+        example: &ref_26
           value:
             context:
               domain: ONDC:RET10
@@ -6390,7 +6449,7 @@ x-flows:
         api: on_search - inc
         description: BPP returns the incremental changes
         reference: if any
-        example: &ref_24
+        example: &ref_28
           value:
             context:
               domain: ONDC:RET10
@@ -6466,7 +6525,7 @@ x-flows:
                               - code: country
                                 value: IND
                         id: P1
-  - summary: Retail 1.2.0 (flow - 2)
+  - summary: Retail 1.2.0 (Delivery)
     description: >-
       Retail platforms enable seamless e-commerce, allowing buyers to search,
       select, and track products while sellers manage inventory. The search and
@@ -6523,7 +6582,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_25
+        example: &ref_29
           value:
             context:
               domain: ONDC:RET10
@@ -6548,7 +6607,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_26
+        example: &ref_30
           value:
             context:
               domain: ONDC:RET10
@@ -6726,7 +6785,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_27
+        example: &ref_31
           value:
             context:
               domain: ONDC:RET10
@@ -6767,7 +6826,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_28
+        example: &ref_32
           value:
             context:
               domain: ONDC:RET10
@@ -6840,7 +6899,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_29
+        example: &ref_33
           value:
             context:
               domain: ONDC:RET10
@@ -6902,7 +6961,7 @@ x-flows:
         api: on_init
         description: null
         reference: if any
-        example: &ref_30
+        example: &ref_34
           value:
             context:
               domain: ONDC:RET10
@@ -7020,7 +7079,7 @@ x-flows:
         api: confirm
         description: null
         reference: if any
-        example: &ref_31
+        example: &ref_35
           value:
             context:
               domain: ONDC:RET10
@@ -7141,7 +7200,7 @@ x-flows:
         api: on_confirm
         description: null
         reference: if any
-        example: &ref_32
+        example: &ref_36
           value:
             context:
               domain: ONDC:RET10
@@ -7291,7 +7350,7 @@ x-flows:
         api: on_status
         description: Status updates - order packed
         reference: if any
-        example: &ref_33
+        example: &ref_37
           value:
             context:
               domain: ONDC:RET10
@@ -7428,7 +7487,7 @@ x-flows:
         api: on_status
         description: Status updates - agent assigned
         reference: if any
-        example: &ref_34
+        example: &ref_38
           value:
             context:
               domain: ONDC:RET10
@@ -7565,7 +7624,7 @@ x-flows:
         api: on_status
         description: Status updates - order picked up
         reference: if any
-        example: &ref_35
+        example: &ref_39
           value:
             context:
               domain: ONDC:RET10
@@ -7705,7 +7764,7 @@ x-flows:
         api: on_status
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_36
+        example: &ref_40
           value:
             context:
               domain: ONDC:RET10
@@ -7845,7 +7904,7 @@ x-flows:
         api: on_status
         description: Status updates - order delivered
         reference: if any
-        example: &ref_37
+        example: &ref_41
           value:
             context:
               domain: ONDC:RET10
@@ -7985,7 +8044,7 @@ x-flows:
         api: track
         description: BAP request to track the order
         reference: if any
-        example: &ref_38
+        example: &ref_42
           value:
             context:
               domain: ONDC:RET10
@@ -8006,7 +8065,7 @@ x-flows:
         api: on_track
         description: BPP sends the tracking information
         reference: if any
-        example: &ref_39
+        example: &ref_43
           value:
             context:
               domain: ONDC:RET10
@@ -8031,7 +8090,7 @@ x-flows:
                   updated_at: '2024-12-23T07:10:00.413Z'
                 url: https://sellerNP.com/ondc/tracking/F1
                 status: active
-  - summary: Retail 1.2.0 (flow - 3)
+  - summary: Retail 1.2.0 (Out Of Stock)
     description: >-
       Retail platforms connect buyers and sellers for smooth transactions.
       Search and on_search handle catalog retrieval, select and on_select manage
@@ -8091,7 +8150,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_40
+        example: &ref_44
           value:
             context:
               domain: ONDC:RET10
@@ -8116,7 +8175,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_41
+        example: &ref_45
           value:
             context:
               domain: ONDC:RET10
@@ -8294,7 +8353,7 @@ x-flows:
         api: select - out of stock
         description: BAP may add unavailable or out-of-stock items to the cart
         reference: if any
-        example: &ref_42
+        example: &ref_46
           value:
             context:
               domain: ONDC:RET10
@@ -8331,7 +8390,7 @@ x-flows:
         api: on_select - out of stock
         description: BPP returns item breakup when item is out of stock
         reference: if any
-        example: &ref_44
+        example: &ref_48
           value:
             context:
               domain: ONDC:RET10
@@ -8408,7 +8467,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_43
+        example: &ref_47
           value:
             context:
               domain: ONDC:RET10
@@ -8449,7 +8508,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_45
+        example: &ref_49
           value:
             context:
               domain: ONDC:RET10
@@ -8522,7 +8581,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_46
+        example: &ref_50
           value:
             context:
               domain: ONDC:RET10
@@ -8584,7 +8643,7 @@ x-flows:
         api: on_init
         description: null
         reference: if any
-        example: &ref_47
+        example: &ref_51
           value:
             context:
               domain: ONDC:RET10
@@ -8702,7 +8761,7 @@ x-flows:
         api: confirm
         description: null
         reference: if any
-        example: &ref_48
+        example: &ref_52
           value:
             context:
               domain: ONDC:RET10
@@ -8823,7 +8882,7 @@ x-flows:
         api: on_confirm
         description: null
         reference: if any
-        example: &ref_49
+        example: &ref_53
           value:
             context:
               domain: ONDC:RET10
@@ -8973,7 +9032,7 @@ x-flows:
         api: on_status
         description: Status updates - order packed
         reference: if any
-        example: &ref_50
+        example: &ref_54
           value:
             context:
               domain: ONDC:RET10
@@ -9110,7 +9169,7 @@ x-flows:
         api: on_status
         description: Status updates - agent assigned
         reference: if any
-        example: &ref_51
+        example: &ref_55
           value:
             context:
               domain: ONDC:RET10
@@ -9247,7 +9306,7 @@ x-flows:
         api: on_status
         description: Status updates - order picked up
         reference: if any
-        example: &ref_52
+        example: &ref_56
           value:
             context:
               domain: ONDC:RET10
@@ -9387,7 +9446,7 @@ x-flows:
         api: on_status
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_53
+        example: &ref_57
           value:
             context:
               domain: ONDC:RET10
@@ -9527,7 +9586,7 @@ x-flows:
         api: on_status
         description: Status updates - order delivered
         reference: if any
-        example: &ref_54
+        example: &ref_58
           value:
             context:
               domain: ONDC:RET10
@@ -9667,7 +9726,7 @@ x-flows:
         api: track
         description: BAP request to track the order
         reference: if any
-        example: &ref_55
+        example: &ref_59
           value:
             context:
               domain: ONDC:RET10
@@ -9688,7 +9747,7 @@ x-flows:
         api: on_track
         description: BPP sends the tracking information
         reference: if any
-        example: &ref_56
+        example: &ref_60
           value:
             context:
               domain: ONDC:RET10
@@ -9713,7 +9772,7 @@ x-flows:
                   updated_at: '2024-12-10T08:49:33.284Z'
                 url: https://sellerNP.com/ondc/tracking/F1
                 status: active
-  - summary: Retail 1.2.0 (flow - 4)
+  - summary: Retail 1.2.0 (Buyer Side Order Cancellation)
     description: >-
       Retail platforms connect buyers and sellers for smooth transactions.
       search and on_search handle catalog retrieval, select and on_select manage
@@ -9761,7 +9820,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_57
+        example: &ref_61
           value:
             context:
               domain: ONDC:RET12
@@ -9786,7 +9845,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_58
+        example: &ref_62
           value:
             context:
               domain: ONDC:RET12
@@ -10063,7 +10122,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_59
+        example: &ref_63
           value:
             context:
               domain: ONDC:RET12
@@ -10104,7 +10163,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_60
+        example: &ref_64
           value:
             context:
               domain: ONDC:RET12
@@ -10177,7 +10236,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_61
+        example: &ref_65
           value:
             context:
               domain: ONDC:RET12
@@ -10240,7 +10299,7 @@ x-flows:
         api: on_init
         description: null
         reference: if any
-        example: &ref_62
+        example: &ref_66
           value:
             context:
               domain: ONDC:RET12
@@ -10354,7 +10413,7 @@ x-flows:
         api: confirm
         description: null
         reference: if any
-        example: &ref_63
+        example: &ref_67
           value:
             context:
               domain: ONDC:RET12
@@ -10489,7 +10548,7 @@ x-flows:
         api: on_confirm
         description: null
         reference: if any
-        example: &ref_64
+        example: &ref_68
           value:
             context:
               domain: ONDC:RET12
@@ -10641,7 +10700,7 @@ x-flows:
         api: cancel
         description: Buyer request for the cancellation of the order
         reference: if any
-        example: &ref_65
+        example: &ref_69
           value:
             context:
               domain: ONDC:RET12
@@ -10664,7 +10723,7 @@ x-flows:
         api: on_cancel
         description: Seller confirms the cancellation of the order
         reference: if any
-        example: &ref_66
+        example: &ref_70
           value:
             context:
               domain: ONDC:RET12
@@ -10857,7 +10916,7 @@ x-flows:
                   cancelled_by: buyerNP.com
                   reason:
                     id: '001'
-  - summary: Retail 1.2.0 (flow - 5)
+  - summary: Retail 1.2.0 (Seller Side Order Cancellation)
     description: >-
       Retail platforms connect buyers and sellers for smooth transactions.
       search and on_search handle catalog retrieval, select and on_select manage
@@ -10913,7 +10972,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_67
+        example: &ref_71
           value:
             context:
               domain: ONDC:RET12
@@ -10938,7 +10997,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_68
+        example: &ref_72
           value:
             context:
               domain: ONDC:RET12
@@ -11215,7 +11274,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_69
+        example: &ref_73
           value:
             context:
               domain: ONDC:RET12
@@ -11256,7 +11315,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_70
+        example: &ref_74
           value:
             context:
               domain: ONDC:RET12
@@ -11329,7 +11388,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_71
+        example: &ref_75
           value:
             context:
               domain: ONDC:RET12
@@ -11392,7 +11451,7 @@ x-flows:
         api: on_init
         description: null
         reference: if any
-        example: &ref_72
+        example: &ref_76
           value:
             context:
               domain: ONDC:RET12
@@ -11506,7 +11565,7 @@ x-flows:
         api: confirm
         description: null
         reference: if any
-        example: &ref_73
+        example: &ref_77
           value:
             context:
               domain: ONDC:RET12
@@ -11641,7 +11700,7 @@ x-flows:
         api: on_confirm
         description: null
         reference: if any
-        example: &ref_74
+        example: &ref_78
           value:
             context:
               domain: ONDC:RET12
@@ -11793,7 +11852,7 @@ x-flows:
         api: on_status
         description: Status updates - order pending
         reference: if any
-        example: &ref_75
+        example: &ref_79
           value:
             context:
               city: std:080
@@ -11946,7 +12005,7 @@ x-flows:
         api: on_status
         description: Status updates - order packed
         reference: if any
-        example: &ref_76
+        example: &ref_80
           value:
             context:
               city: std:080
@@ -12099,7 +12158,7 @@ x-flows:
         api: on_status
         description: Status updates - order picked up
         reference: if any
-        example: &ref_77
+        example: &ref_81
           value:
             context:
               city: std:080
@@ -12257,7 +12316,7 @@ x-flows:
         api: on_status
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_78
+        example: &ref_82
           value:
             context:
               city: std:080
@@ -12415,7 +12474,7 @@ x-flows:
         api: on_status
         description: Order updates - seller side full-order cancellation
         reference: if any
-        example: &ref_80
+        example: &ref_84
           value:
             context:
               city: std:080
@@ -12631,7 +12690,7 @@ x-flows:
         api: on_status
         description: Status updates - rto order delivered
         reference: if any
-        example: &ref_79
+        example: &ref_83
           value:
             context:
               city: std:080
@@ -12926,8 +12985,8 @@ x-flows:
             Seller NP->>Buyer NP: **/on_track** - Provides live tracking details
     reference: if any
 x-examples:
-  B2C - flow 1:
-    summary: B2C flow-1 Use Case Specification
+  B2C - Discovery Flow:
+    summary: B2C Discovery Use Case Specification
     description: >-
       Retail networks facilitate product and service offerings by connecting
       buyers and sellers. Consumer platforms use APIs for key e-commerce
@@ -12936,14 +12995,14 @@ x-examples:
     example_set:
       search:
         examples:
-          search - full catalog refresh: *ref_21
-          search - incremental refresh: *ref_22
+          search - full catalog refresh: *ref_25
+          search - incremental refresh: *ref_26
       on_search:
         examples:
-          on_search - on full catalog refresh: *ref_23
-          on_search - on incremental refresh: *ref_24
-  B2C - flow 2:
-    summary: B2C flow-2 Use Case Specification
+          on_search - on full catalog refresh: *ref_27
+          on_search - on incremental refresh: *ref_28
+  B2C - Delivery:
+    summary: B2C Delivery Use Case Specification
     description: >-
       Retail platforms enable seamless e-commerce, allowing buyers to search,
       select, and track products while sellers manage inventory. The search and
@@ -12954,43 +13013,43 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_25
+          search: *ref_29
       on_search:
         examples:
-          on_search: *ref_26
+          on_search: *ref_30
       select:
         examples:
-          select: *ref_27
+          select: *ref_31
       on_select:
         examples:
-          on_select: *ref_28
+          on_select: *ref_32
       init:
         examples:
-          init: *ref_29
+          init: *ref_33
       on_init:
         examples:
-          on_init: *ref_30
+          on_init: *ref_34
       confirm:
         examples:
-          confirm: *ref_31
+          confirm: *ref_35
       on_confirm:
         examples:
-          on_confirm: *ref_32
+          on_confirm: *ref_36
       on_status:
         examples:
-          on_status - packed: *ref_33
-          on_status - agent assigned: *ref_34
-          on_status - picked: *ref_35
-          on_status - out for delivery: *ref_36
-          on_status - delivered: *ref_37
+          on_status - packed: *ref_37
+          on_status - agent assigned: *ref_38
+          on_status - picked: *ref_39
+          on_status - out for delivery: *ref_40
+          on_status - delivered: *ref_41
       track:
         examples:
-          track: *ref_38
+          track: *ref_42
       on_track:
         examples:
-          on_track: *ref_39
-  B2C - flow 3:
-    summary: B2C flow-3 Use Case Specification
+          on_track: *ref_43
+  B2C - Out Of Stock:
+    summary: B2C Out Of Stock Use Case Specification
     description: >-
       Retail platforms connect buyers and sellers for smooth transactions.
       Search and on_search handle catalog retrieval, select and on_select manage
@@ -13000,45 +13059,45 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_40
+          search: *ref_44
       on_search:
         examples:
-          on_search: *ref_41
+          on_search: *ref_45
       select:
         examples:
-          select - out of stock: *ref_42
-          select: *ref_43
+          select - out of stock: *ref_46
+          select: *ref_47
       on_select:
         examples:
-          on_select - out of stock: *ref_44
-          on_select: *ref_45
+          on_select - out of stock: *ref_48
+          on_select: *ref_49
       init:
         examples:
-          init: *ref_46
+          init: *ref_50
       on_init:
         examples:
-          on_init: *ref_47
+          on_init: *ref_51
       confirm:
         examples:
-          confirm: *ref_48
+          confirm: *ref_52
       on_confirm:
         examples:
-          on_confirm: *ref_49
+          on_confirm: *ref_53
       on_status:
         examples:
-          on_status - packed: *ref_50
-          on_status - agent assigned: *ref_51
-          on_status - picked: *ref_52
-          on_status - out for delivery: *ref_53
-          on_status - delivered: *ref_54
+          on_status - packed: *ref_54
+          on_status - agent assigned: *ref_55
+          on_status - picked: *ref_56
+          on_status - out for delivery: *ref_57
+          on_status - delivered: *ref_58
       track:
         examples:
-          track: *ref_55
+          track: *ref_59
       on_track:
         examples:
-          on_track: *ref_56
-  B2C - flow 4:
-    summary: B2C flow-4 Use Case Specification
+          on_track: *ref_60
+  B2C - Buyer Side Order Cancellation:
+    summary: B2C Buyer Side Order Cancellation Use Case Specification
     description: >-
       Retail platforms enable seamless e-commerce, allowing buyers to search,
       select, and track products while sellers manage inventory. The search and
@@ -13049,36 +13108,36 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_57
+          search: *ref_61
       on_search:
         examples:
-          on_search: *ref_58
+          on_search: *ref_62
       select:
         examples:
-          select: *ref_59
+          select: *ref_63
       on_select:
         examples:
-          on_select: *ref_60
+          on_select: *ref_64
       init:
         examples:
-          init: *ref_61
+          init: *ref_65
       on_init:
         examples:
-          on_init: *ref_62
+          on_init: *ref_66
       confirm:
         examples:
-          confirm: *ref_63
+          confirm: *ref_67
       on_confirm:
         examples:
-          on_confirm: *ref_64
+          on_confirm: *ref_68
       cancel:
         examples:
-          cancel: *ref_65
+          cancel: *ref_69
       on_cancel:
         examples:
-          on_cancel: *ref_66
-  B2C - flow 5:
-    summary: B2C flow-5 Use Case Specification
+          on_cancel: *ref_70
+  B2C - Seller Side Order Cancellation:
+    summary: B2C Seller Side Order Cancellation Use Case Specification
     description: >-
       Retail platforms connect buyers and sellers for smooth transactions.
       Search and on_search handle catalog retrieval, select and on_select manage
@@ -13088,38 +13147,38 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_67
+          search: *ref_71
       on_search:
         examples:
-          on_search: *ref_68
+          on_search: *ref_72
       select:
         examples:
-          select: *ref_69
+          select: *ref_73
       on_select:
         examples:
-          on_select: *ref_70
+          on_select: *ref_74
       init:
         examples:
-          init: *ref_71
+          init: *ref_75
       on_init:
         examples:
-          on_init: *ref_72
+          on_init: *ref_76
       confirm:
         examples:
-          confirm: *ref_73
+          confirm: *ref_77
       on_confirm:
         examples:
-          on_confirm: *ref_74
+          on_confirm: *ref_78
       on_status:
         examples:
-          on_status - pending: *ref_75
-          on_status - packed: *ref_76
-          on_status - picked: *ref_77
-          on_status - out for delivery: *ref_78
-          on_status - RTO delivered: *ref_79
+          on_status - pending: *ref_79
+          on_status - packed: *ref_80
+          on_status - picked: *ref_81
+          on_status - out for delivery: *ref_82
+          on_status - RTO delivered: *ref_83
       on_cancel:
         examples:
-          on_cancel: *ref_80
+          on_cancel: *ref_84
   B2C - flow 6:
     summary: B2C flow-6 Use Case Specification
     description: >-
