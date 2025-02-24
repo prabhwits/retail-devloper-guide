@@ -28,23 +28,7 @@ details:
         
         B2C BAP ->> B2C BPP: **/confirm** - Buyer confirms order
         B2C BPP ->> B2C BAP: **/on_confirm** - Seller Accepts order
-  - description: Status updates till Product Delivery
-    mermaidGraph: >-
-      sequenceDiagram
-
-        participant B2C BAP
-        participant B2C BPP
         
-        B2C BAP ->> B2C BPP: **/status** - Buyer requests for a Status update
-
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Packed
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Agent Assigned
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Picked Up
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Out for Delivery
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Delivered
-        B2C BPP ->> B2C BAP: /track - Tracking Initiated
-        B2C BPP ->> B2C BAP: /on_track - Real-time Tracking Updates
-
   - description: Part Cancellation and Product Delivery
     mermaidGraph: >-
       sequenceDiagram

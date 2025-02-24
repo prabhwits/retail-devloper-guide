@@ -28,24 +28,8 @@ details:
         
         B2C BAP ->> B2C BPP: **/confirm** - Buyer confirms order
         B2C BPP ->> B2C BAP: **/on_confirm** - Seller Accepts order
-  - description: Status updates till Product Delivery
-    mermaidGraph: >-
-      sequenceDiagram
 
-        participant B2C BAP
-        participant B2C BPP
-        
-        B2C BAP ->> B2C BPP: **/status** - Buyer requests for a Status update
-
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Packed
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Agent Assigned
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Picked Up
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Out for Delivery
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Delivered
-        B2C BPP ->> B2C BAP: /track - Tracking Initiated
-        B2C BPP ->> B2C BAP: /on_track - Real-time Tracking Updates
-
-  - description: Part Cancellation and Product Delivery
+  - description: Product Delivery
     mermaidGraph: >-
       sequenceDiagram
         participant B2C BAP
@@ -59,19 +43,11 @@ details:
         B2C BPP ->> B2C BAP: /on_status - Status Updates - Out for Delivery
         B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Delivered
 
-  - description: Return and Liquidation
+  - description: Liquidation
     mermaidGraph: >-
       sequenceDiagram
         participant B2C BAP
         participant B2C BPP
-
-        B2C BAP ->> B2C BPP: update - reverse qc - Return request from BAP
-        B2C BPP ->> B2C BAP: on_update - interim reverse qc - Return initiate request from BPP
-        B2C BPP ->> B2C BAP: on_update - approval - BPP approves return request
-        B2C BPP ->> B2C BAP: on_update - picked - Order picked up confirmation
-        B2C BPP ->> B2C BAP: update - reverse qc settlement - Settlement update
-
-        B2C BPP ->> B2C BAP: on_update - return delivered - Order return delivered confirmation
 
         B2C BAP ->> B2C BPP: update - liquidated - Return request from BAP
         B2C BPP ->> B2C BAP: on_update - interim liquidated - Return initiate request from BPP
