@@ -31,19 +31,19 @@ details:
   - description: Post-order APIs
     mermaidGraph: >-
       sequenceDiagram
-
+      
         participant B2C BAP
         participant B2C BPP
-        
+
         B2C BAP ->> B2C BPP: **/status** - Buyer requests for a Status update
 
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Packed
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Agent Assigned
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Picked Up
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Out for Delivery
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Delivered
-        B2C BPP ->> B2C BAP: /track - Tracking Initiated
-        B2C BPP ->> B2C BAP: /on_track - Real-time Tracking Updates
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Packed
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Agent Assigned
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Picked Up
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Out for Delivery
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Delivered
+        B2C BAP ->> B2C BPP: **/track** - Tracking Initiated
+        B2C BPP ->> B2C BAP: **/on_track** - Real-time Tracking Updates
 reference: if any
 steps:
   - summary: BAP sends the search request
@@ -95,31 +95,31 @@ steps:
     example:
       $ref: "../../examples/B2C/flow-2/08_on_confirm.yaml"
   - summary: Status updates - order packed
-    api: on_status
+    api: on_status - packed
     description: Status updates - order packed
     reference: if any
     example:
       $ref: "../../examples/B2C/flow-2/09_on_status_packed.yaml"
   - summary: Status updates - agent assigned
-    api: on_status
+    api: on_status - agent assigned
     description: Status updates - agent assigned
     reference: if any
     example:
       $ref: "../../examples/B2C/flow-2/10_01_on_status_agent_assigned.yaml"
   - summary: Status updates - order picked up
-    api: on_status
+    api: on_status - picked
     description: Status updates - order picked up
     reference: if any
     example:
       $ref: "../../examples/B2C/flow-2/10_on_status_picked.yaml"
   - summary: Status updates - order out for delivery
-    api: on_status
+    api: on_status - out_for_delivery
     description: Status updates - order out for delivery
     reference: if any
     example:
       $ref: "../../examples/B2C/flow-2/11_on_status_out_for_delivery.yaml"
   - summary: Status updates - order delivered
-    api: on_status
+    api: on_status - order_delivered
     description: Status updates - order delivered
     reference: if any
     example:

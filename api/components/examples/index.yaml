@@ -52,7 +52,6 @@ B2C - Liquidation:
   summary: B2C flow-6b Use Case Specification
   description: >-
     The Liquidation Flow in ONDC manages returns where the Seller NP opts for liquidation instead of restocking. After order placement and delivery, the Buyer NP initiates a return (/update), and the Seller NP confirms it (on_update_return_initiated.json). The Seller NP then processes liquidation (on_update_liquidated.json) and updates payment.
-
   example_set:
     $ref: "./B2C/flow-6b/index.yaml"
 
@@ -60,7 +59,6 @@ B2C - Reverse QC:
   summary: B2C flow-6c Use Case Specification
   description: >-
     The Reverse QC Flow in ONDC ensures quality checks before processing returns. After order fulfillment, the Buyer NP initiates a return (update_reverse_qc) , and the Seller NP conducts a quality check (on_update_interim_reverse_qc). If approved (on_update_approval), the item is picked up (on_update_picked) and settled by Buyer NP (update_settlement_reverse_qc) and delivered back to the seller/warehouse(on_update_delivered), ensuring a smooth return process.
-
   example_set:
     $ref: "./B2C/flow-6c/index.yaml"
 
@@ -68,7 +66,6 @@ B2C - Discovery phase F&B:
   summary: B2C flow-1 Use Case Specification
   description: >-
     The Discovery Phase in ONDC enables buyers to search for products or services across the network. The Buyer NP initiates a /search request to specify the search intent (live search or catalog crawl), and the Seller NP responds with an /on_search call, providing relevant product listings based on the request.
-
   example_set:
     $ref: "./B2C-F&B/flow-1/index.yaml"
 

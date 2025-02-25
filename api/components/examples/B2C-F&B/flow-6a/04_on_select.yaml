@@ -10,7 +10,7 @@ value:
     bpp_uri: https://sellerNP.com/ondc
     transaction_id: 88c5af81-48b9-4181-977a-e4bc3659d74f
     message_id: fa36a983-858d-4f29-827e-7775ce79aee2
-    timestamp: '2024-11-15T06:52:41.122Z'
+    timestamp: "2024-11-15T06:52:41.122Z"
     bpp_id: sellerNP.com
     ttl: PT30S
   message:
@@ -27,7 +27,7 @@ value:
               list:
                 - code: type
                   value: item
-          parent_item_id: ShxCIU+v5vYa
+          parent_item_id: RNO0lGOd4WSx
         - fulfillment_id: a48b0756-c7fe-469a-bf52-946529b5b2ba
           id: C1
           tags:
@@ -39,7 +39,7 @@ value:
               list:
                 - code: id
                   value: CG1
-          parent_item_id: ShxCIU+v5vYa
+          parent_item_id: RNO0lGOd4WSx
         - fulfillment_id: a48b0756-c7fe-469a-bf52-946529b5b2ba
           id: C4
           tags:
@@ -51,7 +51,7 @@ value:
               list:
                 - code: id
                   value: CG2
-          parent_item_id: ShxCIU+v5vYa
+          parent_item_id: RNO0lGOd4WSx
         - fulfillment_id: a48b0756-c7fe-469a-bf52-946529b5b2ba
           id: C12
           tags:
@@ -63,7 +63,7 @@ value:
               list:
                 - code: id
                   value: CG5
-          parent_item_id: ShxCIU+v5vYa
+          parent_item_id: RNO0lGOd4WSx
         - fulfillment_id: a48b0756-c7fe-469a-bf52-946529b5b2ba
           id: C13
           tags:
@@ -75,7 +75,7 @@ value:
               list:
                 - code: id
                   value: CG5
-          parent_item_id: ShxCIU+v5vYa
+          parent_item_id: RNO0lGOd4WSx
         - fulfillment_id: a48b0756-c7fe-469a-bf52-946529b5b2ba
           id: 4f4afe04-f72c-4ce6-a576-176e99a15c50
           tags:
@@ -83,7 +83,7 @@ value:
               list:
                 - code: type
                   value: item
-          parent_item_id: ++Zx7J0HpIuE
+          parent_item_id: AOmeVux87wXA
         - fulfillment_id: a48b0756-c7fe-469a-bf52-946529b5b2ba
           id: a650002
           tags:
@@ -95,7 +95,7 @@ value:
               list:
                 - code: id
                   value: A1000
-          parent_item_id: ++Zx7J0HpIuE
+          parent_item_id: AOmeVux87wXA
         - fulfillment_id: a48b0756-c7fe-469a-bf52-946529b5b2ba
           id: a650003
           tags:
@@ -107,7 +107,7 @@ value:
               list:
                 - code: id
                   value: A1001
-          parent_item_id: ++Zx7J0HpIuE
+          parent_item_id: AOmeVux87wXA
         - fulfillment_id: a48b0756-c7fe-469a-bf52-946529b5b2ba
           id: a650008
           tags:
@@ -119,7 +119,7 @@ value:
               list:
                 - code: id
                   value: A1005
-          parent_item_id: ++Zx7J0HpIuE
+          parent_item_id: AOmeVux87wXA
         - fulfillment_id: a48b0756-c7fe-469a-bf52-946529b5b2ba
           id: a6500011
           tags:
@@ -131,75 +131,75 @@ value:
               list:
                 - code: id
                   value: A1008
-          parent_item_id: ++Zx7J0HpIuE
+          parent_item_id: AOmeVux87wXA
       fulfillments:
         - id: a48b0756-c7fe-469a-bf52-946529b5b2ba
           type: Delivery
-          '@ondc/org/provider_name': Dominos Pizza's
+          "@ondc/org/provider_name": xyz
           tracking: true
-          '@ondc/org/category': Immediate Delivery
-          '@ondc/org/TAT': PT60M
+          "@ondc/org/category": Immediate Delivery
+          "@ondc/org/TAT": PT60M
           state:
             descriptor:
               code: Serviceable
       quote:
         price:
           currency: INR
-          value: '3331.40'
+          value: "3331.40"
         breakup:
-          - '@ondc/org/item_id': 7a1eb7d6-c522-5a69-936d-b9ebbaf88869
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": 7a1eb7d6-c522-5a69-936d-b9ebbaf88869
+            "@ondc/org/item_quantity":
               count: 2
             title: Farm House Pizza
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '538'
+              value: "538"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '269'
+                value: "269"
               tags:
                 - code: type
                   list:
                     - code: type
                       value: item
-              parent_item_id: ShxCIU+v5vYa
-          - '@ondc/org/item_id': 7a1eb7d6-c522-5a69-936d-b9ebbaf88869
+              parent_item_id: RNO0lGOd4WSx
+          - "@ondc/org/item_id": 7a1eb7d6-c522-5a69-936d-b9ebbaf88869
             title: Tax
-            '@ondc/org/title_type': tax
+            "@ondc/org/title_type": tax
             price:
               currency: INR
-              value: '13.45'
+              value: "13.45"
             item:
-              parent_item_id: ShxCIU+v5vYa
+              parent_item_id: RNO0lGOd4WSx
               tags:
                 - code: type
                   list:
                     - code: type
                       value: item
-          - '@ondc/org/item_id': C1
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": C1
+            "@ondc/org/item_quantity":
               count: 2
             title: New Hand Tossed
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '0'
+              value: "0"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '0'
+                value: "0"
               tags:
                 - code: type
                   list:
@@ -209,15 +209,15 @@ value:
                   list:
                     - code: id
                       value: CG1
-              parent_item_id: ShxCIU+v5vYa
-          - '@ondc/org/item_id': C1
+              parent_item_id: RNO0lGOd4WSx
+          - "@ondc/org/item_id": C1
             title: Tax
-            '@ondc/org/title_type': tax
+            "@ondc/org/title_type": tax
             price:
               currency: INR
-              value: '0.00'
+              value: "0.00"
             item:
-              parent_item_id: ShxCIU+v5vYa
+              parent_item_id: RNO0lGOd4WSx
               tags:
                 - code: type
                   list:
@@ -227,23 +227,23 @@ value:
                   list:
                     - code: id
                       value: CG1
-          - '@ondc/org/item_id': C4
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": C4
+            "@ondc/org/item_quantity":
               count: 2
             title: Large
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '900'
+              value: "900"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '450'
+                value: "450"
               tags:
                 - code: type
                   list:
@@ -253,15 +253,15 @@ value:
                   list:
                     - code: id
                       value: CG2
-              parent_item_id: ShxCIU+v5vYa
-          - '@ondc/org/item_id': C4
+              parent_item_id: RNO0lGOd4WSx
+          - "@ondc/org/item_id": C4
             title: Tax
-            '@ondc/org/title_type': tax
+            "@ondc/org/title_type": tax
             price:
               currency: INR
-              value: '8.50'
+              value: "8.50"
             item:
-              parent_item_id: ShxCIU+v5vYa
+              parent_item_id: RNO0lGOd4WSx
               tags:
                 - code: type
                   list:
@@ -271,23 +271,23 @@ value:
                   list:
                     - code: id
                       value: CG2
-          - '@ondc/org/item_id': C12
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": C12
+            "@ondc/org/item_quantity":
               count: 2
             title: Fresh Tomato
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '160'
+              value: "160"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '80'
+                value: "80"
               tags:
                 - code: type
                   list:
@@ -297,15 +297,15 @@ value:
                   list:
                     - code: id
                       value: CG5
-              parent_item_id: ShxCIU+v5vYa
-          - '@ondc/org/item_id': C12
+              parent_item_id: RNO0lGOd4WSx
+          - "@ondc/org/item_id": C12
             title: Tax
-            '@ondc/org/title_type': tax
+            "@ondc/org/title_type": tax
             price:
               currency: INR
-              value: '3.00'
+              value: "3.00"
             item:
-              parent_item_id: ShxCIU+v5vYa
+              parent_item_id: RNO0lGOd4WSx
               tags:
                 - code: type
                   list:
@@ -315,23 +315,23 @@ value:
                   list:
                     - code: id
                       value: CG5
-          - '@ondc/org/item_id': C13
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": C13
+            "@ondc/org/item_quantity":
               count: 2
             title: Pepper Barbeque
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '190'
+              value: "190"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '95'
+                value: "95"
               tags:
                 - code: type
                   list:
@@ -341,15 +341,15 @@ value:
                   list:
                     - code: id
                       value: CG5
-              parent_item_id: ShxCIU+v5vYa
-          - '@ondc/org/item_id': C13
+              parent_item_id: RNO0lGOd4WSx
+          - "@ondc/org/item_id": C13
             title: Tax
-            '@ondc/org/title_type': tax
+            "@ondc/org/title_type": tax
             price:
               currency: INR
-              value: '4.00'
+              value: "4.00"
             item:
-              parent_item_id: ShxCIU+v5vYa
+              parent_item_id: RNO0lGOd4WSx
               tags:
                 - code: type
                   list:
@@ -359,59 +359,59 @@ value:
                   list:
                     - code: id
                       value: CG5
-          - '@ondc/org/item_id': 4f4afe04-f72c-4ce6-a576-176e99a15c50
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": 4f4afe04-f72c-4ce6-a576-176e99a15c50
+            "@ondc/org/item_quantity":
               count: 2
             title: Mexican Patty Sandwichs
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '458'
+              value: "458"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '229'
+                value: "229"
               tags:
                 - code: type
                   list:
                     - code: type
                       value: item
-              parent_item_id: ++Zx7J0HpIuE
-          - '@ondc/org/item_id': 4f4afe04-f72c-4ce6-a576-176e99a15c50
+              parent_item_id: AOmeVux87wXA
+          - "@ondc/org/item_id": 4f4afe04-f72c-4ce6-a576-176e99a15c50
             title: Tax
-            '@ondc/org/title_type': tax
+            "@ondc/org/title_type": tax
             price:
               currency: INR
-              value: '12.45'
+              value: "12.45"
             item:
-              parent_item_id: ++Zx7J0HpIuE
+              parent_item_id: AOmeVux87wXA
               tags:
                 - code: type
                   list:
                     - code: type
                       value: item
-          - '@ondc/org/item_id': a650002
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": a650002
+            "@ondc/org/item_quantity":
               count: 2
             title: Make Cheese Pull Mexican Patty 30cm
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '540'
+              value: "540"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '270'
+                value: "270"
               tags:
                 - code: type
                   list:
@@ -421,15 +421,15 @@ value:
                   list:
                     - code: id
                       value: A1000
-              parent_item_id: ++Zx7J0HpIuE
-          - '@ondc/org/item_id': a650002
+              parent_item_id: AOmeVux87wXA
+          - "@ondc/org/item_id": a650002
             title: Tax
-            '@ondc/org/title_type': tax
+            "@ondc/org/title_type": tax
             price:
               currency: INR
-              value: '2.00'
+              value: "2.00"
             item:
-              parent_item_id: ++Zx7J0HpIuE
+              parent_item_id: AOmeVux87wXA
               tags:
                 - code: type
                   list:
@@ -439,23 +439,23 @@ value:
                   list:
                     - code: id
                       value: A1000
-          - '@ondc/org/item_id': a650003
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": a650003
+            "@ondc/org/item_quantity":
               count: 2
             title: Multigrain Honey Oats
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '0'
+              value: "0"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '0'
+                value: "0"
               tags:
                 - code: type
                   list:
@@ -465,15 +465,15 @@ value:
                   list:
                     - code: id
                       value: A1001
-              parent_item_id: ++Zx7J0HpIuE
-          - '@ondc/org/item_id': a650003
+              parent_item_id: AOmeVux87wXA
+          - "@ondc/org/item_id": a650003
             title: Tax
-            '@ondc/org/title_type': tax
+            "@ondc/org/title_type": tax
             price:
               currency: INR
-              value: '4.50'
+              value: "4.50"
             item:
-              parent_item_id: ++Zx7J0HpIuE
+              parent_item_id: AOmeVux87wXA
               tags:
                 - code: type
                   list:
@@ -483,23 +483,23 @@ value:
                   list:
                     - code: id
                       value: A1001
-          - '@ondc/org/item_id': a650008
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": a650008
+            "@ondc/org/item_quantity":
               count: 2
             title: Extra Mexican Bean Patty Footlong
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '240'
+              value: "240"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '120'
+                value: "120"
               tags:
                 - code: type
                   list:
@@ -509,15 +509,15 @@ value:
                   list:
                     - code: id
                       value: A1005
-              parent_item_id: ++Zx7J0HpIuE
-          - '@ondc/org/item_id': a650008
+              parent_item_id: AOmeVux87wXA
+          - "@ondc/org/item_id": a650008
             title: Tax
-            '@ondc/org/title_type': tax
+            "@ondc/org/title_type": tax
             price:
               currency: INR
-              value: '7.50'
+              value: "7.50"
             item:
-              parent_item_id: ++Zx7J0HpIuE
+              parent_item_id: AOmeVux87wXA
               tags:
                 - code: type
                   list:
@@ -527,23 +527,23 @@ value:
                   list:
                     - code: id
                       value: A1005
-          - '@ondc/org/item_id': a6500011
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": a6500011
+            "@ondc/org/item_quantity":
               count: 2
             title: Dark Chunk Choc Cookies
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '198'
+              value: "198"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '99'
+                value: "99"
               tags:
                 - code: type
                   list:
@@ -553,15 +553,15 @@ value:
                   list:
                     - code: id
                       value: A1008
-              parent_item_id: ++Zx7J0HpIuE
-          - '@ondc/org/item_id': a6500011
+              parent_item_id: AOmeVux87wXA
+          - "@ondc/org/item_id": a6500011
             title: Tax
-            '@ondc/org/title_type': tax
+            "@ondc/org/title_type": tax
             price:
               currency: INR
-              value: '12.00'
+              value: "12.00"
             item:
-              parent_item_id: ++Zx7J0HpIuE
+              parent_item_id: AOmeVux87wXA
               tags:
                 - code: type
                   list:
@@ -571,22 +571,22 @@ value:
                   list:
                     - code: id
                       value: A1008
-          - '@ondc/org/item_id': a48b0756-c7fe-469a-bf52-946529b5b2ba
+          - "@ondc/org/item_id": a48b0756-c7fe-469a-bf52-946529b5b2ba
             title: Packing charges
-            '@ondc/org/title_type': packing
+            "@ondc/org/title_type": packing
             price:
               currency: INR
-              value: '10'
-          - '@ondc/org/item_id': a48b0756-c7fe-469a-bf52-946529b5b2ba
+              value: "10"
+          - "@ondc/org/item_id": a48b0756-c7fe-469a-bf52-946529b5b2ba
             title: Delivery charges
-            '@ondc/org/title_type': delivery
+            "@ondc/org/title_type": delivery
             price:
               currency: INR
-              value: '20'
-          - '@ondc/org/item_id': a48b0756-c7fe-469a-bf52-946529b5b2ba
+              value: "20"
+          - "@ondc/org/item_id": a48b0756-c7fe-469a-bf52-946529b5b2ba
             title: Convenience Fee
-            '@ondc/org/title_type': misc
+            "@ondc/org/title_type": misc
             price:
               currency: INR
-              value: '10'
+              value: "10"
         ttl: P1D

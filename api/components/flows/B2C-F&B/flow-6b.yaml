@@ -32,28 +32,27 @@ details:
   - description: Product Delivery
     mermaidGraph: >-
       sequenceDiagram
+        
         participant B2C BAP
         participant B2C BPP
 
-        B2C BPP ->> B2C BAP: /on_update - Order Update - Part Cancel
-        B2C BAP ->> B2C BPP: /update - Settlement for Part Cancel
-
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Packed
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Picked Up
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Out for Delivery
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Delivered
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Pending
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Packed
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Picked Up
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Out for Delivery
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Delivered
 
   - description: Liquidation
     mermaidGraph: >-
       sequenceDiagram
+        
         participant B2C BAP
         participant B2C BPP
 
-        B2C BAP ->> B2C BPP: update - liquidated - Return request from BAP
-        B2C BPP ->> B2C BAP: on_update - interim liquidated - Return initiate request from BPP
-        B2C BPP ->> B2C BAP: on_update - liquidated - BPP approves return request and liquidates items
-        B2C BPP ->> B2C BAP: update - liquidated settlement - Settlement update
-
+        B2C BAP ->> B2C BPP: **/update** - liquidated - Return request from BAP
+        B2C BPP ->> B2C BAP: **/on_update** - interim liquidated - Return initiate request from BPP
+        B2C BPP ->> B2C BAP: **/on_update** - liquidated - BPP approves return request and liquidates items
+        B2C BAP ->> B2C BPP: **/update** - liquidated settlement - Settlement update
 reference: if any
 steps:
   - summary: BAP sends the search request
@@ -105,31 +104,31 @@ steps:
     example:
       $ref: "../../examples/B2C-F&B/flow-6b/08_on_confirm.yaml"
   - summary: Status updates - order accepted
-    api: on_status
+    api: on_status - pending
     description: Status updates - order accepted
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-6b/09_on_status_accepted.yaml"
   - summary: Status updates - order packed
-    api: on_status
+    api: on_status - packed
     description: Status updates - order packed
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-6b/10_on_status_packed.yaml"
   - summary: Status updates - order picked up
-    api: on_status
+    api: on_status - picked
     description: Status updates - order picked up
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-6b/11_on_status_order_picked_up.yaml"
   - summary: Status updates - order out for delivery
-    api: on_status
+    api: on_status - out_for_delivery
     description: Status updates - order out for delivery
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-6b/12_on_status_out_for_delivery.yaml"
   - summary: Status updates - order delivered
-    api: on_status
+    api: on_status - order_delivered
     description: Status updates - order delivered
     reference: if any
     example:

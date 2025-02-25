@@ -1,4 +1,4 @@
-summary: Retail 1.2.0 (Seller Side Order Cancellation) F&B
+summary: Retail 1.2.0 (Seller Side Order Cancellation RTO) F&B
 description: The Seller-Initiated Cancellation Flow in ONDC allows the Seller NP or Logistics Service Provider (LSP) to cancel an order if the buyer is unavailable, etc. The Seller NP/LSP sends an unsolicited cancellation request (/on_cancel), citing the cancellation reason. The order is then marked as canceled, and any applicable refunds or reversals are processed as per the cancellation terms.
 details:
   - description: Buyer Search & Quotation
@@ -34,15 +34,15 @@ details:
 
         participant B2C BAP
         participant B2C BPP
-        
+
         B2C BAP ->> B2C BPP: **/status** - Buyer requests for a Status update
 
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Pending
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Packed
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Order Picked Up
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - Out for Delivery
-        B2C BPP ->> B2C BAP: /on_cancel - Order State Updates - RTO Side Full Order cancellations
-        B2C BPP ->> B2C BAP: /on_status - Status Updates - RTO Delivered/Disposed
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Pending
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Packed
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Picked Up
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Out for Delivery
+        B2C BPP ->> B2C BAP: **/on_cancel** - Order State Updates - RTO Side Full Order cancellations
+        B2C BPP ->> B2C BAP: **/on_status** - Status Updates - RTO Delivered/Disposed
 reference: if any
 steps:
   - summary: BAP sends the search request
@@ -94,25 +94,25 @@ steps:
     example:
       $ref: "../../examples/B2C-F&B/flow-5/08_on_confirm.yaml"
   - summary: Status updates - order pending
-    api: on_status
+    api: on_status - pending
     description: Status updates - order pending
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-5/09_on_status_accepted.yaml"
   - summary: Status updates - order packed
-    api: on_status
+    api: on_status - packed
     description: Status updates - order packed
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-5/10_on_status_packed.yaml"
   - summary: Status updates - order picked up
-    api: on_status
+    api: on_status - picked
     description: Status updates - order picked up
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-5/11_on_status_picked.yaml"
   - summary: Status updates - order out for delivery
-    api: on_status
+    api: on_status - out_for_delivery
     description: Status updates - order out for delivery
     reference: if any
     example:
@@ -124,7 +124,7 @@ steps:
     example:
       $ref: "../../examples/B2C-F&B/flow-5/13_rto_initiated.yaml"
   - summary: Status updates - rto order delivered
-    api: on_status
+    api: on_status - rto_delivered/disposed
     description: Status updates - rto order delivered
     reference: if any
     example:

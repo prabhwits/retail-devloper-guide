@@ -8,7 +8,7 @@ value:
     bap_id: buyerNP.com
     bap_uri: https://buyerNP.com/ondc
     bpp_id: sellerNP.com
-    bpp_uri: sellerNP.com
+    bpp_uri: https://sellerNP.com/ondc
     transaction_id: 91728968-9aea-4d66-94a5-49dc89820af8
     message_id: a0d52c46247b7829f83aeb0a2e9d4186
     timestamp: "2025-02-10T08:29:54.000Z"
