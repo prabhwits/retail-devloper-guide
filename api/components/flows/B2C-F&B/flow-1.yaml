@@ -1,5 +1,6 @@
 summary: Retail 1.2.0 (Discovery Flow) F&B
-description: Retail networks facilitate product and service offerings by connecting buyers and sellers. Consumer platforms use APIs for key e-commerce operations, such as searching and retrieving inventory from providers. The search and on_search APIs support full or incremental catalog refreshes.
+description: The Discovery Phase in ONDC enables buyers to search for products or services across the network. The Buyer NP initiates a /search request to specify the search intent (live search or catalog crawl), and the Seller NP responds with an /on_search call, providing relevant product listings based on the request.
+
 details:
   - description: Buyer Search For Full Catalog Refresh and Incremental Changes
     mermaidGraph: >-
@@ -30,7 +31,7 @@ steps:
     description: BPP returns the full catalog refresh
     reference: if any
     example:
-      $ref:  "../../examples/B2C-F&B/flow-1/02_on_search_full_catalog_refresh.yaml"
+      $ref: "../../examples/B2C-F&B/flow-1/02_on_search_full_catalog_refresh.yaml"
   - summary: Bap sends search for incremental changes
     api: search - inc
     description: Bap sends search for incremental changes
@@ -42,4 +43,4 @@ steps:
     description: BPP returns the incremental changes
     reference: if any
     example:
-      $ref:  "../../examples/B2C-F&B/flow-1/04_on_search_inc_refresh.yaml"
+      $ref: "../../examples/B2C-F&B/flow-1/04_on_search_inc_refresh.yaml"

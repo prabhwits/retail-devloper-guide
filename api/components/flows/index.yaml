@@ -17,4 +17,4 @@
 - $ref: "./B2C-F&B/flow-4.yaml"
 - $ref: "./B2C-F&B/flow-5.yaml"
 - $ref: "./B2C-F&B/flow-6a.yaml"
-# - $ref: "./B2C-F&B/flow-6b.yaml"
+- $ref: "./B2C-F&B/flow-6b.yaml"

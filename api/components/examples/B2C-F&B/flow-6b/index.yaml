@@ -60,10 +60,10 @@ update:
 
 on_update:
   examples:
-    on_update - liquidated:
-      $ref: ./15_on_update_liquidated.yaml
     on_update - return initiated:
-      $ref: ./16_on_update_return_initiated.yaml
+      $ref: ./15_on_update_return_initiated.yaml
+    on_update - liquidated:
+      $ref: ./16_on_update_liquidated.yaml
 
 track:
   examples:

@@ -1,5 +1,5 @@
 summary: Retail 1.2.0 (Out Of Stock) F&B
-description: Retail platforms connect buyers and sellers for smooth transactions. Search and on_search handle catalog retrieval, select and on_select manage item selection, and init and on_init confirm agreements. Confirm and on_confirm process orders, on_status provides real-time updates, and track and on_track enable live tracking.
+description: The Buyer NP selects multiple items (/select), and the Seller NP responds with fulfillment options and stock availability (/on_select). If an item is out of stock or partially available, the Buyer NP modifies the selection and reattempts (/select). Once finalized, both parties confirm terms (/init, /on_init), and the order is placed (/confirm, /on_confirm).  Post-order, The Seller NP provides unsolicited updates (/on_status) until delivery while the Buyer NP tracks the order (/track) and Seller NP sends the tracking detail (/on_track).
 details:
   - description: Buyer Search & Quotation
     mermaidGraph: >-
@@ -94,19 +94,19 @@ steps:
       $ref: "../../examples/B2C-F&B/flow-3/07_init.yaml"
   - summary: Respond to init
     api: on_init
-    description:
+    description: Respond to init
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-3/08_on_init.yaml"
   - summary: Buyer confirms product
     api: confirm
-    description:
+    description: Buyer confirms product
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-3/09_confirm.yaml"
   - summary: Seller Accepts confirmation
     api: on_confirm
-    description:
+    description: Seller Accepts confirmation
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-3/10_on_confirm.yaml"

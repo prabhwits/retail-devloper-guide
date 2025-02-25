@@ -1,5 +1,5 @@
 summary: Retail 1.2.0 (Delivery) F&B
-description: Retail platforms enable seamless e-commerce, allowing buyers to search, select, and track products while sellers manage inventory. The search and on_search APIs retrieve catalog details, select and on_select manage item selection, and init and on_init establish agreements. Confirm and on_confirm process orders, on_status tracks progress, and track and on_track enable live tracking.
+description: The Order Fulfillment Phase in ONDC covers item selection, order confirmation, and tracking. The Buyer NP selects items (/select), and the Seller NP responds with serviceability details (/on_select). Both parties finalize terms (/init, /on_init), and the order is placed (/confirm). The Seller NP then accepts, defers, or rejects the order (/on_confirm). Post-order, The Seller NP provides unsolicited updates (/on_status) until delivery while the Buyer NP tracks the order (/track) and Seller NP sends the tracking detail (/on_track).
 details:
   - description: Buyer Search & Quotation
     mermaidGraph: >-
@@ -48,7 +48,7 @@ reference: if any
 steps:
   - summary: BAP sends the search request
     api: search
-    description: BAP sends the search request
+    description: buyer NP specifies the search intent for live search or for catalog crawl
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-2/01_search_full_catalog_refresh.yaml"
@@ -78,19 +78,19 @@ steps:
       $ref: "../../examples/B2C-F&B/flow-2/05_init.yaml"
   - summary: Respond to init
     api: on_init
-    description:
+    description: Respond to init
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-2/06_on_init.yaml"
   - summary: Buyer confirms product
     api: confirm
-    description:
+    description: Buyer confirms product
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-2/07_confirm.yaml"
   - summary: Seller Accepts confirmation
     api: on_confirm
-    description:
+    description: Seller Accepts confirmation
     reference: if any
     example:
       $ref: "../../examples/B2C-F&B/flow-2/08_on_confirm.yaml"
