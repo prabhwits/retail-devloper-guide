@@ -98,7 +98,7 @@ steps:
     description: Status updates - order pending
     reference: if any
     example:
-      $ref: "../../examples/B2C-F&B/flow-5/09_on_status_pending.yaml"
+      $ref: "../../examples/B2C-F&B/flow-5/09_on_status_accepted.yaml"
   - summary: Status updates - order packed
     api: on_status
     description: Status updates - order packed
@@ -122,10 +122,10 @@ steps:
     description: Order updates - seller side full-order cancellation
     reference: if any
     example:
-      $ref: "../../examples/B2C-F&B/flow-5/13_on_cancel.yaml"
+      $ref: "../../examples/B2C-F&B/flow-5/13_rto_initiated.yaml"
   - summary: Status updates - rto order delivered
     api: on_status
     description: Status updates - rto order delivered
     reference: if any
     example:
-      $ref: "../../examples/B2C-F&B/flow-5/14_on_status_rto_delivered.yaml"
+      $ref: "../../examples/B2C-F&B/flow-5/14_on_status_rto_disposed.yaml"

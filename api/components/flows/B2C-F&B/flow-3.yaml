@@ -112,16 +112,16 @@ steps:
       $ref: "../../examples/B2C-F&B/flow-3/10_on_confirm.yaml"
   - summary: Status updates - order packed
     api: on_status
-    description: Status updates - order packed
+    description: Status updates - order accepted
     reference: if any
     example:
-      $ref: "../../examples/B2C-F&B/flow-3/11_on_status_packed.yaml"
-  - summary: Status updates - agent assigned
+      $ref: "../../examples/B2C-F&B/flow-3/11_on_status_accepted.yaml"
+  - summary: Status updates - agent packed
     api: on_status
-    description: Status updates - agent assigned
+    description: Status updates - agent packed
     reference: if any
     example:
-      $ref: "../../examples/B2C-F&B/flow-3/12_on_status_agent_assigned.yaml"
+      $ref: "../../examples/B2C-F&B/flow-3/12_on_status_packed.yaml"
   - summary: Status updates - order picked up
     api: on_status
     description: Status updates - order picked up
