@@ -1,0 +1,45 @@
+summary: Retail 1.2.0 (Discovery Flow) F&B
+description: Retail networks facilitate product and service offerings by connecting buyers and sellers. Consumer platforms use APIs for key e-commerce operations, such as searching and retrieving inventory from providers. The search and on_search APIs support full or incremental catalog refreshes.
+details:
+  - description: Buyer Search For Full Catalog Refresh and Incremental Changes
+    mermaidGraph: >-
+      sequenceDiagram
+
+        participant B2C BAP
+        participant Gateway
+        participant B2C BPP
+
+        B2C BAP->>Gateway: **/search**  - Buyer searches for full catalog refresh
+        Gateway->>B2C BPP: **/search**  - Buyer searches for full catalog refresh
+        B2C BPP->>B2C BAP: **/on_search** - Returns the item or catalog for the specific domain
+
+        B2C BAP->>Gateway: **/search - inc**  - Buyer searches for incremental changes
+        Gateway->>B2C BPP: **/search - inc**  - Buyer searches for incremental changes
+        B2C BPP->>B2C BAP: **/on_search - inc** - Returns the item or catalog incremental changes for the specific domain
+
+reference: if any
+steps:
+  - summary: BAP sends the search request
+    api: search
+    description: BAP sends the search request
+    reference: if any
+    example:
+      $ref: "../../examples/B2C-F&B/flow-1/01_search_full_catalog_refresh.yaml"
+  - summary: BPP returns the full catalog refresh
+    api: on_search
+    description: BPP returns the full catalog refresh
+    reference: if any
+    example:
+      $ref:  "../../examples/B2C-F&B/flow-1/02_on_search_full_catalog_refresh.yaml"
+  - summary: Bap sends search for incremental changes
+    api: search - inc
+    description: Bap sends search for incremental changes
+    reference: if any
+    example:
+      $ref: "../../examples/B2C-F&B/flow-1/03_search_inc_refresh.yaml"
+  - summary: BPP returns the incremental changes
+    api: on_search - inc
+    description: BPP returns the incremental changes
+    reference: if any
+    example:
+      $ref:  "../../examples/B2C-F&B/flow-1/04_on_search_inc_refresh.yaml"

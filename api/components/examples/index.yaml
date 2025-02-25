@@ -75,3 +75,18 @@ B2C - Seller side Cancellation F&B:
     Retail platforms connect buyers and sellers for smooth transactions. Search and on_search handle catalog retrieval, select and on_select manage item selection, and init and on_init confirm agreements. Confirm and on_confirm process orders, on_status provides real-time updates, and track and on_track enable live tracking.
   example_set:
     $ref: "./B2C-F&B/flow-5/index.yaml"
+
+B2C - Part Cancellation F&B:
+  summary: B2C flow-6a Use Case Specification
+  description: >-
+    Retail platforms connect buyers and sellers for smooth transactions. Search and on_search handle catalog retrieval, select and on_select manage item selection, and init and on_init confirm agreements. Confirm and on_confirm process orders, update and on_update describes the part-cancellation of items, on_status provides real-time updates, and track and on_track enable live tracking.
+  example_set:
+    $ref: "./B2C-F&B/flow-6a/index.yaml"    
+  
+
+B2C - Liquidation F&B:
+  summary: B2C flow-6b Use Case Specification
+  description: >-
+    Retail platforms connect buyers and sellers for smooth transactions. Search and on_search handle catalog retrieval, update and on_update refer to the liquidation process, select and on_select manage item selection, and init and on_init confirm agreements. Confirm and on_confirm process orders, on_status provides real-time updates, and track and on_track enable live tracking.
+  example_set:
+    $ref: "./B2C-F&B/flow-6b/index.yaml"    
