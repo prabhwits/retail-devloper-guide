@@ -1,0 +1,15 @@
+search_full_catalog:
+  parent: true
+  $ref: "./search/search_full_catalog.yaml"
+
+search_incremental:
+  parent: true
+  $ref: "./search/search_incremental.yaml"
+
+on_search_full_catalog:
+  parent: true
+  $ref: "./on_search/on_search_full_catalog.yaml"
+
+on_search_incremental:
+  parent: true
+  $ref: "./on_search/on_search_incremental.yaml"
