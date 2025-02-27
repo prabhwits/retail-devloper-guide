@@ -13,12 +13,19 @@ B2C - Delivery:
   example_set:
     $ref: "./B2C/flow-2/index.yaml"
 
-B2C - COD:
+B2C - COD:  
   summary: B2C Cash-On-Delivery Use Case Specification
   description: >-
     Retail platforms enable seamless e-commerce, allowing buyers to search, select, and track products while sellers manage inventory. The search and on_search APIs retrieve catalog details, select and on_select manage item selection, and init and on_init establish agreements. Confirm and on_confirm process orders, on_status tracks progress, and track and on_track enable live tracking.
   example_set:
     $ref: "./B2C/cod-flow/index.yaml"
+
+B2C - Buyer Delivery:
+  summary: B2C Cash-On-Delivery Use Case Specification
+  description: >-
+    The Order Fulfillment Phase in ONDC involves item selection, order confirmation, and tracking. The Buyer Network Participant (Buyer NP) selects items using the /select API, and the Seller Network Participant (Seller NP) responds with serviceability details via /on_select. Both parties finalize terms using /init, and the Seller NP acknowledges it with /on_init. Once finalized, the Buyer NP places the order via /confirm, and the Seller NP either accepts, defers, or rejects the order using /on_confirm. After order placement, the Seller NP provides unsolicited status updates through /on_status until the order is packed. From this point, the Buyer NP takes over by providing solicited updates using /update until the order is delivered, while the Seller NP acknowledges these updates through /on_update.
+  example_set:
+    $ref: "./B2C/buyer-delivery/index.yaml"
 
 B2C - Item Out-of-stock:
   summary: B2C flow-3 Use Case Specification

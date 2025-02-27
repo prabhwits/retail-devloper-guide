@@ -18,6 +18,9 @@ value:
       payment:
         '@ondc/org/buyer_app_finder_fee_type': percent
         '@ondc/org/buyer_app_finder_fee_amount': '3'
+        '@ondc/org/settlement_basis': delivery
+        '@ondc/org/settlement_window': P1D
+        '@ondc/org/withholding_amount': '10.00'
       tags:
         - code: bap_terms
           list:

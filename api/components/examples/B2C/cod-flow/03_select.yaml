@@ -31,7 +31,7 @@ value:
       fulfillments:
         - end:
             location:
-              gps: 28.326451046477988, 76.77823101205861
+              gps: 28.326451046477988,76.77823101205861
               address:
                 area_code: '122503'
       payment:

@@ -1,0 +1,79 @@
+value:
+  context:
+    domain: ONDC:RET10
+    action: update
+    core_version: 1.2.0
+    bap_id: buyerNP.com
+    bap_uri: https://buyerNP.com/ondc
+    bpp_id: sellerNP.com
+    bpp_uri: https://sellerNP.com/ondc
+    transaction_id: T1
+    message_id: M10
+    city: std:080
+    country: IND
+    timestamp: '2023-11-17T10:00:00.000Z'
+  message:
+    update_target: fulfillment
+    order:
+      id: 2024-08-08-739546
+      fulfillments:
+        - id: F3
+          tags:
+            - code: update_state
+              list:
+                - code: state
+                  value: Out-For-Delivery
+                - code: reason_id
+                  value: '007'
+            - code: update_fulfillment_time
+              list:
+                - code: state
+                  value: Out-For-Delivery
+                - code: timestamp
+                  value: '2023-11-17T10:30:00.000Z'
+                - code: start_time
+                  value: '2023-11-17T10:00:00.000Z'
+                - code: end_time
+                  value: '2023-11-17T10:30:00.000Z'
+            - code: update_agent_details
+              list:
+                - code: name
+                  value: agent_name
+                - code: phone
+                  value: '9886098860'
+            - code: update_label
+              list:
+                - code: shipping
+                  value: link to downloadable shipping label (required for P2H2P)
+            - code: bnp_receivables_claim
+              list:
+                - code: type
+                  value: delivery
+                - code: currency
+                  value: INR
+                - code: value
+                  value: '50.00'
+            - code: bnp_diff_weight
+              list:
+                - code: unit
+                  value: kilogram
+                - code: value
+                  value: '1'
+            - code: bnp_diff_length
+              list:
+                - code: unit
+                  value: centimeter
+                - code: value
+                  value: '1'
+            - code: bnp_diff_breadth
+              list:
+                - code: unit
+                  value: centimeter
+                - code: value
+                  value: '1'
+            - code: bnp_diff_height
+              list:
+                - code: unit
+                  value: centimeter
+                - code: value
+                  value: '1'
