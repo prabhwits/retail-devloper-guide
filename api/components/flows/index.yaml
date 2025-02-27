@@ -1,5 +1,6 @@
 - $ref: "./B2C/flow-1.yaml"
 - $ref: "./B2C/flow-2.yaml"
+- $ref: "./B2C/flow-cod.yaml"
 - $ref: "./B2C/flow-3.yaml"
 - $ref: "./B2C/flow-4.yaml"
 - $ref: "./B2C/flow-5.yaml"
