@@ -24,7 +24,7 @@ value:
           '@ondc/org/provider_name': Seller Business
           tracking: false
           '@ondc/org/category': Standard Delivery
-          '@ondc/org/TAT': PT96H
+          '@ondc/org/TAT': P4D
           state:
             descriptor:
               code: Serviceable

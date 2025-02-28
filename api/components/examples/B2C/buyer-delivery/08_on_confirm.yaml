@@ -9,7 +9,7 @@ value:
     bap_uri: https://buyerNP.com/ondc
     bpp_uri: https://sellerNP.com/ondc
     transaction_id: 68079e7c-0af9-4e16-a356-2e6ec708e2cb
-    message_id: 6f9fa4e2-1487-4af4-b4ef-a9ea0957d648
+    message_id: 97e50758-0931-4467-b914-fc0968172e61
     timestamp: '2024-08-08T10:01:50.921Z'
     bpp_id: sellerNP.com
   message:
@@ -27,7 +27,7 @@ value:
           fulfillment_id: F3
       billing:
         address:
-          name: John Doe
+          name: Door no. or building name
           building: New_Building
           locality: 6th Cross Road
           city: Bengaluru
@@ -133,8 +133,6 @@ value:
                       value: fulfillment
         ttl: P1D
       payment:
-        uri: https://razorpay.com/
-        tl_method: http/get
         params:
           amount: '120.00'
           currency: INR

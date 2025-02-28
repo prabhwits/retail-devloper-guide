@@ -27,7 +27,7 @@ value:
           fulfillment_id: F3
       billing:
         address:
-          name: John Doe
+          name: Door no. or building name
           building: New_Building
           locality: 6th Cross Road
           city: Bengaluru
@@ -62,10 +62,6 @@ value:
             contact:
               email: test@gmail.com
               phone: '9876543210'
-            time:
-              range:
-                start: '2024-08-08T10:09:58.799Z'
-                end: '2024-08-10T11:09:58.799Z'
           end:
             person:
               name: John Doe
@@ -82,11 +78,11 @@ value:
                 state: Karnataka
                 country: IND
                 area_code: '560027'
-            time:
-              range:
-                start: '2024-08-12T10:09:58.799Z'
-                end: '2024-08-14T10:09:58.799Z'
           tags:
+            - code: state
+              list:
+                - code: ready_to_ship
+                  value: 'yes'
             - code: routing
               list:
                 - code: type
@@ -146,8 +142,6 @@ value:
                       value: fulfillment
         ttl: P1D
       payment:
-        uri: https://razorpay.com/
-        tl_method: http/get
         params:
           amount: '120.00'
           currency: INR

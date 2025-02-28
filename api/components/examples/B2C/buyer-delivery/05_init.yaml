@@ -27,13 +27,13 @@ value:
           fulfillment_id: F3
       billing:
         address:
+          name: Door no. or building name
           building: New_Building
+          locality: 6th Cross Road
           city: Bengaluru
           state: Karnataka
           country: IND
           area_code: '560027'
-          locality: 6th Cross Road
-          name: John Doe
         phone: '9399788618'
         name: John Doe
         email: nobody@nomail.com
