@@ -25,10 +25,7 @@ details:
 
         B2C BAP ->> B2C BPP: **/init** - Buyer initializes the order and proceeds to checkout.
         B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
-        B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
-         
-        B2C BAP ->> B2C BPP: **/confirm** - Buyer confirms order
-        B2C BPP ->> B2C BAP: **/on_confirm** - Seller Accepts order
+        B2C BPP ->> B2C BAP: **/on_init - unsolicited** - Unsolicited on_init call with error message
 reference: if any
 steps:
   - summary: BAP sends the search request
@@ -67,8 +64,8 @@ steps:
     reference: if any
     example:
       $ref: "../../examples/B2C/bpp-collect-flow/bpp_collect_error/06_on_init.yaml"
-  - summary: Unsolicited Respond to init
-    api: on_init
+  - summary: Unsolicited on_init
+    api: on_init - unsolicited
     description: Respond to init
     reference: if any
     example:

@@ -101,6 +101,8 @@ value:
             list:
               - code: success
                 value: 'N'
+              - code: error
+                value: ' error message (free text) '
       tags:
         - code: bpp_terms
           list:

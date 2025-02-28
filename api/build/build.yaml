@@ -12476,7 +12476,7 @@ x-flows:
                       - code: update_state
                         list:
                           - code: state
-                            value: Out-For-Delivery
+                            value: Out-for-delivery
       - summary: Status updates - order out for delivery (updated)
         api: on_update - out_for_delivery
         description: Seller updated the order as out for delivery
@@ -12531,7 +12531,7 @@ x-flows:
                     '@ondc/org/TAT': PT60M
                     state:
                       descriptor:
-                        code: Out-for-Delivery
+                        code: Out-for-delivery
                         short_desc: '007'
                     start:
                       location:
@@ -12708,11 +12708,11 @@ x-flows:
                       - code: update_state
                         list:
                           - code: state
-                            value: Order-Delivered
+                            value: Order-delivered
                       - code: update_fulfillment_time
                         list:
                           - code: state
-                            value: Order-Delivered
+                            value: Order-delivered
                           - code: timestamp
                             value: '2024-08-12T10:10:58.799Z'
                           - code: start_time
@@ -12959,10 +12959,7 @@ x-flows:
 
             B2C BAP ->> B2C BPP: **/init** - Buyer initializes the order and proceeds to checkout.
             B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
-            B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
-             
-            B2C BAP ->> B2C BPP: **/confirm** - Buyer confirms order
-            B2C BPP ->> B2C BAP: **/on_confirm** - Seller Accepts order
+            B2C BPP ->> B2C BAP: **/on_init - unsolicited** - Unsolicited on_init call with error message
     reference: if any
     steps:
       - summary: BAP sends the search request
@@ -13454,8 +13451,8 @@ x-flows:
                         value: gst_number_of_sellerNP
                       - code: provider_tax_number
                         value: PAN_number_of_provider
-      - summary: Unsolicited Respond to init
-        api: on_init
+      - summary: Unsolicited on_init
+        api: on_init - unsolicited
         description: Respond to init
         reference: if any
         example: &ref_97
@@ -13562,6 +13559,8 @@ x-flows:
                       list:
                         - code: success
                           value: 'N'
+                        - code: error
+                          value: ' error message (free text) '
                 tags:
                   - code: bpp_terms
                     list:
@@ -13605,7 +13604,7 @@ x-flows:
 
             B2C BAP ->> B2C BPP: **/init** - Buyer initializes the order and proceeds to checkout.
             B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
-            B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
+            B2C BPP ->> B2C BAP: **/on_init - unsolicited** - Unsolicited on_init call
              
             B2C BAP ->> B2C BPP: **/confirm** - Buyer confirms order
             B2C BPP ->> B2C BAP: **/on_confirm** - Seller Accepts order
@@ -14100,9 +14099,9 @@ x-flows:
                         value: gst_number_of_sellerNP
                       - code: provider_tax_number
                         value: PAN_number_of_provider
-      - summary: Unsolicited Respond to init
-        api: on_init
-        description: Respond to init
+      - summary: Unsolicited on_init
+        api: on_init - unsolicited
+        description: Unsolicited on_init
         reference: if any
         example: &ref_88
           value:
@@ -14194,6 +14193,10 @@ x-flows:
                         value: '00.00'
                   ttl: P1D
                 payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
                   type: ON-ORDER
                   collected_by: BPP
                   uri: https://snp.com/pg
@@ -14208,8 +14211,6 @@ x-flows:
                       list:
                         - code: success
                           value: 'N'
-                        - code: error
-                          value: ERROR_MESSAGE (FREE TEXT)
                 tags:
                   - code: bpp_terms
                     list:
@@ -14551,7 +14552,7 @@ x-flows:
 
             B2C BAP ->> B2C BPP: **/init** - Buyer initializes the order and proceeds to checkout.
             B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
-            B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
+            B2C BPP ->> B2C BAP: **/on_init - unsolicited** - Unsolicited on_init call
              
             B2C BAP ->> B2C BPP: **/confirm** - Buyer confirms order
             B2C BPP ->> B2C BAP: **/on_confirm** - Seller Accepts order
@@ -15046,9 +15047,9 @@ x-flows:
                         value: gst_number_of_sellerNP
                       - code: provider_tax_number
                         value: PAN_number_of_provider
-      - summary: Unsolicited Respond to init
-        api: on_init
-        description: Respond to init
+      - summary: Unsolicited on_init
+        api: on_init - unsolicited
+        description: Unsolicited on_init
         reference: if any
         example: &ref_79
           value:
@@ -15140,6 +15141,10 @@ x-flows:
                         value: '00.00'
                   ttl: P1D
                 payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
                   type: ON-ORDER
                   collected_by: BPP
                   uri: https://snp.com/pg

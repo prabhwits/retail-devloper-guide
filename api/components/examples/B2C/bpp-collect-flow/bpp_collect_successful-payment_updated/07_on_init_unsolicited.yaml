@@ -87,6 +87,10 @@ value:
               value: '00.00'
         ttl: P1D
       payment:
+        params:
+          amount: '100.00'
+          currency: INR
+          transaction_id: order_PjggJp7MccQmAa
         type: ON-ORDER
         collected_by: BPP
         uri: https://snp.com/pg

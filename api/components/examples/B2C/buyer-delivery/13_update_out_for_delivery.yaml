@@ -11,7 +11,7 @@ value:
     message_id: 17a77531-7e19-4a5f-bfa7-ab591c93028a
     city: std:080
     country: IND
-    timestamp: '2024-08-08T10:11:00.000Z'
+    timestamp: "2024-08-08T10:11:00.000Z"
   message:
     update_target: fulfillment
     order:
@@ -22,4 +22,4 @@ value:
             - code: update_state
               list:
                 - code: state
-                  value: Out-For-Delivery
+                  value: Out-for-delivery
