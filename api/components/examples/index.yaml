@@ -27,6 +27,13 @@ B2C - Buyer Delivery:
   example_set:
     $ref: "./B2C/buyer-delivery/index.yaml"
 
+B2C - Slotted Delivery:
+  summary: B2C Slotted-Delivery Use Case Specification
+  description: >-
+    The ONDC Order Fulfillment Phase includes item selection, order confirmation and so on. The Buyer NP selects items (/select), and the Seller NP responds with serviceability details (/on_select) and slotted delivery options. During initialization (/init), the Buyer NP selects the desired slot before proceeding with the order (/on_init). Once finalized, the order is placed (/confirm), and the Seller NP accepts, defers, or rejects it (/on_confirm).
+  example_set:
+    $ref: "./B2C/slotted-delivery/index.yaml"
+
 B2C - Item Out-of-stock:
   summary: B2C flow-3 Use Case Specification
   description: >-

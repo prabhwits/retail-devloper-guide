@@ -3,7 +3,7 @@ const path = require("path");
 const yaml = require("js-yaml");
 
 // Define the root directory where your YAML files are located
-const rootDirectory = path.join(__dirname, "../examples/B2C-F&B2");
+const rootDirectory = path.join(__dirname, "../examples/retailFlows");
 
 // Function to convert a YAML file to JSON and delete the original YAML file
 function convertYamlToJson(yamlFilePath, jsonFilePath) {
