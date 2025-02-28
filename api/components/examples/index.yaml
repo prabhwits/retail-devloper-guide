@@ -34,6 +34,27 @@ B2C - Slotted Delivery:
   example_set:
     $ref: "./B2C/slotted-delivery/index.yaml"
 
+B2C - Payment Successfully Collected and Updated:
+  summary: B2C Payment Successfully Collected and Updated Use Case Specification
+  description: >-
+    The buyer completes the payment, and the SNP successfully updates the payment status to "PAID" along with transaction details (currency, amount, and transaction ID). The SNP confirms successful collection using payment.tags.bpp_collect.success="Y" in the unsolicited on_init call, allowing the BNP to proceed with /confirm without issues.
+  example_set:
+    $ref: "./B2C/bpp-collect-flow/bpp_collect_successful-payment_updated/index.yaml"
+
+B2C - Payment Collected but Status Not Updated:
+  summary: B2C Payment Collected but Status Not Updated Use Case Specification
+  description: >-
+    The buyer makes the payment, but the SNP is unable to update the payment status immediately. The SNP still marks collection success (bpp_collect.success="Y") but keeps payment.status="NOT-PAID". The BNP can choose to either terminate the transaction or proceed with /confirm, trusting that the SNP will update the status later.If BNP proceeds with /confirm, SNP should honour /confirm as per the contract and it will be the SNP’s responsibility to subsequently update payment.status when available
+  example_set:
+    $ref: "./B2C/bpp-collect-flow/bpp_collect_successful-payment_not_updated/index.yaml"
+
+B2C - Payment Collection Error:
+  summary: B2C Payment Collection Error Use Case Specification
+  description: >-
+    The buyer attempts payment, but an error occurs (e.g., payment gateway failure or timeout). The SNP marks payment.tags.bpp_collect.success="N" and includes an error message (bpp_collect.error="error_message"). Since the payment was unsuccessful, the BNP must terminate the transaction, preventing order confirmation.
+  example_set:
+    $ref: "./B2C/bpp-collect-flow/bpp_collect_error/index.yaml"
+
 B2C - Item Out-of-stock:
   summary: B2C flow-3 Use Case Specification
   description: >-

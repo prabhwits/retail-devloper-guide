@@ -12928,6 +12928,2542 @@ x-flows:
                       branch_name: xxxx
                 created_at: '2024-08-08T10:01:50.601Z'
                 updated_at: '2024-08-12T10:12:59.879Z'
+  - summary: Retail 1.2.0 (Payment Collection Error)
+    description: >-
+      The buyer attempts payment, but an error occurs (e.g., payment gateway
+      failure or timeout). The SNP marks payment.tags.bpp_collect.success="N"
+      and includes an error message (bpp_collect.error="error_message"). Since
+      the payment was unsuccessful, the BNP must terminate the transaction,
+      preventing order confirmation.
+    details:
+      - description: Buyer Search & Quotation
+        mermaidGraph: |-
+          sequenceDiagram
+
+            participant B2C BAP
+            participant Gateway
+            participant B2C BPP
+
+            B2C BAP->>Gateway: **/search**  - Buyer searches for full catalog refresh
+            Gateway->>B2C BPP: **/search**  - Buyer searches for full catalog refresh
+            B2C BPP->>B2C BAP: **/on_search** - Returns the item or catalog for the specific domain
+      - description: Pre-order APIs
+        mermaidGraph: |-
+          sequenceDiagram
+
+            participant B2C BAP
+            participant B2C BPP
+
+            B2C BAP ->> B2C BPP: **/select** - Buyer adds the item(s) to the cart.
+            B2C BPP ->> B2C BAP: **/on_select** - Returns quote breakup (adding offers if any) when item is in stock 
+
+            B2C BAP ->> B2C BPP: **/init** - Buyer initializes the order and proceeds to checkout.
+            B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
+            B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
+             
+            B2C BAP ->> B2C BPP: **/confirm** - Buyer confirms order
+            B2C BPP ->> B2C BAP: **/on_confirm** - Seller Accepts order
+    reference: if any
+    steps:
+      - summary: BAP sends the search request
+        api: search
+        description: BAP sends the search request
+        reference: if any
+        example: &ref_91
+          value:
+            context:
+              domain: ONDC:RET10
+              action: search
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
+              message_id: bc167440-16e7-4ba6-9132-9b25518f1da2
+              timestamp: '2024-12-23T06:54:34.035Z'
+              ttl: PT30S
+              city: std:022
+            message:
+              intent:
+                fulfillment:
+                  type: Delivery
+                payment:
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+      - summary: BPP returns the full catalog refresh
+        api: on_search
+        description: BPP returns the full catalog refresh
+        reference: if any
+        example: &ref_92
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_search
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
+              message_id: bc167440-16e7-4ba6-9132-9b25518f1da2
+              timestamp: '2024-12-23T06:55:45.035Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              catalog:
+                bpp/fulfillments:
+                  - id: F1
+                    type: Delivery
+                bpp/descriptor:
+                  name: Seller NP
+                  symbol: https://sellerNP.com/images/np.png
+                  short_desc: Seller Marketplace
+                  long_desc: Seller Marketplace
+                  images:
+                    - https://sellerNP.com/images/np.png
+                  tags:
+                    - code: bpp_terms
+                      list:
+                        - code: np_type
+                          value: MSN
+                        - code: accept_bap_terms
+                          value: 'Y'
+                        - code: collect_payment
+                          value: 'Y'
+                bpp/providers:
+                  - time:
+                      label: enable
+                      timestamp: '2024-12-23T06:55:45.035Z'
+                    descriptor:
+                      name: Store 1
+                      symbol: https://sellerNP.com/images/store1.png
+                      short_desc: Store 1
+                      long_desc: Store 1
+                      images:
+                        - https://sellerNP.com/images/store1.png
+                    ttl: P1D
+                    locations:
+                      - id: L1
+                        time:
+                          label: enable
+                          timestamp: '2024-12-23T06:55:45.035Z'
+                          days: 1,2,3,4,5,6,7
+                          schedule:
+                            holidays: []
+                          range:
+                            start: '0000'
+                            end: '2359'
+                        gps: 19.129076,72.825803
+                        address:
+                          street: 1 & 2,AMAR JYOTI CHS.BLDG.,OPP.NAND KRIPA HALL
+                          locality: ANDHERI FOUR BUNGLOW AMAR JYOTI CHS
+                          city: Mumbai
+                          state: Maharashtra
+                          area_code: '400053'
+                        circle:
+                          gps: 19.129076,72.825803
+                          radius:
+                            unit: km
+                            value: '3'
+                    fulfillments:
+                      - id: F1
+                        type: Delivery
+                        contact:
+                          phone: '9594663710'
+                          email: nobody@nomail.com
+                    items:
+                      - descriptor:
+                          name: Plain Atta
+                          code: 1:XXXXXXXXXXXXX
+                          symbol: https://sellerNP.com/images/i1.png
+                          short_desc: Plain Atta
+                          long_desc: Plain Atta
+                          images:
+                            - https://sellerNP.com/images/i1.png
+                        price:
+                          currency: INR
+                          value: '100.00'
+                          maximum_value: '100.00'
+                        quantity:
+                          unitized:
+                            measure:
+                              unit: kilogram
+                              value: '3'
+                          available:
+                            count: '99'
+                          maximum:
+                            count: '99'
+                        category_id: Atta, Flours and Sooji
+                        fulfillment_id: F1
+                        location_id: L1
+                        '@ondc/org/returnable': true
+                        '@ondc/org/cancellable': true
+                        '@ondc/org/return_window': P7D
+                        '@ondc/org/seller_pickup_return': false
+                        '@ondc/org/time_to_ship': PT5M
+                        '@ondc/org/available_on_cod': false
+                        '@ondc/org/contact_details_consumer_care': Ramesh,ramesh@abc.com,18004254444
+                        '@ondc/org/statutory_reqs_packaged_commodities':
+                          manufacturer_or_packer_name: ITC
+                          manufacturer_or_packer_address: >-
+                            ITC Quality Care Cell,P.O Box
+                            No.592,Bangalore-560005
+                          common_or_generic_name_of_commodity: Ashirwad Atta
+                          month_year_of_manufacture_packing_import: 01/2023
+                        time:
+                          label: enable
+                          timestamp: '2024-12-23T06:55:45.035Z'
+                        tags:
+                          - code: origin
+                            list:
+                              - code: country
+                                value: THA
+                        id: I1
+                        parent_item_id: V1
+                    tags:
+                      - code: timing
+                        list:
+                          - code: type
+                            value: All
+                          - code: location
+                            value: L1
+                          - code: day_from
+                            value: '1'
+                          - code: day_to
+                            value: '7'
+                          - code: time_from
+                            value: '0000'
+                          - code: time_to
+                            value: '2359'
+                      - code: serviceability
+                        list:
+                          - code: location
+                            value: L1
+                          - code: category
+                            value: Atta, Flours and Sooji
+                          - code: type
+                            value: '10'
+                          - code: val
+                            value: '3'
+                          - code: unit
+                            value: km
+                    categories:
+                      - id: V1
+                        tags:
+                          - code: type
+                            list:
+                              - code: type
+                                value: variant_group
+                          - code: attr
+                            list:
+                              - code: name
+                                value: item.quantity.unitized.measure
+                              - code: seq
+                                value: '1'
+                        descriptor:
+                          name: Plain Atta
+                    id: P1
+      - summary: BAP select the item
+        api: select
+        description: BAP select the item
+        reference: if any
+        example: &ref_93
+          value:
+            context:
+              domain: ONDC:RET10
+              action: select
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_id: sellerNP.com
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 8ded399c-89ea-4100-a7c8-343430a7c8d0
+              city: std:022
+              country: IND
+              timestamp: '2024-12-23T06:58:34.035Z'
+              ttl: PT30S
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    location_id: L1
+                fulfillments:
+                  - end:
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          area_code: '400053'
+      - summary: >-
+          BPP returns item breakup when item is in stock and offer applied (if
+          any)
+        api: on_select
+        description: >-
+          BPP returns item breakup when item is in stock and offer applied (if
+          any)
+        reference: if any
+        example: &ref_94
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_select
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 8ded399c-89ea-4100-a7c8-343430a7c8d0
+              timestamp: '2024-12-23T06:58:35.754Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    '@ondc/org/provider_name': LSP or Provider Name
+                    tracking: true
+                    '@ondc/org/category': Immediate Delivery
+                    '@ondc/org/TAT': PT60M
+                    state:
+                      descriptor:
+                        code: Serviceable
+                quote:
+                  price:
+                    value: '100.00'
+                    currency: INR
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100.00'
+                      item:
+                        quantity:
+                          available:
+                            count: '99'
+                          maximum:
+                            count: '99'
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                items:
+                  - id: I1
+                    fulfillment_id: F1
+      - summary: Buyer initiate the product and send the updated fulfillment id
+        api: init
+        description: Buyer initiate the product and send the updated fulfillment id
+        reference: if any
+        example: &ref_95
+          value:
+            context:
+              domain: ONDC:RET10
+              action: init
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
+              timestamp: '2024-12-23T07:01:43.145Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    location_id: L1
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    end:
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+      - summary: Respond to init
+        api: on_init
+        description: Respond to init
+        reference: if any
+        example: &ref_96
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_init
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
+              timestamp: '2024-12-23T07:01:44.759Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    end:
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                    tracking: true
+                quote:
+                  price:
+                    value: '100'
+                    currency: INR
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100.00'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  type: ON-ORDER
+                  collected_by: BPP
+                  uri: https://snp.com/pg
+                  status: NOT-PAID
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+                  '@ondc/org/settlement_basis': delivery
+                  '@ondc/org/settlement_window': P1D
+                  '@ondc/org/withholding_amount': '10.00'
+                tags:
+                  - code: bpp_terms
+                    list:
+                      - code: np_type
+                        value: MSN
+                      - code: tax_number
+                        value: gst_number_of_sellerNP
+                      - code: provider_tax_number
+                        value: PAN_number_of_provider
+      - summary: Unsolicited Respond to init
+        api: on_init
+        description: Respond to init
+        reference: if any
+        example: &ref_97
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_init
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
+              timestamp: '2024-12-23T07:01:44.759Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    end:
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                    tracking: true
+                quote:
+                  price:
+                    value: '100'
+                    currency: INR
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100.00'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  type: ON-ORDER
+                  collected_by: BPP
+                  uri: https://snp.com/pg
+                  status: NOT-PAID
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+                  '@ondc/org/settlement_basis': delivery
+                  '@ondc/org/settlement_window': P1D
+                  '@ondc/org/withholding_amount': '10.00'
+                  tags:
+                    - code: bpp_collect
+                      list:
+                        - code: success
+                          value: 'N'
+                tags:
+                  - code: bpp_terms
+                    list:
+                      - code: np_type
+                        value: MSN
+                      - code: tax_number
+                        value: gst_number_of_sellerNP
+                      - code: provider_tax_number
+                        value: PAN_number_of_provider
+  - summary: Retail 1.2.0 (Payment Collected but Status Not Updated)
+    description: >-
+      The buyer makes the payment, but the SNP is unable to update the payment
+      status immediately. The SNP still marks collection success
+      (bpp_collect.success="Y") but keeps payment.status="NOT-PAID". The BNP can
+      choose to either terminate the transaction or proceed with /confirm,
+      trusting that the SNP will update the status later.If BNP proceeds with
+      /confirm, SNP should honour /confirm as per the contract and it will be
+      the SNP’s responsibility to subsequently update payment.status when
+      available
+    details:
+      - description: Buyer Search & Quotation
+        mermaidGraph: |-
+          sequenceDiagram
+
+            participant B2C BAP
+            participant Gateway
+            participant B2C BPP
+
+            B2C BAP->>Gateway: **/search**  - Buyer searches for full catalog refresh
+            Gateway->>B2C BPP: **/search**  - Buyer searches for full catalog refresh
+            B2C BPP->>B2C BAP: **/on_search** - Returns the item or catalog for the specific domain
+      - description: Pre-order APIs
+        mermaidGraph: |-
+          sequenceDiagram
+
+            participant B2C BAP
+            participant B2C BPP
+
+            B2C BAP ->> B2C BPP: **/select** - Buyer adds the item(s) to the cart.
+            B2C BPP ->> B2C BAP: **/on_select** - Returns quote breakup (adding offers if any) when item is in stock 
+
+            B2C BAP ->> B2C BPP: **/init** - Buyer initializes the order and proceeds to checkout.
+            B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
+            B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
+             
+            B2C BAP ->> B2C BPP: **/confirm** - Buyer confirms order
+            B2C BPP ->> B2C BAP: **/on_confirm** - Seller Accepts order
+    reference: if any
+    steps:
+      - summary: BAP sends the search request
+        api: search
+        description: BAP sends the search request
+        reference: if any
+        example: &ref_82
+          value:
+            context:
+              domain: ONDC:RET10
+              action: search
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
+              message_id: bc167440-16e7-4ba6-9132-9b25518f1da2
+              timestamp: '2024-12-23T06:54:34.035Z'
+              ttl: PT30S
+              city: std:022
+            message:
+              intent:
+                fulfillment:
+                  type: Delivery
+                payment:
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+      - summary: BPP returns the full catalog refresh
+        api: on_search
+        description: BPP returns the full catalog refresh
+        reference: if any
+        example: &ref_83
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_search
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
+              message_id: bc167440-16e7-4ba6-9132-9b25518f1da2
+              timestamp: '2024-12-23T06:55:45.035Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              catalog:
+                bpp/fulfillments:
+                  - id: F1
+                    type: Delivery
+                bpp/descriptor:
+                  name: Seller NP
+                  symbol: https://sellerNP.com/images/np.png
+                  short_desc: Seller Marketplace
+                  long_desc: Seller Marketplace
+                  images:
+                    - https://sellerNP.com/images/np.png
+                  tags:
+                    - code: bpp_terms
+                      list:
+                        - code: np_type
+                          value: MSN
+                        - code: accept_bap_terms
+                          value: 'Y'
+                        - code: collect_payment
+                          value: 'Y'
+                bpp/providers:
+                  - time:
+                      label: enable
+                      timestamp: '2024-12-23T06:55:45.035Z'
+                    descriptor:
+                      name: Store 1
+                      symbol: https://sellerNP.com/images/store1.png
+                      short_desc: Store 1
+                      long_desc: Store 1
+                      images:
+                        - https://sellerNP.com/images/store1.png
+                    ttl: P1D
+                    locations:
+                      - id: L1
+                        time:
+                          label: enable
+                          timestamp: '2024-12-23T06:55:45.035Z'
+                          days: 1,2,3,4,5,6,7
+                          schedule:
+                            holidays: []
+                          range:
+                            start: '0000'
+                            end: '2359'
+                        gps: 19.129076,72.825803
+                        address:
+                          street: 1 & 2,AMAR JYOTI CHS.BLDG.,OPP.NAND KRIPA HALL
+                          locality: ANDHERI FOUR BUNGLOW AMAR JYOTI CHS
+                          city: Mumbai
+                          state: Maharashtra
+                          area_code: '400053'
+                        circle:
+                          gps: 19.129076,72.825803
+                          radius:
+                            unit: km
+                            value: '3'
+                    fulfillments:
+                      - id: F1
+                        type: Delivery
+                        contact:
+                          phone: '9594663710'
+                          email: nobody@nomail.com
+                    items:
+                      - descriptor:
+                          name: Plain Atta
+                          code: 1:XXXXXXXXXXXXX
+                          symbol: https://sellerNP.com/images/i1.png
+                          short_desc: Plain Atta
+                          long_desc: Plain Atta
+                          images:
+                            - https://sellerNP.com/images/i1.png
+                        price:
+                          currency: INR
+                          value: '100.00'
+                          maximum_value: '100.00'
+                        quantity:
+                          unitized:
+                            measure:
+                              unit: kilogram
+                              value: '3'
+                          available:
+                            count: '99'
+                          maximum:
+                            count: '99'
+                        category_id: Atta, Flours and Sooji
+                        fulfillment_id: F1
+                        location_id: L1
+                        '@ondc/org/returnable': true
+                        '@ondc/org/cancellable': true
+                        '@ondc/org/return_window': P7D
+                        '@ondc/org/seller_pickup_return': false
+                        '@ondc/org/time_to_ship': PT5M
+                        '@ondc/org/available_on_cod': false
+                        '@ondc/org/contact_details_consumer_care': Ramesh,ramesh@abc.com,18004254444
+                        '@ondc/org/statutory_reqs_packaged_commodities':
+                          manufacturer_or_packer_name: ITC
+                          manufacturer_or_packer_address: >-
+                            ITC Quality Care Cell,P.O Box
+                            No.592,Bangalore-560005
+                          common_or_generic_name_of_commodity: Ashirwad Atta
+                          month_year_of_manufacture_packing_import: 01/2023
+                        time:
+                          label: enable
+                          timestamp: '2024-12-23T06:55:45.035Z'
+                        tags:
+                          - code: origin
+                            list:
+                              - code: country
+                                value: THA
+                        id: I1
+                        parent_item_id: V1
+                    tags:
+                      - code: timing
+                        list:
+                          - code: type
+                            value: All
+                          - code: location
+                            value: L1
+                          - code: day_from
+                            value: '1'
+                          - code: day_to
+                            value: '7'
+                          - code: time_from
+                            value: '0000'
+                          - code: time_to
+                            value: '2359'
+                      - code: serviceability
+                        list:
+                          - code: location
+                            value: L1
+                          - code: category
+                            value: Atta, Flours and Sooji
+                          - code: type
+                            value: '10'
+                          - code: val
+                            value: '3'
+                          - code: unit
+                            value: km
+                    categories:
+                      - id: V1
+                        tags:
+                          - code: type
+                            list:
+                              - code: type
+                                value: variant_group
+                          - code: attr
+                            list:
+                              - code: name
+                                value: item.quantity.unitized.measure
+                              - code: seq
+                                value: '1'
+                        descriptor:
+                          name: Plain Atta
+                    id: P1
+      - summary: BAP select the item
+        api: select
+        description: BAP select the item
+        reference: if any
+        example: &ref_84
+          value:
+            context:
+              domain: ONDC:RET10
+              action: select
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_id: sellerNP.com
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 8ded399c-89ea-4100-a7c8-343430a7c8d0
+              city: std:022
+              country: IND
+              timestamp: '2024-12-23T06:58:34.035Z'
+              ttl: PT30S
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    location_id: L1
+                fulfillments:
+                  - end:
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          area_code: '400053'
+      - summary: >-
+          BPP returns item breakup when item is in stock and offer applied (if
+          any)
+        api: on_select
+        description: >-
+          BPP returns item breakup when item is in stock and offer applied (if
+          any)
+        reference: if any
+        example: &ref_85
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_select
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 8ded399c-89ea-4100-a7c8-343430a7c8d0
+              timestamp: '2024-12-23T06:58:35.754Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    '@ondc/org/provider_name': LSP or Provider Name
+                    tracking: true
+                    '@ondc/org/category': Immediate Delivery
+                    '@ondc/org/TAT': PT60M
+                    state:
+                      descriptor:
+                        code: Serviceable
+                quote:
+                  price:
+                    value: '100.00'
+                    currency: INR
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100.00'
+                      item:
+                        quantity:
+                          available:
+                            count: '99'
+                          maximum:
+                            count: '99'
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                items:
+                  - id: I1
+                    fulfillment_id: F1
+      - summary: Buyer initiate the product and send the updated fulfillment id
+        api: init
+        description: Buyer initiate the product and send the updated fulfillment id
+        reference: if any
+        example: &ref_86
+          value:
+            context:
+              domain: ONDC:RET10
+              action: init
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
+              timestamp: '2024-12-23T07:01:43.145Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    location_id: L1
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    end:
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+      - summary: Respond to init
+        api: on_init
+        description: Respond to init
+        reference: if any
+        example: &ref_87
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_init
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
+              timestamp: '2024-12-23T07:01:44.759Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    end:
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                    tracking: true
+                quote:
+                  price:
+                    value: '100'
+                    currency: INR
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100.00'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  type: ON-ORDER
+                  collected_by: BPP
+                  uri: https://snp.com/pg
+                  status: NOT-PAID
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+                  '@ondc/org/settlement_basis': delivery
+                  '@ondc/org/settlement_window': P1D
+                  '@ondc/org/withholding_amount': '10.00'
+                tags:
+                  - code: bpp_terms
+                    list:
+                      - code: np_type
+                        value: MSN
+                      - code: tax_number
+                        value: gst_number_of_sellerNP
+                      - code: provider_tax_number
+                        value: PAN_number_of_provider
+      - summary: Unsolicited Respond to init
+        api: on_init
+        description: Respond to init
+        reference: if any
+        example: &ref_88
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_init
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
+              timestamp: '2024-12-23T07:01:44.759Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    end:
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                    tracking: true
+                quote:
+                  price:
+                    value: '100'
+                    currency: INR
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100.00'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  type: ON-ORDER
+                  collected_by: BPP
+                  uri: https://snp.com/pg
+                  status: NOT-PAID
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+                  '@ondc/org/settlement_basis': delivery
+                  '@ondc/org/settlement_window': P1D
+                  '@ondc/org/withholding_amount': '10.00'
+                  tags:
+                    - code: bpp_collect
+                      list:
+                        - code: success
+                          value: 'N'
+                        - code: error
+                          value: ERROR_MESSAGE (FREE TEXT)
+                tags:
+                  - code: bpp_terms
+                    list:
+                      - code: np_type
+                        value: MSN
+                      - code: tax_number
+                        value: gst_number_of_sellerNP
+                      - code: provider_tax_number
+                        value: PAN_number_of_provider
+      - summary: Buyer confirms product
+        api: confirm
+        description: Buyer confirms product
+        reference: if any
+        example: &ref_89
+          value:
+            context:
+              domain: ONDC:RET10
+              action: confirm
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 3dbb05b6-dbb0-4399-95e6-c51cf5be842d
+              timestamp: '2024-12-23T07:03:30.516Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: Created
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                fulfillments:
+                  - '@ondc/org/TAT': PT60M
+                    id: F1
+                    tracking: true
+                    end:
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      person:
+                        name: ONDC Buyer
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                    type: Delivery
+                payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: buyer-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                  type: ON-ORDER
+                  collected_by: BPP
+                  uri: https://snp.com/pg
+                  status: NOT-PAID
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+                  '@ondc/org/settlement_basis': delivery
+                  '@ondc/org/settlement_window': P1D
+                  '@ondc/org/withholding_amount': '10.00'
+                quote:
+                  price:
+                    currency: INR
+                    value: '100.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                tags:
+                  - code: bpp_terms
+                    list:
+                      - code: np_type
+                        value: MSN
+                      - code: tax_number
+                        value: gst_number_of_sellerNP
+                      - code: provider_tax_number
+                        value: PAN_number_of_provider
+                  - code: bap_terms
+                    list:
+                      - code: tax_number
+                        value: gst_number_of_buyerNP
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-23T07:03:30.516Z'
+      - summary: Seller Accepts confirmation
+        api: on_confirm
+        description: Seller Accepts confirmation
+        reference: if any
+        example: &ref_90
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_confirm
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 3dbb05b6-dbb0-4399-95e6-c51cf5be842d
+              timestamp: '2024-12-23T07:03:32.230Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: Accepted
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
+                    state:
+                      descriptor:
+                        code: Pending
+                    type: Delivery
+                    tracking: true
+                    '@ondc/org/TAT': PT60M
+                    start:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:03:32.230Z'
+                          end: '2024-12-23T07:33:32.230Z'
+                      contact:
+                        phone: '9594663710'
+                        email: nobody@nomail.com
+                    end:
+                      person:
+                        name: John Doe
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:33:32.230Z'
+                          end: '2024-12-23T07:04:32.230Z'
+                quote:
+                  price:
+                    currency: INR
+                    value: '100.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: buyer-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                  type: ON-ORDER
+                  collected_by: BPP
+                  uri: https://snp.com/pg
+                  status: PAID
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+                  '@ondc/org/settlement_basis': delivery
+                  '@ondc/org/settlement_window': P1D
+                  '@ondc/org/withholding_amount': '10.00'
+                tags:
+                  - code: bpp_terms
+                    list:
+                      - code: np_type
+                        value: MSN
+                      - code: tax_number
+                        value: gst_number_of_sellerNP
+                      - code: provider_tax_number
+                        value: PAN_number_of_provider
+                  - code: bap_terms
+                    list:
+                      - code: tax_number
+                        value: gst_number_of_buyerNP
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-23T07:03:32.230Z'
+  - summary: Retail 1.2.0 (Payment Successfully Collected and Updated)
+    description: >-
+      The buyer completes the payment, and the SNP successfully updates the
+      payment status to "PAID" along with transaction details (currency, amount,
+      and transaction ID). The SNP confirms successful collection using
+      payment.tags.bpp_collect.success="Y" in the unsolicited on_init call,
+      allowing the BNP to proceed with /confirm without issues.
+    details:
+      - description: Buyer Search & Quotation
+        mermaidGraph: |-
+          sequenceDiagram
+
+            participant B2C BAP
+            participant Gateway
+            participant B2C BPP
+
+            B2C BAP->>Gateway: **/search**  - Buyer searches for full catalog refresh
+            Gateway->>B2C BPP: **/search**  - Buyer searches for full catalog refresh
+            B2C BPP->>B2C BAP: **/on_search** - Returns the item or catalog for the specific domain
+      - description: Pre-order APIs
+        mermaidGraph: |-
+          sequenceDiagram
+
+            participant B2C BAP
+            participant B2C BPP
+
+            B2C BAP ->> B2C BPP: **/select** - Buyer adds the item(s) to the cart.
+            B2C BPP ->> B2C BAP: **/on_select** - Returns quote breakup (adding offers if any) when item is in stock 
+
+            B2C BAP ->> B2C BPP: **/init** - Buyer initializes the order and proceeds to checkout.
+            B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
+            B2C BPP ->> B2C BAP: **/on_init** - Seller app initializes order
+             
+            B2C BAP ->> B2C BPP: **/confirm** - Buyer confirms order
+            B2C BPP ->> B2C BAP: **/on_confirm** - Seller Accepts order
+    reference: if any
+    steps:
+      - summary: BAP sends the search request
+        api: search
+        description: BAP sends the search request
+        reference: if any
+        example: &ref_73
+          value:
+            context:
+              domain: ONDC:RET10
+              action: search
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
+              message_id: bc167440-16e7-4ba6-9132-9b25518f1da2
+              timestamp: '2024-12-23T06:54:34.035Z'
+              ttl: PT30S
+              city: std:022
+            message:
+              intent:
+                fulfillment:
+                  type: Delivery
+                payment:
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+      - summary: BPP returns the full catalog refresh
+        api: on_search
+        description: BPP returns the full catalog refresh
+        reference: if any
+        example: &ref_74
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_search
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
+              message_id: bc167440-16e7-4ba6-9132-9b25518f1da2
+              timestamp: '2024-12-23T06:55:45.035Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              catalog:
+                bpp/fulfillments:
+                  - id: F1
+                    type: Delivery
+                bpp/descriptor:
+                  name: Seller NP
+                  symbol: https://sellerNP.com/images/np.png
+                  short_desc: Seller Marketplace
+                  long_desc: Seller Marketplace
+                  images:
+                    - https://sellerNP.com/images/np.png
+                  tags:
+                    - code: bpp_terms
+                      list:
+                        - code: np_type
+                          value: MSN
+                        - code: accept_bap_terms
+                          value: 'Y'
+                        - code: collect_payment
+                          value: 'Y'
+                bpp/providers:
+                  - time:
+                      label: enable
+                      timestamp: '2024-12-23T06:55:45.035Z'
+                    descriptor:
+                      name: Store 1
+                      symbol: https://sellerNP.com/images/store1.png
+                      short_desc: Store 1
+                      long_desc: Store 1
+                      images:
+                        - https://sellerNP.com/images/store1.png
+                    ttl: P1D
+                    locations:
+                      - id: L1
+                        time:
+                          label: enable
+                          timestamp: '2024-12-23T06:55:45.035Z'
+                          days: 1,2,3,4,5,6,7
+                          schedule:
+                            holidays: []
+                          range:
+                            start: '0000'
+                            end: '2359'
+                        gps: 19.129076,72.825803
+                        address:
+                          street: 1 & 2,AMAR JYOTI CHS.BLDG.,OPP.NAND KRIPA HALL
+                          locality: ANDHERI FOUR BUNGLOW AMAR JYOTI CHS
+                          city: Mumbai
+                          state: Maharashtra
+                          area_code: '400053'
+                        circle:
+                          gps: 19.129076,72.825803
+                          radius:
+                            unit: km
+                            value: '3'
+                    fulfillments:
+                      - id: F1
+                        type: Delivery
+                        contact:
+                          phone: '9594663710'
+                          email: nobody@nomail.com
+                    items:
+                      - descriptor:
+                          name: Plain Atta
+                          code: 1:XXXXXXXXXXXXX
+                          symbol: https://sellerNP.com/images/i1.png
+                          short_desc: Plain Atta
+                          long_desc: Plain Atta
+                          images:
+                            - https://sellerNP.com/images/i1.png
+                        price:
+                          currency: INR
+                          value: '100.00'
+                          maximum_value: '100.00'
+                        quantity:
+                          unitized:
+                            measure:
+                              unit: kilogram
+                              value: '3'
+                          available:
+                            count: '99'
+                          maximum:
+                            count: '99'
+                        category_id: Atta, Flours and Sooji
+                        fulfillment_id: F1
+                        location_id: L1
+                        '@ondc/org/returnable': true
+                        '@ondc/org/cancellable': true
+                        '@ondc/org/return_window': P7D
+                        '@ondc/org/seller_pickup_return': false
+                        '@ondc/org/time_to_ship': PT5M
+                        '@ondc/org/available_on_cod': false
+                        '@ondc/org/contact_details_consumer_care': Ramesh,ramesh@abc.com,18004254444
+                        '@ondc/org/statutory_reqs_packaged_commodities':
+                          manufacturer_or_packer_name: ITC
+                          manufacturer_or_packer_address: >-
+                            ITC Quality Care Cell,P.O Box
+                            No.592,Bangalore-560005
+                          common_or_generic_name_of_commodity: Ashirwad Atta
+                          month_year_of_manufacture_packing_import: 01/2023
+                        time:
+                          label: enable
+                          timestamp: '2024-12-23T06:55:45.035Z'
+                        tags:
+                          - code: origin
+                            list:
+                              - code: country
+                                value: THA
+                        id: I1
+                        parent_item_id: V1
+                    tags:
+                      - code: timing
+                        list:
+                          - code: type
+                            value: All
+                          - code: location
+                            value: L1
+                          - code: day_from
+                            value: '1'
+                          - code: day_to
+                            value: '7'
+                          - code: time_from
+                            value: '0000'
+                          - code: time_to
+                            value: '2359'
+                      - code: serviceability
+                        list:
+                          - code: location
+                            value: L1
+                          - code: category
+                            value: Atta, Flours and Sooji
+                          - code: type
+                            value: '10'
+                          - code: val
+                            value: '3'
+                          - code: unit
+                            value: km
+                    categories:
+                      - id: V1
+                        tags:
+                          - code: type
+                            list:
+                              - code: type
+                                value: variant_group
+                          - code: attr
+                            list:
+                              - code: name
+                                value: item.quantity.unitized.measure
+                              - code: seq
+                                value: '1'
+                        descriptor:
+                          name: Plain Atta
+                    id: P1
+      - summary: BAP select the item
+        api: select
+        description: BAP select the item
+        reference: if any
+        example: &ref_75
+          value:
+            context:
+              domain: ONDC:RET10
+              action: select
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_id: sellerNP.com
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 8ded399c-89ea-4100-a7c8-343430a7c8d0
+              city: std:022
+              country: IND
+              timestamp: '2024-12-23T06:58:34.035Z'
+              ttl: PT30S
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    location_id: L1
+                fulfillments:
+                  - end:
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          area_code: '400053'
+      - summary: >-
+          BPP returns item breakup when item is in stock and offer applied (if
+          any)
+        api: on_select
+        description: >-
+          BPP returns item breakup when item is in stock and offer applied (if
+          any)
+        reference: if any
+        example: &ref_76
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_select
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 8ded399c-89ea-4100-a7c8-343430a7c8d0
+              timestamp: '2024-12-23T06:58:35.754Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    '@ondc/org/provider_name': LSP or Provider Name
+                    tracking: true
+                    '@ondc/org/category': Immediate Delivery
+                    '@ondc/org/TAT': PT60M
+                    state:
+                      descriptor:
+                        code: Serviceable
+                quote:
+                  price:
+                    value: '100.00'
+                    currency: INR
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100.00'
+                      item:
+                        quantity:
+                          available:
+                            count: '99'
+                          maximum:
+                            count: '99'
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                items:
+                  - id: I1
+                    fulfillment_id: F1
+      - summary: Buyer initiate the product and send the updated fulfillment id
+        api: init
+        description: Buyer initiate the product and send the updated fulfillment id
+        reference: if any
+        example: &ref_77
+          value:
+            context:
+              domain: ONDC:RET10
+              action: init
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
+              timestamp: '2024-12-23T07:01:43.145Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    location_id: L1
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    end:
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+      - summary: Respond to init
+        api: on_init
+        description: Respond to init
+        reference: if any
+        example: &ref_78
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_init
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
+              timestamp: '2024-12-23T07:01:44.759Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    end:
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                    tracking: true
+                quote:
+                  price:
+                    value: '100'
+                    currency: INR
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100.00'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  type: ON-ORDER
+                  collected_by: BPP
+                  uri: https://snp.com/pg
+                  status: NOT-PAID
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+                  '@ondc/org/settlement_basis': delivery
+                  '@ondc/org/settlement_window': P1D
+                  '@ondc/org/withholding_amount': '10.00'
+                tags:
+                  - code: bpp_terms
+                    list:
+                      - code: np_type
+                        value: MSN
+                      - code: tax_number
+                        value: gst_number_of_sellerNP
+                      - code: provider_tax_number
+                        value: PAN_number_of_provider
+      - summary: Unsolicited Respond to init
+        api: on_init
+        description: Respond to init
+        reference: if any
+        example: &ref_79
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_init
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
+              timestamp: '2024-12-23T07:01:44.759Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    type: Delivery
+                    end:
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                    tracking: true
+                quote:
+                  price:
+                    value: '100'
+                    currency: INR
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100.00'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  type: ON-ORDER
+                  collected_by: BPP
+                  uri: https://snp.com/pg
+                  status: PAID
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+                  '@ondc/org/settlement_basis': delivery
+                  '@ondc/org/settlement_window': P1D
+                  '@ondc/org/withholding_amount': '10.00'
+                  tags:
+                    - code: bpp_collect
+                      list:
+                        - code: success
+                          value: 'Y'
+                tags:
+                  - code: bpp_terms
+                    list:
+                      - code: np_type
+                        value: MSN
+                      - code: tax_number
+                        value: gst_number_of_sellerNP
+                      - code: provider_tax_number
+                        value: PAN_number_of_provider
+      - summary: Buyer confirms product
+        api: confirm
+        description: Buyer confirms product
+        reference: if any
+        example: &ref_80
+          value:
+            context:
+              domain: ONDC:RET10
+              action: confirm
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 3dbb05b6-dbb0-4399-95e6-c51cf5be842d
+              timestamp: '2024-12-23T07:03:30.516Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: Created
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                fulfillments:
+                  - '@ondc/org/TAT': PT60M
+                    id: F1
+                    tracking: true
+                    end:
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      person:
+                        name: ONDC Buyer
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                    type: Delivery
+                payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: buyer-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                  type: ON-ORDER
+                  collected_by: BPP
+                  uri: https://snp.com/pg
+                  status: PAID
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+                  '@ondc/org/settlement_basis': delivery
+                  '@ondc/org/settlement_window': P1D
+                  '@ondc/org/withholding_amount': '10.00'
+                quote:
+                  price:
+                    currency: INR
+                    value: '100.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                tags:
+                  - code: bpp_terms
+                    list:
+                      - code: np_type
+                        value: MSN
+                      - code: tax_number
+                        value: gst_number_of_sellerNP
+                      - code: provider_tax_number
+                        value: PAN_number_of_provider
+                  - code: bap_terms
+                    list:
+                      - code: tax_number
+                        value: gst_number_of_buyerNP
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-23T07:03:30.516Z'
+      - summary: Seller Accepts confirmation
+        api: on_confirm
+        description: Seller Accepts confirmation
+        reference: if any
+        example: &ref_81
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_confirm
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 3dbb05b6-dbb0-4399-95e6-c51cf5be842d
+              timestamp: '2024-12-23T07:03:32.230Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: Accepted
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
+                    state:
+                      descriptor:
+                        code: Pending
+                    type: Delivery
+                    tracking: true
+                    '@ondc/org/TAT': PT60M
+                    start:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:03:32.230Z'
+                          end: '2024-12-23T07:33:32.230Z'
+                      contact:
+                        phone: '9594663710'
+                        email: nobody@nomail.com
+                    end:
+                      person:
+                        name: John Doe
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:33:32.230Z'
+                          end: '2024-12-23T07:04:32.230Z'
+                quote:
+                  price:
+                    currency: INR
+                    value: '100.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: buyer-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                  type: ON-ORDER
+                  collected_by: BPP
+                  uri: https://snp.com/pg
+                  status: PAID
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+                  '@ondc/org/settlement_basis': delivery
+                  '@ondc/org/settlement_window': P1D
+                  '@ondc/org/withholding_amount': '10.00'
+                tags:
+                  - code: bpp_terms
+                    list:
+                      - code: np_type
+                        value: MSN
+                      - code: tax_number
+                        value: gst_number_of_sellerNP
+                      - code: provider_tax_number
+                        value: PAN_number_of_provider
+                  - code: bap_terms
+                    list:
+                      - code: tax_number
+                        value: gst_number_of_buyerNP
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-23T07:03:32.230Z'
   - summary: Retail 1.2.0 (Out Of Stock)
     description: >-
       The Buyer NP selects multiple items (/select), and the Seller NP responds
@@ -12991,7 +15527,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_73
+        example: &ref_98
           value:
             context:
               domain: ONDC:RET10
@@ -13016,7 +15552,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_74
+        example: &ref_99
           value:
             context:
               domain: ONDC:RET10
@@ -13194,7 +15730,7 @@ x-flows:
         api: select - out of stock
         description: BAP may add unavailable or out-of-stock items to the cart
         reference: if any
-        example: &ref_75
+        example: &ref_100
           value:
             context:
               domain: ONDC:RET10
@@ -13231,7 +15767,7 @@ x-flows:
         api: on_select - out of stock
         description: BPP returns item breakup when item is out of stock
         reference: if any
-        example: &ref_77
+        example: &ref_102
           value:
             context:
               domain: ONDC:RET10
@@ -13308,7 +15844,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_76
+        example: &ref_101
           value:
             context:
               domain: ONDC:RET10
@@ -13349,7 +15885,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_78
+        example: &ref_103
           value:
             context:
               domain: ONDC:RET10
@@ -13422,7 +15958,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_79
+        example: &ref_104
           value:
             context:
               domain: ONDC:RET10
@@ -13484,7 +16020,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_80
+        example: &ref_105
           value:
             context:
               domain: ONDC:RET10
@@ -13602,7 +16138,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_81
+        example: &ref_106
           value:
             context:
               domain: ONDC:RET10
@@ -13723,7 +16259,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_82
+        example: &ref_107
           value:
             context:
               domain: ONDC:RET10
@@ -13873,7 +16409,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_83
+        example: &ref_108
           value:
             context:
               domain: ONDC:RET10
@@ -14010,7 +16546,7 @@ x-flows:
         api: on_status - agent_assigned
         description: Status updates - agent assigned
         reference: if any
-        example: &ref_84
+        example: &ref_109
           value:
             context:
               domain: ONDC:RET10
@@ -14147,7 +16683,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_85
+        example: &ref_110
           value:
             context:
               domain: ONDC:RET10
@@ -14287,7 +16823,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_86
+        example: &ref_111
           value:
             context:
               domain: ONDC:RET10
@@ -14427,7 +16963,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_87
+        example: &ref_112
           value:
             context:
               domain: ONDC:RET10
@@ -14567,7 +17103,7 @@ x-flows:
         api: track
         description: BAP request to track the order
         reference: if any
-        example: &ref_88
+        example: &ref_113
           value:
             context:
               domain: ONDC:RET10
@@ -14588,7 +17124,7 @@ x-flows:
         api: on_track
         description: BPP sends the tracking information
         reference: if any
-        example: &ref_89
+        example: &ref_114
           value:
             context:
               domain: ONDC:RET10
@@ -14662,7 +17198,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_90
+        example: &ref_115
           value:
             context:
               domain: ONDC:RET12
@@ -14687,7 +17223,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_91
+        example: &ref_116
           value:
             context:
               domain: ONDC:RET12
@@ -14964,7 +17500,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_92
+        example: &ref_117
           value:
             context:
               domain: ONDC:RET12
@@ -15005,7 +17541,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_93
+        example: &ref_118
           value:
             context:
               domain: ONDC:RET12
@@ -15078,7 +17614,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_94
+        example: &ref_119
           value:
             context:
               domain: ONDC:RET12
@@ -15141,7 +17677,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_95
+        example: &ref_120
           value:
             context:
               domain: ONDC:RET12
@@ -15255,7 +17791,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_96
+        example: &ref_121
           value:
             context:
               domain: ONDC:RET12
@@ -15390,7 +17926,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_97
+        example: &ref_122
           value:
             context:
               domain: ONDC:RET12
@@ -15542,7 +18078,7 @@ x-flows:
         api: cancel
         description: Buyer request for the cancellation of the order
         reference: if any
-        example: &ref_98
+        example: &ref_123
           value:
             context:
               domain: ONDC:RET12
@@ -15565,7 +18101,7 @@ x-flows:
         api: on_cancel
         description: Seller confirms the cancellation of the order
         reference: if any
-        example: &ref_99
+        example: &ref_124
           value:
             context:
               domain: ONDC:RET12
@@ -15814,7 +18350,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_100
+        example: &ref_125
           value:
             context:
               domain: ONDC:RET12
@@ -15839,7 +18375,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_101
+        example: &ref_126
           value:
             context:
               domain: ONDC:RET12
@@ -16116,7 +18652,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_102
+        example: &ref_127
           value:
             context:
               domain: ONDC:RET12
@@ -16157,7 +18693,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_103
+        example: &ref_128
           value:
             context:
               domain: ONDC:RET12
@@ -16230,7 +18766,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_104
+        example: &ref_129
           value:
             context:
               domain: ONDC:RET12
@@ -16293,7 +18829,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_105
+        example: &ref_130
           value:
             context:
               domain: ONDC:RET12
@@ -16407,7 +18943,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_106
+        example: &ref_131
           value:
             context:
               domain: ONDC:RET12
@@ -16542,7 +19078,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_107
+        example: &ref_132
           value:
             context:
               domain: ONDC:RET12
@@ -16694,7 +19230,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order pending
         reference: if any
-        example: &ref_108
+        example: &ref_133
           value:
             context:
               city: std:080
@@ -16847,7 +19383,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_109
+        example: &ref_134
           value:
             context:
               city: std:080
@@ -17000,7 +19536,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_110
+        example: &ref_135
           value:
             context:
               city: std:080
@@ -17158,7 +19694,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_111
+        example: &ref_136
           value:
             context:
               city: std:080
@@ -17316,7 +19852,7 @@ x-flows:
         api: on_cancel - rto
         description: Order updates - seller side full-order cancellation
         reference: if any
-        example: &ref_113
+        example: &ref_138
           value:
             context:
               city: std:080
@@ -17532,7 +20068,7 @@ x-flows:
         api: on_status - rto_delivered/disposed
         description: Status updates - rto order delivered
         reference: if any
-        example: &ref_112
+        example: &ref_137
           value:
             context:
               city: std:080
@@ -17806,7 +20342,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_139
+        example: &ref_164
           value:
             context:
               domain: ONDC:RET10
@@ -17831,7 +20367,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_140
+        example: &ref_165
           value:
             context:
               domain: ONDC:RET10
@@ -18086,7 +20622,7 @@ x-flows:
         api: select
         description: BAP selects the item
         reference: if any
-        example: &ref_141
+        example: &ref_166
           value:
             context:
               domain: ONDC:RET10
@@ -18127,7 +20663,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_142
+        example: &ref_167
           value:
             context:
               domain: ONDC:RET10
@@ -18194,7 +20730,7 @@ x-flows:
         api: init
         description: Buyer initiates the product and sends the updated fulfillment ID
         reference: if any
-        example: &ref_143
+        example: &ref_168
           value:
             context:
               domain: ONDC:RET10
@@ -18257,7 +20793,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_144
+        example: &ref_169
           value:
             context:
               domain: ONDC:RET10
@@ -18366,7 +20902,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_145
+        example: &ref_170
           value:
             context:
               domain: ONDC:RET10
@@ -18492,7 +21028,7 @@ x-flows:
         api: on_confirm
         description: Seller accepts confirmation
         reference: if any
-        example: &ref_146
+        example: &ref_171
           value:
             context:
               domain: ONDC:RET10
@@ -18642,7 +21178,7 @@ x-flows:
         api: on_update - part cancel
         description: Seller side partial cancellation
         reference: if any
-        example: &ref_147
+        example: &ref_172
           value:
             context:
               domain: ONDC:RET10
@@ -18805,7 +21341,7 @@ x-flows:
         api: update - partial cancel settlement
         description: Update settlement - partial cancel
         reference: if any
-        example: &ref_148
+        example: &ref_173
           value:
             context:
               domain: ONDC:RET10
@@ -18838,7 +21374,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order accepted
         reference: if any
-        example: &ref_149
+        example: &ref_174
           value:
             context:
               domain: ONDC:RET10
@@ -19015,7 +21551,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_150
+        example: &ref_175
           value:
             context:
               domain: ONDC:RET10
@@ -19201,7 +21737,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_151
+        example: &ref_176
           value:
             context:
               domain: ONDC:RET10
@@ -19392,7 +21928,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_152
+        example: &ref_177
           value:
             context:
               domain: ONDC:RET10
@@ -19583,7 +22119,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_153
+        example: &ref_178
           value:
             context:
               domain: ONDC:RET10
@@ -19834,7 +22370,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_154
+        example: &ref_179
           value:
             context:
               domain: ONDC:RET10
@@ -19859,7 +22395,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_155
+        example: &ref_180
           value:
             context:
               domain: ONDC:RET10
@@ -20114,7 +22650,7 @@ x-flows:
         api: select
         description: BAP selects the item
         reference: if any
-        example: &ref_156
+        example: &ref_181
           value:
             context:
               domain: ONDC:RET10
@@ -20155,7 +22691,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_157
+        example: &ref_182
           value:
             context:
               domain: ONDC:RET10
@@ -20222,7 +22758,7 @@ x-flows:
         api: init
         description: Buyer initiates the product and sends the updated fulfillment ID
         reference: if any
-        example: &ref_158
+        example: &ref_183
           value:
             context:
               domain: ONDC:RET10
@@ -20285,7 +22821,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_159
+        example: &ref_184
           value:
             context:
               domain: ONDC:RET10
@@ -20394,7 +22930,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_160
+        example: &ref_185
           value:
             context:
               domain: ONDC:RET10
@@ -20520,7 +23056,7 @@ x-flows:
         api: on_confirm
         description: Seller accepts confirmation
         reference: if any
-        example: &ref_161
+        example: &ref_186
           value:
             context:
               domain: ONDC:RET10
@@ -20670,7 +23206,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order accepted
         reference: if any
-        example: &ref_162
+        example: &ref_187
           value:
             context:
               domain: ONDC:RET10
@@ -20816,7 +23352,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_163
+        example: &ref_188
           value:
             context:
               domain: ONDC:RET10
@@ -20971,7 +23507,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_164
+        example: &ref_189
           value:
             context:
               domain: ONDC:RET10
@@ -21132,7 +23668,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_165
+        example: &ref_190
           value:
             context:
               domain: ONDC:RET10
@@ -21292,7 +23828,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_166
+        example: &ref_191
           value:
             context:
               domain: ONDC:RET10
@@ -21454,7 +23990,7 @@ x-flows:
         api: update - liquidated
         description: BAP requests to return the items
         reference: if any
-        example: &ref_167
+        example: &ref_192
           value:
             context:
               domain: ONDC:RET10
@@ -21502,7 +24038,7 @@ x-flows:
         api: on_update - interim liquidated
         description: BPP sends the return initiate request
         reference: if any
-        example: &ref_168
+        example: &ref_193
           value:
             context:
               domain: ONDC:RET10
@@ -21682,7 +24218,7 @@ x-flows:
         api: on_update - liquidated
         description: BPP approves return request and liquidates the items
         reference: if any
-        example: &ref_169
+        example: &ref_194
           value:
             context:
               domain: ONDC:RET10
@@ -21878,7 +24414,7 @@ x-flows:
       - summary: Update settlement - liquidated
         api: update - liquidated settlement
         description: Update settlement - liquidated
-        example: &ref_170
+        example: &ref_195
           value:
             context:
               domain: ONDC:RET10
@@ -21971,7 +24507,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_171
+        example: &ref_196
           value:
             context:
               domain: ONDC:RET10
@@ -21996,7 +24532,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_172
+        example: &ref_197
           value:
             context:
               domain: ONDC:RET10
@@ -22251,7 +24787,7 @@ x-flows:
         api: select
         description: BAP selects the item
         reference: if any
-        example: &ref_173
+        example: &ref_198
           value:
             context:
               domain: ONDC:RET10
@@ -22292,7 +24828,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_174
+        example: &ref_199
           value:
             context:
               domain: ONDC:RET10
@@ -22359,7 +24895,7 @@ x-flows:
         api: init
         description: Buyer initiates the product and sends the updated fulfillment ID
         reference: if any
-        example: &ref_175
+        example: &ref_200
           value:
             context:
               domain: ONDC:RET10
@@ -22422,7 +24958,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_176
+        example: &ref_201
           value:
             context:
               domain: ONDC:RET10
@@ -22531,7 +25067,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_177
+        example: &ref_202
           value:
             context:
               domain: ONDC:RET10
@@ -22657,7 +25193,7 @@ x-flows:
         api: on_confirm
         description: Seller accepts confirmation
         reference: if any
-        example: &ref_178
+        example: &ref_203
           value:
             context:
               domain: ONDC:RET10
@@ -22807,7 +25343,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order accepted
         reference: if any
-        example: &ref_185
+        example: &ref_210
           value:
             context:
               domain: ONDC:RET10
@@ -22953,7 +25489,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_186
+        example: &ref_211
           value:
             context:
               domain: ONDC:RET10
@@ -23108,7 +25644,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_187
+        example: &ref_212
           value:
             context:
               domain: ONDC:RET10
@@ -23269,7 +25805,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_188
+        example: &ref_213
           value:
             context:
               domain: ONDC:RET10
@@ -23429,7 +25965,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_189
+        example: &ref_214
           value:
             context:
               domain: ONDC:RET10
@@ -23591,7 +26127,7 @@ x-flows:
         api: update - reverse qc
         description: BAP requests to return the items
         reference: if any
-        example: &ref_184
+        example: &ref_209
           value:
             context:
               domain: ONDC:RET10
@@ -23639,7 +26175,7 @@ x-flows:
         api: on_update - interim reverseQc
         description: BPP sends the return initiate request
         reference: if any
-        example: &ref_179
+        example: &ref_204
           value:
             context:
               domain: ONDC:RET10
@@ -23822,7 +26358,7 @@ x-flows:
         api: on_update - approved
         description: BPP approves return request and liquidates the items
         reference: if any
-        example: &ref_180
+        example: &ref_205
           value:
             context:
               domain: ONDC:RET10
@@ -24037,7 +26573,7 @@ x-flows:
         api: on_update - picked
         description: BPP sends the request that order picked up
         reference: if any
-        example: &ref_181
+        example: &ref_206
           value:
             context:
               domain: ONDC:RET10
@@ -24252,7 +26788,7 @@ x-flows:
       - summary: Update Settlement - reverse qc
         api: update - reverse qc settlement
         description: Update Settlement - reverse qc
-        example: &ref_183
+        example: &ref_208
           value:
             context:
               domain: ONDC:RET10
@@ -24285,7 +26821,7 @@ x-flows:
         api: on_update - return delivered
         description: BPP sends the request that order is delivered
         reference: if any
-        example: &ref_182
+        example: &ref_207
           value:
             context:
               domain: ONDC:RET10
@@ -24586,7 +27122,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_114
+        example: &ref_139
           value:
             context:
               domain: ONDC:RET10
@@ -24611,7 +27147,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_115
+        example: &ref_140
           value:
             context:
               domain: ONDC:RET10
@@ -24866,7 +27402,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_116
+        example: &ref_141
           value:
             context:
               domain: ONDC:RET10
@@ -24907,7 +27443,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_117
+        example: &ref_142
           value:
             context:
               domain: ONDC:RET10
@@ -24974,7 +27510,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_118
+        example: &ref_143
           value:
             context:
               domain: ONDC:RET10
@@ -25037,7 +27573,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_119
+        example: &ref_144
           value:
             context:
               domain: ONDC:RET10
@@ -25146,7 +27682,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_120
+        example: &ref_145
           value:
             context:
               domain: ONDC:RET10
@@ -25272,7 +27808,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_121
+        example: &ref_146
           value:
             context:
               domain: ONDC:RET10
@@ -25422,7 +27958,7 @@ x-flows:
         api: on_update - part cancel
         description: Seller Side Part Cancellation
         reference: if any
-        example: &ref_122
+        example: &ref_147
           value:
             context:
               domain: ONDC:RET10
@@ -25585,7 +28121,7 @@ x-flows:
         api: update - part cancel settlement
         description: Update Settlement - part cancel
         reference: if any
-        example: &ref_129
+        example: &ref_154
           value:
             context:
               domain: ONDC:RET10
@@ -25618,7 +28154,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order pending
         reference: if any
-        example: &ref_134
+        example: &ref_159
           value:
             context:
               domain: ONDC:RET10
@@ -25795,7 +28331,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_135
+        example: &ref_160
           value:
             context:
               domain: ONDC:RET10
@@ -25981,7 +28517,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_136
+        example: &ref_161
           value:
             context:
               domain: ONDC:RET10
@@ -26172,7 +28708,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_137
+        example: &ref_162
           value:
             context:
               domain: ONDC:RET10
@@ -26363,7 +28899,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_138
+        example: &ref_163
           value:
             context:
               domain: ONDC:RET10
@@ -26555,7 +29091,7 @@ x-flows:
         api: update - reverse qc
         description: BAP request to return the items
         reference: if any
-        example: &ref_131
+        example: &ref_156
           value:
             context:
               domain: ONDC:RET10
@@ -26603,7 +29139,7 @@ x-flows:
         api: on_update - interim reverse qc
         description: BPP sends the return initiate request
         reference: if any
-        example: &ref_123
+        example: &ref_148
           value:
             context:
               domain: ONDC:RET10
@@ -26817,7 +29353,7 @@ x-flows:
         api: on_update - approval
         description: BPP approves return request
         reference: if any
-        example: &ref_124
+        example: &ref_149
           value:
             context:
               domain: ONDC:RET10
@@ -27063,7 +29599,7 @@ x-flows:
         api: on_update - picked
         description: BPP sends the request that order picked up
         reference: if any
-        example: &ref_125
+        example: &ref_150
           value:
             context:
               domain: ONDC:RET10
@@ -27309,7 +29845,7 @@ x-flows:
       - summary: Update Settlement - reverse qc
         api: update - reverse qc settlement
         description: Update Settlement - reverse qc
-        example: &ref_130
+        example: &ref_155
           value:
             context:
               domain: ONDC:RET10
@@ -27342,7 +29878,7 @@ x-flows:
         api: on_update - return delivered
         description: BPP sends the request that order is delivered
         reference: if any
-        example: &ref_126
+        example: &ref_151
           value:
             context:
               domain: ONDC:RET10
@@ -27596,7 +30132,7 @@ x-flows:
         api: update - liquidated
         description: BAP request to return the items
         reference: if any
-        example: &ref_133
+        example: &ref_158
           value:
             context:
               domain: ONDC:RET10
@@ -27644,7 +30180,7 @@ x-flows:
         api: on_update - interim liquidated
         description: BPP sends the return initiate request
         reference: if any
-        example: &ref_127
+        example: &ref_152
           value:
             context:
               domain: ONDC:RET10
@@ -27925,7 +30461,7 @@ x-flows:
         api: on_update - liquidated
         description: BPP approves return request and liquidate the items
         reference: if any
-        example: &ref_128
+        example: &ref_153
           value:
             context:
               domain: ONDC:RET10
@@ -28222,7 +30758,7 @@ x-flows:
       - summary: Update Settlement - liquidated
         api: update - liquidated settlement
         description: Update Settlement - liquidated
-        example: &ref_132
+        example: &ref_157
           value:
             context:
               domain: ONDC:RET10
@@ -28280,7 +30816,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_190
+        example: &ref_215
           value:
             context:
               domain: ONDC:RET11
@@ -28305,7 +30841,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_192
+        example: &ref_217
           value:
             context:
               domain: ONDC:RET11
@@ -29701,7 +32237,7 @@ x-flows:
         api: search - inc
         description: Bap sends search for incremental changes
         reference: if any
-        example: &ref_191
+        example: &ref_216
           value:
             context:
               domain: ONDC:RET11
@@ -29731,7 +32267,7 @@ x-flows:
         api: on_search - inc
         description: BPP returns the incremental changes
         reference: if any
-        example: &ref_193
+        example: &ref_218
           value:
             context:
               domain: ONDC:RET11
@@ -29887,7 +32423,7 @@ x-flows:
           buyer NP specifies the search intent for live search or for catalog
           crawl
         reference: if any
-        example: &ref_194
+        example: &ref_219
           value:
             context:
               domain: ONDC:RET11
@@ -29912,7 +32448,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_195
+        example: &ref_220
           value:
             context:
               domain: ONDC:RET11
@@ -31308,7 +33844,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_196
+        example: &ref_221
           value:
             context:
               domain: ONDC:RET11
@@ -31477,7 +34013,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_197
+        example: &ref_222
           value:
             context:
               domain: ONDC:RET11
@@ -32074,7 +34610,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_198
+        example: &ref_223
           value:
             context:
               domain: ONDC:RET11
@@ -32274,7 +34810,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_199
+        example: &ref_224
           value:
             context:
               domain: ONDC:RET11
@@ -32888,7 +35424,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_200
+        example: &ref_225
           value:
             context:
               domain: ONDC:RET11
@@ -33545,7 +36081,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_201
+        example: &ref_226
           value:
             context:
               domain: ONDC:RET11
@@ -34195,7 +36731,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order accepted
         reference: if any
-        example: &ref_202
+        example: &ref_227
           value:
             context:
               domain: ONDC:RET11
@@ -34841,7 +37377,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_203
+        example: &ref_228
           value:
             context:
               domain: ONDC:RET11
@@ -35498,7 +38034,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_204
+        example: &ref_229
           value:
             context:
               domain: ONDC:RET11
@@ -36160,7 +38696,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_205
+        example: &ref_230
           value:
             context:
               domain: ONDC:RET11
@@ -36822,7 +39358,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_206
+        example: &ref_231
           value:
             context:
               domain: ONDC:RET11
@@ -37485,7 +40021,7 @@ x-flows:
         api: track
         description: BAP request to track the order
         reference: if any
-        example: &ref_207
+        example: &ref_232
           value:
             context:
               domain: ONDC:RET11
@@ -37507,7 +40043,7 @@ x-flows:
         api: on_track
         description: BPP sends the tracking information
         reference: if any
-        example: &ref_208
+        example: &ref_233
           value:
             context:
               domain: ONDC:RET11
@@ -37624,7 +40160,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_209
+        example: &ref_234
           value:
             context:
               domain: ONDC:RET11
@@ -37649,7 +40185,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_210
+        example: &ref_235
           value:
             context:
               domain: ONDC:RET11
@@ -39045,7 +41581,7 @@ x-flows:
         api: select - out of stock
         description: BAP may add unavailable or out-of-stock items to the cart
         reference: if any
-        example: &ref_211
+        example: &ref_236
           value:
             context:
               domain: ONDC:RET11
@@ -39210,7 +41746,7 @@ x-flows:
         api: on_select - out of stock
         description: BPP returns item breakup when item is out of stock
         reference: if any
-        example: &ref_213
+        example: &ref_238
           value:
             context:
               domain: ONDC:RET11
@@ -39811,7 +42347,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_212
+        example: &ref_237
           value:
             context:
               domain: ONDC:RET11
@@ -39914,7 +42450,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_214
+        example: &ref_239
           value:
             context:
               domain: ONDC:RET11
@@ -40243,7 +42779,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_215
+        example: &ref_240
           value:
             context:
               domain: ONDC:RET11
@@ -40373,7 +42909,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_216
+        example: &ref_241
           value:
             context:
               domain: ONDC:RET11
@@ -40734,7 +43270,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_217
+        example: &ref_242
           value:
             context:
               domain: ONDC:RET11
@@ -41138,7 +43674,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_218
+        example: &ref_243
           value:
             context:
               domain: ONDC:RET11
@@ -41535,7 +44071,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order accepted
         reference: if any
-        example: &ref_219
+        example: &ref_244
           value:
             context:
               domain: ONDC:RET11
@@ -41928,7 +44464,7 @@ x-flows:
         api: on_status - agent_assigned
         description: Status updates - agent packed
         reference: if any
-        example: &ref_220
+        example: &ref_245
           value:
             context:
               domain: ONDC:RET11
@@ -42332,7 +44868,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_221
+        example: &ref_246
           value:
             context:
               domain: ONDC:RET11
@@ -42740,7 +45276,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_222
+        example: &ref_247
           value:
             context:
               domain: ONDC:RET11
@@ -43148,7 +45684,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_223
+        example: &ref_248
           value:
             context:
               domain: ONDC:RET11
@@ -43557,7 +46093,7 @@ x-flows:
         api: track
         description: BAP request to track the order
         reference: if any
-        example: &ref_224
+        example: &ref_249
           value:
             context:
               domain: ONDC:RET11
@@ -43579,7 +46115,7 @@ x-flows:
         api: on_track
         description: BPP sends the tracking information
         reference: if any
-        example: &ref_225
+        example: &ref_250
           value:
             context:
               domain: ONDC:RET11
@@ -43682,7 +46218,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_226
+        example: &ref_251
           value:
             context:
               domain: ONDC:RET11
@@ -43707,7 +46243,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_227
+        example: &ref_252
           value:
             context:
               domain: ONDC:RET11
@@ -45103,7 +47639,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_228
+        example: &ref_253
           value:
             context:
               domain: ONDC:RET11
@@ -45272,7 +47808,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_229
+        example: &ref_254
           value:
             context:
               domain: ONDC:RET11
@@ -45869,7 +48405,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_230
+        example: &ref_255
           value:
             context:
               domain: ONDC:RET11
@@ -46070,7 +48606,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_231
+        example: &ref_256
           value:
             context:
               domain: ONDC:RET11
@@ -46684,7 +49220,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_232
+        example: &ref_257
           value:
             context:
               domain: ONDC:RET11
@@ -47341,7 +49877,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_233
+        example: &ref_258
           value:
             context:
               domain: ONDC:RET11
@@ -47991,7 +50527,7 @@ x-flows:
         api: cancel
         description: Buyer request for the cancellation of the order
         reference: if any
-        example: &ref_234
+        example: &ref_259
           value:
             context:
               domain: ONDC:RET11
@@ -48014,7 +50550,7 @@ x-flows:
         api: on_cancel
         description: Seller confirms the cancellation of the order
         reference: if any
-        example: &ref_235
+        example: &ref_260
           value:
             context:
               domain: ONDC:RET11
@@ -49016,7 +51552,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_236
+        example: &ref_261
           value:
             context:
               domain: ONDC:RET11
@@ -49041,7 +51577,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_237
+        example: &ref_262
           value:
             context:
               domain: ONDC:RET11
@@ -50437,7 +52973,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_238
+        example: &ref_263
           value:
             context:
               domain: ONDC:RET11
@@ -50606,7 +53142,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_239
+        example: &ref_264
           value:
             context:
               domain: ONDC:RET11
@@ -51203,7 +53739,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_240
+        example: &ref_265
           value:
             context:
               domain: ONDC:RET11
@@ -51404,7 +53940,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_241
+        example: &ref_266
           value:
             context:
               domain: ONDC:RET11
@@ -52018,7 +54554,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_242
+        example: &ref_267
           value:
             context:
               domain: ONDC:RET11
@@ -52675,7 +55211,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_243
+        example: &ref_268
           value:
             context:
               domain: ONDC:RET11
@@ -53325,7 +55861,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order pending
         reference: if any
-        example: &ref_244
+        example: &ref_269
           value:
             context:
               domain: ONDC:RET11
@@ -53971,7 +56507,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_245
+        example: &ref_270
           value:
             context:
               domain: ONDC:RET11
@@ -54628,7 +57164,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_246
+        example: &ref_271
           value:
             context:
               domain: ONDC:RET11
@@ -55289,7 +57825,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_247
+        example: &ref_272
           value:
             context:
               domain: ONDC:RET11
@@ -55950,7 +58486,7 @@ x-flows:
         api: on_cancel
         description: Order updates - seller side full-order cancellation
         reference: if any
-        example: &ref_249
+        example: &ref_274
           value:
             context:
               domain: ONDC:RET11
@@ -56938,7 +59474,7 @@ x-flows:
         api: on_status - rto_delivered/disposed
         description: Status updates - rto order delivered
         reference: if any
-        example: &ref_248
+        example: &ref_273
           value:
             context:
               domain: ONDC:RET11
@@ -57976,7 +60512,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_250
+        example: &ref_275
           value:
             context:
               domain: ONDC:RET11
@@ -58001,7 +60537,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_251
+        example: &ref_276
           value:
             context:
               domain: ONDC:RET11
@@ -59397,7 +61933,7 @@ x-flows:
         api: select
         description: BAP selects the item
         reference: if any
-        example: &ref_252
+        example: &ref_277
           value:
             context:
               domain: ONDC:RET11
@@ -59566,7 +62102,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_253
+        example: &ref_278
           value:
             context:
               domain: ONDC:RET11
@@ -60163,7 +62699,7 @@ x-flows:
         api: init
         description: Buyer initiates the product and sends the updated fulfillment ID
         reference: if any
-        example: &ref_254
+        example: &ref_279
           value:
             context:
               domain: ONDC:RET11
@@ -60364,7 +62900,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_255
+        example: &ref_280
           value:
             context:
               domain: ONDC:RET11
@@ -60978,7 +63514,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_256
+        example: &ref_281
           value:
             context:
               domain: ONDC:RET11
@@ -61635,7 +64171,7 @@ x-flows:
         api: on_confirm
         description: Seller accepts confirmation
         reference: if any
-        example: &ref_257
+        example: &ref_282
           value:
             context:
               domain: ONDC:RET11
@@ -62285,7 +64821,7 @@ x-flows:
         api: on_update - part cancel
         description: Seller side partial cancellation
         reference: if any
-        example: &ref_258
+        example: &ref_283
           value:
             context:
               domain: ONDC:RET11
@@ -63108,7 +65644,7 @@ x-flows:
         api: update - partial cancel settlement
         description: Update settlement - partial cancel
         reference: if any
-        example: &ref_264
+        example: &ref_289
           value:
             context:
               domain: ONDC:RET11
@@ -63141,7 +65677,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order accepted
         reference: if any
-        example: &ref_259
+        example: &ref_284
           value:
             context:
               domain: ONDC:RET11
@@ -63978,7 +66514,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_260
+        example: &ref_285
           value:
             context:
               domain: ONDC:RET11
@@ -64826,7 +67362,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_261
+        example: &ref_286
           value:
             context:
               domain: ONDC:RET11
@@ -65678,7 +68214,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_262
+        example: &ref_287
           value:
             context:
               domain: ONDC:RET11
@@ -66530,7 +69066,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_263
+        example: &ref_288
           value:
             context:
               domain: ONDC:RET11
@@ -67383,7 +69919,7 @@ x-flows:
         api: track
         description: Track order status
         reference: if any
-        example: &ref_265
+        example: &ref_290
           value:
             context:
               domain: ONDC:RET11
@@ -67405,7 +69941,7 @@ x-flows:
         api: on_track
         description: On track update status
         reference: if any
-        example: &ref_266
+        example: &ref_291
           value:
             context:
               domain: ONDC:RET11
@@ -67522,7 +70058,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_267
+        example: &ref_292
           value:
             context:
               domain: ONDC:RET11
@@ -67547,7 +70083,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_268
+        example: &ref_293
           value:
             context:
               domain: ONDC:RET11
@@ -68943,7 +71479,7 @@ x-flows:
         api: select
         description: BAP selects the item
         reference: if any
-        example: &ref_269
+        example: &ref_294
           value:
             context:
               domain: ONDC:RET11
@@ -69112,7 +71648,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_270
+        example: &ref_295
           value:
             context:
               domain: ONDC:RET11
@@ -69709,7 +72245,7 @@ x-flows:
         api: init
         description: Buyer initiates the product and sends the updated fulfillment ID
         reference: if any
-        example: &ref_271
+        example: &ref_296
           value:
             context:
               domain: ONDC:RET11
@@ -69910,7 +72446,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_272
+        example: &ref_297
           value:
             context:
               domain: ONDC:RET11
@@ -70524,7 +73060,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_273
+        example: &ref_298
           value:
             context:
               domain: ONDC:RET11
@@ -71181,7 +73717,7 @@ x-flows:
         api: on_confirm
         description: Seller accepts confirmation
         reference: if any
-        example: &ref_274
+        example: &ref_299
           value:
             context:
               domain: ONDC:RET11
@@ -71831,7 +74367,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order accepted
         reference: if any
-        example: &ref_275
+        example: &ref_300
           value:
             context:
               domain: ONDC:RET11
@@ -72469,7 +75005,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_276
+        example: &ref_301
           value:
             context:
               domain: ONDC:RET11
@@ -73107,7 +75643,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_277
+        example: &ref_302
           value:
             context:
               domain: ONDC:RET11
@@ -73749,7 +76285,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_278
+        example: &ref_303
           value:
             context:
               domain: ONDC:RET11
@@ -74391,7 +76927,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_279
+        example: &ref_304
           value:
             context:
               domain: ONDC:RET11
@@ -75033,7 +77569,7 @@ x-flows:
         api: update - liquidated
         description: BAP requests to return the items
         reference: if any
-        example: &ref_280
+        example: &ref_305
           value:
             context:
               domain: ONDC:RET11
@@ -75165,7 +77701,7 @@ x-flows:
         api: on_update - interim liquidated
         description: BPP sends the return initiate request
         reference: if any
-        example: &ref_282
+        example: &ref_307
           value:
             context:
               domain: ONDC:RET11
@@ -75928,7 +78464,7 @@ x-flows:
         api: on_update - liquidated
         description: BPP approves return request and liquidates the items
         reference: if any
-        example: &ref_283
+        example: &ref_308
           value:
             context:
               domain: ONDC:RET11
@@ -76873,7 +79409,7 @@ x-flows:
       - summary: Update settlement - liquidated
         api: update - liquidated settlement
         description: Update settlement - liquidated
-        example: &ref_281
+        example: &ref_306
           value:
             context:
               domain: ONDC:RET11
@@ -79314,6 +81850,105 @@ x-examples:
                           value: gst_number_of_buyerNP
                   created_at: '2024-12-23T07:03:30.516Z'
                   updated_at: '2024-12-23T07:03:32.230Z'
+  B2C - Payment Successfully Collected and Updated:
+    summary: B2C Payment Successfully Collected and Updated Use Case Specification
+    description: >-
+      The buyer completes the payment, and the SNP successfully updates the
+      payment status to "PAID" along with transaction details (currency, amount,
+      and transaction ID). The SNP confirms successful collection using
+      payment.tags.bpp_collect.success="Y" in the unsolicited on_init call,
+      allowing the BNP to proceed with /confirm without issues.
+    example_set:
+      search:
+        examples:
+          search: *ref_73
+      on_search:
+        examples:
+          on_search: *ref_74
+      select:
+        examples:
+          select: *ref_75
+      on_select:
+        examples:
+          on_select: *ref_76
+      init:
+        examples:
+          init: *ref_77
+      on_init:
+        examples:
+          on_init: *ref_78
+          on_init - unsolicited: *ref_79
+      confirm:
+        examples:
+          confirm: *ref_80
+      on_confirm:
+        examples:
+          on_confirm: *ref_81
+  B2C - Payment Collected but Status Not Updated:
+    summary: B2C Payment Collected but Status Not Updated Use Case Specification
+    description: >-
+      The buyer makes the payment, but the SNP is unable to update the payment
+      status immediately. The SNP still marks collection success
+      (bpp_collect.success="Y") but keeps payment.status="NOT-PAID". The BNP can
+      choose to either terminate the transaction or proceed with /confirm,
+      trusting that the SNP will update the status later.If BNP proceeds with
+      /confirm, SNP should honour /confirm as per the contract and it will be
+      the SNP’s responsibility to subsequently update payment.status when
+      available
+    example_set:
+      search:
+        examples:
+          search: *ref_82
+      on_search:
+        examples:
+          on_search: *ref_83
+      select:
+        examples:
+          select: *ref_84
+      on_select:
+        examples:
+          on_select: *ref_85
+      init:
+        examples:
+          init: *ref_86
+      on_init:
+        examples:
+          on_init: *ref_87
+          on_init - unsolicited: *ref_88
+      confirm:
+        examples:
+          confirm: *ref_89
+      on_confirm:
+        examples:
+          on_confirm: *ref_90
+  B2C - Payment Collection Error:
+    summary: B2C Payment Collection Error Use Case Specification
+    description: >-
+      The buyer attempts payment, but an error occurs (e.g., payment gateway
+      failure or timeout). The SNP marks payment.tags.bpp_collect.success="N"
+      and includes an error message (bpp_collect.error="error_message"). Since
+      the payment was unsuccessful, the BNP must terminate the transaction,
+      preventing order confirmation.
+    example_set:
+      search:
+        examples:
+          search: *ref_91
+      on_search:
+        examples:
+          on_search: *ref_92
+      select:
+        examples:
+          select: *ref_93
+      on_select:
+        examples:
+          on_select: *ref_94
+      init:
+        examples:
+          init: *ref_95
+      on_init:
+        examples:
+          on_init: *ref_96
+          on_init - unsolicited: *ref_97
   B2C - Item Out-of-stock:
     summary: B2C flow-3 Use Case Specification
     description: >-
@@ -79328,103 +81963,17 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_73
+          search: *ref_98
       on_search:
         examples:
-          on_search: *ref_74
+          on_search: *ref_99
       select:
         examples:
-          select - out of stock: *ref_75
-          select: *ref_76
+          select - out of stock: *ref_100
+          select: *ref_101
       on_select:
         examples:
-          on_select - out of stock: *ref_77
-          on_select: *ref_78
-      init:
-        examples:
-          init: *ref_79
-      on_init:
-        examples:
-          on_init: *ref_80
-      confirm:
-        examples:
-          confirm: *ref_81
-      on_confirm:
-        examples:
-          on_confirm: *ref_82
-      on_status:
-        examples:
-          on_status - packed: *ref_83
-          on_status - agent assigned: *ref_84
-          on_status - picked: *ref_85
-          on_status - out for delivery: *ref_86
-          on_status - delivered: *ref_87
-      track:
-        examples:
-          track: *ref_88
-      on_track:
-        examples:
-          on_track: *ref_89
-  B2C - Buyer Side Cancellation:
-    summary: B2C flow-4 Use Case Specification
-    description: >-
-      The Buyer-Initiated Cancellation Flow in ONDC allows buyers to cancel an
-      order before fulfillment. The Buyer NP sends a cancellation request
-      (/cancel), specifying the reason . The Seller NP responds with a
-      confirmation of the cancellation (/on_cancel), the order is marked as
-      canceled, and any applicable refunds are processed.
-    example_set:
-      search:
-        examples:
-          search: *ref_90
-      on_search:
-        examples:
-          on_search: *ref_91
-      select:
-        examples:
-          select: *ref_92
-      on_select:
-        examples:
-          on_select: *ref_93
-      init:
-        examples:
-          init: *ref_94
-      on_init:
-        examples:
-          on_init: *ref_95
-      confirm:
-        examples:
-          confirm: *ref_96
-      on_confirm:
-        examples:
-          on_confirm: *ref_97
-      cancel:
-        examples:
-          cancel: *ref_98
-      on_cancel:
-        examples:
-          on_cancel: *ref_99
-  B2C - Seller side Cancellation:
-    summary: B2C flow-5 Use Case Specification
-    description: >-
-      The Seller-Initiated Cancellation Flow in ONDC allows the Seller NP or
-      Logistics Service Provider (LSP) to cancel an order if the buyer is
-      unavailable, etc. The Seller NP/LSP sends an unsolicited cancellation
-      request (/on_cancel), citing the cancellation reason. The order is then
-      marked as canceled, and any applicable refunds or reversals are processed
-      as per the cancellation terms.
-    example_set:
-      search:
-        examples:
-          search: *ref_100
-      on_search:
-        examples:
-          on_search: *ref_101
-      select:
-        examples:
-          select: *ref_102
-      on_select:
-        examples:
+          on_select - out of stock: *ref_102
           on_select: *ref_103
       init:
         examples:
@@ -79440,14 +81989,100 @@ x-examples:
           on_confirm: *ref_107
       on_status:
         examples:
-          on_status - pending: *ref_108
-          on_status - packed: *ref_109
+          on_status - packed: *ref_108
+          on_status - agent assigned: *ref_109
           on_status - picked: *ref_110
           on_status - out for delivery: *ref_111
-          on_status - RTO delivered: *ref_112
+          on_status - delivered: *ref_112
+      track:
+        examples:
+          track: *ref_113
+      on_track:
+        examples:
+          on_track: *ref_114
+  B2C - Buyer Side Cancellation:
+    summary: B2C flow-4 Use Case Specification
+    description: >-
+      The Buyer-Initiated Cancellation Flow in ONDC allows buyers to cancel an
+      order before fulfillment. The Buyer NP sends a cancellation request
+      (/cancel), specifying the reason . The Seller NP responds with a
+      confirmation of the cancellation (/on_cancel), the order is marked as
+      canceled, and any applicable refunds are processed.
+    example_set:
+      search:
+        examples:
+          search: *ref_115
+      on_search:
+        examples:
+          on_search: *ref_116
+      select:
+        examples:
+          select: *ref_117
+      on_select:
+        examples:
+          on_select: *ref_118
+      init:
+        examples:
+          init: *ref_119
+      on_init:
+        examples:
+          on_init: *ref_120
+      confirm:
+        examples:
+          confirm: *ref_121
+      on_confirm:
+        examples:
+          on_confirm: *ref_122
+      cancel:
+        examples:
+          cancel: *ref_123
       on_cancel:
         examples:
-          on_cancel: *ref_113
+          on_cancel: *ref_124
+  B2C - Seller side Cancellation:
+    summary: B2C flow-5 Use Case Specification
+    description: >-
+      The Seller-Initiated Cancellation Flow in ONDC allows the Seller NP or
+      Logistics Service Provider (LSP) to cancel an order if the buyer is
+      unavailable, etc. The Seller NP/LSP sends an unsolicited cancellation
+      request (/on_cancel), citing the cancellation reason. The order is then
+      marked as canceled, and any applicable refunds or reversals are processed
+      as per the cancellation terms.
+    example_set:
+      search:
+        examples:
+          search: *ref_125
+      on_search:
+        examples:
+          on_search: *ref_126
+      select:
+        examples:
+          select: *ref_127
+      on_select:
+        examples:
+          on_select: *ref_128
+      init:
+        examples:
+          init: *ref_129
+      on_init:
+        examples:
+          on_init: *ref_130
+      confirm:
+        examples:
+          confirm: *ref_131
+      on_confirm:
+        examples:
+          on_confirm: *ref_132
+      on_status:
+        examples:
+          on_status - pending: *ref_133
+          on_status - packed: *ref_134
+          on_status - picked: *ref_135
+          on_status - out for delivery: *ref_136
+          on_status - RTO delivered: *ref_137
+      on_cancel:
+        examples:
+          on_cancel: *ref_138
   B2C - Part-cancellation/ Reverse QC/ Liquidation:
     summary: B2C flow-6 Use Case Specification
     description: >-
@@ -79461,64 +82096,6 @@ x-examples:
       is picked up (on_update_picked), settled (update_settlement_reverse_qc),
       and returned to the seller (on_update_delivered). Settlement details are
       carried forward across processes for accurate reconciliation.
-    example_set:
-      search:
-        examples:
-          search: *ref_114
-      on_search:
-        examples:
-          on_search: *ref_115
-      select:
-        examples:
-          select: *ref_116
-      on_select:
-        examples:
-          on_select: *ref_117
-      init:
-        examples:
-          init: *ref_118
-      on_init:
-        examples:
-          on_init: *ref_119
-      confirm:
-        examples:
-          confirm: *ref_120
-      on_confirm:
-        examples:
-          on_confirm: *ref_121
-      on_update:
-        examples:
-          on_update - part cancel: *ref_122
-          on_update - interim reverse QC: *ref_123
-          on_update - approval: *ref_124
-          on_update - picked: *ref_125
-          on_update - delivered: *ref_126
-          on_update - interim liquidated: *ref_127
-          on_update - liquidated: *ref_128
-      update:
-        examples:
-          update - settlement part cancel: *ref_129
-          update - settlement reverse QC: *ref_130
-          update - reverse QC: *ref_131
-          update - settlement liquidated: *ref_132
-          update - liquidated: *ref_133
-      on_status:
-        examples:
-          on_status - pending: *ref_134
-          on_status - packed: *ref_135
-          on_status - picked: *ref_136
-          on_status - out for delivery: *ref_137
-          on_status - delivered: *ref_138
-  B2C - Part Cancellation:
-    summary: B2C flow-6a Use Case Specification
-    description: >-
-      The Partial Cancellation Flow in ONDC allows the Seller NP to cancel
-      specific items before fulfillment while processing the rest of the order.
-      The Buyer NP proceeds with checkout and confirms the order, after which
-      the Seller NP updates the cancellation (on_update_part_cancel.json),
-      adjusting payments accordingly. The remaining items move through
-      fulfillment stages—accepted, packed, picked up, and delivered—while the
-      Buyer NP tracks the order with real-time updates.
     example_set:
       search:
         examples:
@@ -79547,16 +82124,74 @@ x-examples:
       on_update:
         examples:
           on_update - part cancel: *ref_147
+          on_update - interim reverse QC: *ref_148
+          on_update - approval: *ref_149
+          on_update - picked: *ref_150
+          on_update - delivered: *ref_151
+          on_update - interim liquidated: *ref_152
+          on_update - liquidated: *ref_153
       update:
         examples:
-          update - settlement part cancel: *ref_148
+          update - settlement part cancel: *ref_154
+          update - settlement reverse QC: *ref_155
+          update - reverse QC: *ref_156
+          update - settlement liquidated: *ref_157
+          update - liquidated: *ref_158
       on_status:
         examples:
-          on_status - pending: *ref_149
-          on_status - packed: *ref_150
-          on_status - picked: *ref_151
-          on_status - out for delivery: *ref_152
-          on_status - delivered: *ref_153
+          on_status - pending: *ref_159
+          on_status - packed: *ref_160
+          on_status - picked: *ref_161
+          on_status - out for delivery: *ref_162
+          on_status - delivered: *ref_163
+  B2C - Part Cancellation:
+    summary: B2C flow-6a Use Case Specification
+    description: >-
+      The Partial Cancellation Flow in ONDC allows the Seller NP to cancel
+      specific items before fulfillment while processing the rest of the order.
+      The Buyer NP proceeds with checkout and confirms the order, after which
+      the Seller NP updates the cancellation (on_update_part_cancel.json),
+      adjusting payments accordingly. The remaining items move through
+      fulfillment stages—accepted, packed, picked up, and delivered—while the
+      Buyer NP tracks the order with real-time updates.
+    example_set:
+      search:
+        examples:
+          search: *ref_164
+      on_search:
+        examples:
+          on_search: *ref_165
+      select:
+        examples:
+          select: *ref_166
+      on_select:
+        examples:
+          on_select: *ref_167
+      init:
+        examples:
+          init: *ref_168
+      on_init:
+        examples:
+          on_init: *ref_169
+      confirm:
+        examples:
+          confirm: *ref_170
+      on_confirm:
+        examples:
+          on_confirm: *ref_171
+      on_update:
+        examples:
+          on_update - part cancel: *ref_172
+      update:
+        examples:
+          update - settlement part cancel: *ref_173
+      on_status:
+        examples:
+          on_status - pending: *ref_174
+          on_status - packed: *ref_175
+          on_status - picked: *ref_176
+          on_status - out for delivery: *ref_177
+          on_status - delivered: *ref_178
   B2C - Liquidation:
     summary: B2C flow-6b Use Case Specification
     description: >-
@@ -79568,41 +82203,41 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_154
+          search: *ref_179
       on_search:
         examples:
-          on_search: *ref_155
+          on_search: *ref_180
       select:
         examples:
-          select: *ref_156
+          select: *ref_181
       on_select:
         examples:
-          on_select: *ref_157
+          on_select: *ref_182
       init:
         examples:
-          init: *ref_158
+          init: *ref_183
       on_init:
         examples:
-          on_init: *ref_159
+          on_init: *ref_184
       confirm:
         examples:
-          confirm: *ref_160
+          confirm: *ref_185
       on_confirm:
         examples:
-          on_confirm: *ref_161
+          on_confirm: *ref_186
       on_status:
         examples:
-          on_status - pending: *ref_162
-          on_status - packed: *ref_163
-          on_status - picked: *ref_164
-          on_status - out for delivery: *ref_165
-          on_status - delivered: *ref_166
+          on_status - pending: *ref_187
+          on_status - packed: *ref_188
+          on_status - picked: *ref_189
+          on_status - out for delivery: *ref_190
+          on_status - delivered: *ref_191
       update:
         examples:
-          update - liquidated: *ref_167
-          on_update - interim liquidated: *ref_168
-          on_update - liquidated: *ref_169
-          update - settlement liquidated: *ref_170
+          update - liquidated: *ref_192
+          on_update - interim liquidated: *ref_193
+          on_update - liquidated: *ref_194
+          update - settlement liquidated: *ref_195
   B2C - Reverse QC:
     summary: B2C flow-6c Use Case Specification
     description: >-
@@ -79616,45 +82251,45 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_171
+          search: *ref_196
       on_search:
         examples:
-          on_search: *ref_172
+          on_search: *ref_197
       select:
         examples:
-          select: *ref_173
+          select: *ref_198
       on_select:
         examples:
-          on_select: *ref_174
+          on_select: *ref_199
       init:
         examples:
-          init: *ref_175
+          init: *ref_200
       on_init:
         examples:
-          on_init: *ref_176
+          on_init: *ref_201
       confirm:
         examples:
-          confirm: *ref_177
+          confirm: *ref_202
       on_confirm:
         examples:
-          on_confirm: *ref_178
+          on_confirm: *ref_203
       on_update:
         examples:
-          on_update - interim reverse QC: *ref_179
-          on_update - approval: *ref_180
-          on_update - picked: *ref_181
-          on_update - delivered: *ref_182
+          on_update - interim reverse QC: *ref_204
+          on_update - approval: *ref_205
+          on_update - picked: *ref_206
+          on_update - delivered: *ref_207
       update:
         examples:
-          update - settlement reverse QC: *ref_183
-          update - reverse QC: *ref_184
+          update - settlement reverse QC: *ref_208
+          update - reverse QC: *ref_209
       on_status:
         examples:
-          on_status - pending: *ref_185
-          on_status - packed: *ref_186
-          on_status - picked: *ref_187
-          on_status - out for delivery: *ref_188
-          on_status - delivered: *ref_189
+          on_status - pending: *ref_210
+          on_status - packed: *ref_211
+          on_status - picked: *ref_212
+          on_status - out for delivery: *ref_213
+          on_status - delivered: *ref_214
   B2C - Discovery phase F&B:
     summary: B2C flow-1 Use Case Specification
     description: >-
@@ -79666,12 +82301,12 @@ x-examples:
     example_set:
       search:
         examples:
-          search - full catalog refresh: *ref_190
-          search - incremental refresh: *ref_191
+          search - full catalog refresh: *ref_215
+          search - incremental refresh: *ref_216
       on_search:
         examples:
-          on_search - on full catalog refresh: *ref_192
-          on_search - on incremental refresh: *ref_193
+          on_search - on full catalog refresh: *ref_217
+          on_search - on incremental refresh: *ref_218
   B2C - Delivery F&B:
     summary: B2C flow-2 Use Case Specification
     description: >-
@@ -79684,41 +82319,41 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_194
+          search: *ref_219
       on_search:
         examples:
-          on_search: *ref_195
+          on_search: *ref_220
       select:
         examples:
-          select: *ref_196
+          select: *ref_221
       on_select:
         examples:
-          on_select: *ref_197
+          on_select: *ref_222
       init:
         examples:
-          init: *ref_198
+          init: *ref_223
       on_init:
         examples:
-          on_init: *ref_199
+          on_init: *ref_224
       confirm:
         examples:
-          confirm: *ref_200
+          confirm: *ref_225
       on_confirm:
         examples:
-          on_confirm: *ref_201
+          on_confirm: *ref_226
       on_status:
         examples:
-          on_status - accepted: *ref_202
-          on_status - packed: *ref_203
-          on_status - picked: *ref_204
-          on_status - out for delivery: *ref_205
-          on_status - delivered: *ref_206
+          on_status - accepted: *ref_227
+          on_status - packed: *ref_228
+          on_status - picked: *ref_229
+          on_status - out for delivery: *ref_230
+          on_status - delivered: *ref_231
       track:
         examples:
-          track: *ref_207
+          track: *ref_232
       on_track:
         examples:
-          on_track: *ref_208
+          on_track: *ref_233
   B2C - Item Out-of-stock F&B:
     summary: B2C flow-3 Use Case Specification
     description: >-
@@ -79733,103 +82368,17 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_209
+          search: *ref_234
       on_search:
         examples:
-          on_search: *ref_210
+          on_search: *ref_235
       select:
         examples:
-          select - out of stock: *ref_211
-          select: *ref_212
+          select - out of stock: *ref_236
+          select: *ref_237
       on_select:
         examples:
-          on_select - out of stock: *ref_213
-          on_select: *ref_214
-      init:
-        examples:
-          init: *ref_215
-      on_init:
-        examples:
-          on_init: *ref_216
-      confirm:
-        examples:
-          confirm: *ref_217
-      on_confirm:
-        examples:
-          on_confirm: *ref_218
-      on_status:
-        examples:
-          on_status - accepted: *ref_219
-          on_status - packed: *ref_220
-          on_status - picked: *ref_221
-          on_status - out for delivery: *ref_222
-          on_status - delivered: *ref_223
-      track:
-        examples:
-          track: *ref_224
-      on_track:
-        examples:
-          on_track: *ref_225
-  B2C - Buyer Side Cancellation F&B:
-    summary: B2C flow-4 Use Case Specification
-    description: >-
-      The Buyer-Initiated Cancellation Flow in ONDC allows buyers to cancel an
-      order before fulfillment. The Buyer NP sends a cancellation request
-      (/cancel), specifying the reason . The Seller NP responds with a
-      confirmation of the cancellation (/on_cancel), the order is marked as
-      canceled, and any applicable refunds are processed.
-    example_set:
-      search:
-        examples:
-          search: *ref_226
-      on_search:
-        examples:
-          on_search: *ref_227
-      select:
-        examples:
-          select: *ref_228
-      on_select:
-        examples:
-          on_select: *ref_229
-      init:
-        examples:
-          init: *ref_230
-      on_init:
-        examples:
-          on_init: *ref_231
-      confirm:
-        examples:
-          confirm: *ref_232
-      on_confirm:
-        examples:
-          on_confirm: *ref_233
-      cancel:
-        examples:
-          cancel: *ref_234
-      on_cancel:
-        examples:
-          on_cancel: *ref_235
-  B2C - Seller side Cancellation F&B:
-    summary: B2C flow-5 Use Case Specification
-    description: >-
-      The Seller-Initiated Cancellation Flow in ONDC allows the Seller NP or
-      Logistics Service Provider (LSP) to cancel an order if the buyer is
-      unavailable, etc. The Seller NP/LSP sends an unsolicited cancellation
-      request (/on_cancel), citing the cancellation reason. The order is then
-      marked as canceled, and any applicable refunds or reversals are processed
-      as per the cancellation terms.
-    example_set:
-      search:
-        examples:
-          search: *ref_236
-      on_search:
-        examples:
-          on_search: *ref_237
-      select:
-        examples:
-          select: *ref_238
-      on_select:
-        examples:
+          on_select - out of stock: *ref_238
           on_select: *ref_239
       init:
         examples:
@@ -79849,10 +82398,96 @@ x-examples:
           on_status - packed: *ref_245
           on_status - picked: *ref_246
           on_status - out for delivery: *ref_247
-          on_status - rto disposed: *ref_248
+          on_status - delivered: *ref_248
+      track:
+        examples:
+          track: *ref_249
+      on_track:
+        examples:
+          on_track: *ref_250
+  B2C - Buyer Side Cancellation F&B:
+    summary: B2C flow-4 Use Case Specification
+    description: >-
+      The Buyer-Initiated Cancellation Flow in ONDC allows buyers to cancel an
+      order before fulfillment. The Buyer NP sends a cancellation request
+      (/cancel), specifying the reason . The Seller NP responds with a
+      confirmation of the cancellation (/on_cancel), the order is marked as
+      canceled, and any applicable refunds are processed.
+    example_set:
+      search:
+        examples:
+          search: *ref_251
+      on_search:
+        examples:
+          on_search: *ref_252
+      select:
+        examples:
+          select: *ref_253
+      on_select:
+        examples:
+          on_select: *ref_254
+      init:
+        examples:
+          init: *ref_255
+      on_init:
+        examples:
+          on_init: *ref_256
+      confirm:
+        examples:
+          confirm: *ref_257
+      on_confirm:
+        examples:
+          on_confirm: *ref_258
+      cancel:
+        examples:
+          cancel: *ref_259
       on_cancel:
         examples:
-          on_cancel - RTO: *ref_249
+          on_cancel: *ref_260
+  B2C - Seller side Cancellation F&B:
+    summary: B2C flow-5 Use Case Specification
+    description: >-
+      The Seller-Initiated Cancellation Flow in ONDC allows the Seller NP or
+      Logistics Service Provider (LSP) to cancel an order if the buyer is
+      unavailable, etc. The Seller NP/LSP sends an unsolicited cancellation
+      request (/on_cancel), citing the cancellation reason. The order is then
+      marked as canceled, and any applicable refunds or reversals are processed
+      as per the cancellation terms.
+    example_set:
+      search:
+        examples:
+          search: *ref_261
+      on_search:
+        examples:
+          on_search: *ref_262
+      select:
+        examples:
+          select: *ref_263
+      on_select:
+        examples:
+          on_select: *ref_264
+      init:
+        examples:
+          init: *ref_265
+      on_init:
+        examples:
+          on_init: *ref_266
+      confirm:
+        examples:
+          confirm: *ref_267
+      on_confirm:
+        examples:
+          on_confirm: *ref_268
+      on_status:
+        examples:
+          on_status - accepted: *ref_269
+          on_status - packed: *ref_270
+          on_status - picked: *ref_271
+          on_status - out for delivery: *ref_272
+          on_status - rto disposed: *ref_273
+      on_cancel:
+        examples:
+          on_cancel - RTO: *ref_274
       track:
         examples:
           track:
@@ -79942,47 +82577,47 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_250
+          search: *ref_275
       on_search:
         examples:
-          on_search: *ref_251
+          on_search: *ref_276
       select:
         examples:
-          select: *ref_252
+          select: *ref_277
       on_select:
         examples:
-          on_select: *ref_253
+          on_select: *ref_278
       init:
         examples:
-          init: *ref_254
+          init: *ref_279
       on_init:
         examples:
-          on_init: *ref_255
+          on_init: *ref_280
       confirm:
         examples:
-          confirm: *ref_256
+          confirm: *ref_281
       on_confirm:
         examples:
-          on_confirm: *ref_257
+          on_confirm: *ref_282
       on_update:
         examples:
-          on_update - partial cancel: *ref_258
+          on_update - partial cancel: *ref_283
       on_status:
         examples:
-          on_status - accepted: *ref_259
-          on_status - packed: *ref_260
-          on_status - picked: *ref_261
-          on_status - out for delivery: *ref_262
-          on_status - delivered: *ref_263
+          on_status - accepted: *ref_284
+          on_status - packed: *ref_285
+          on_status - picked: *ref_286
+          on_status - out for delivery: *ref_287
+          on_status - delivered: *ref_288
       update:
         examples:
-          update - partial cancel payment: *ref_264
+          update - partial cancel payment: *ref_289
       track:
         examples:
-          track: *ref_265
+          track: *ref_290
       on_track:
         examples:
-          on_track: *ref_266
+          on_track: *ref_291
   B2C - Liquidation F&B:
     summary: B2C flow-6b Use Case Specification
     description: >-
@@ -79994,43 +82629,43 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_267
+          search: *ref_292
       on_search:
         examples:
-          on_search: *ref_268
+          on_search: *ref_293
       select:
         examples:
-          select: *ref_269
+          select: *ref_294
       on_select:
         examples:
-          on_select: *ref_270
+          on_select: *ref_295
       init:
         examples:
-          init: *ref_271
+          init: *ref_296
       on_init:
         examples:
-          on_init: *ref_272
+          on_init: *ref_297
       confirm:
         examples:
-          confirm: *ref_273
+          confirm: *ref_298
       on_confirm:
         examples:
-          on_confirm: *ref_274
+          on_confirm: *ref_299
       on_status:
         examples:
-          on_status - accepted: *ref_275
-          on_status - packed: *ref_276
-          on_status - picked: *ref_277
-          on_status - out for delivery: *ref_278
-          on_status - delivered: *ref_279
+          on_status - accepted: *ref_300
+          on_status - packed: *ref_301
+          on_status - picked: *ref_302
+          on_status - out for delivery: *ref_303
+          on_status - delivered: *ref_304
       update:
         examples:
-          update - return initiated: *ref_280
-          update - liquidated payment: *ref_281
+          update - return initiated: *ref_305
+          update - liquidated payment: *ref_306
       on_update:
         examples:
-          on_update - return initiated: *ref_282
-          on_update - liquidated: *ref_283
+          on_update - return initiated: *ref_307
+          on_update - liquidated: *ref_308
       track:
         examples:
           track:
