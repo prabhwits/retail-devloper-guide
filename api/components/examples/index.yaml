@@ -13,7 +13,7 @@ B2C - Delivery:
   example_set:
     $ref: "./B2C/flow-2/index.yaml"
 
-B2C - COD:  
+B2C - COD:
   summary: B2C Cash-On-Delivery Use Case Specification
   description: >-
     Retail platforms enable seamless e-commerce, allowing buyers to search, select, and track products while sellers manage inventory. The search and on_search APIs retrieve catalog details, select and on_select manage item selection, and init and on_init establish agreements. Confirm and on_confirm process orders, on_status tracks progress, and track and on_track enable live tracking.
@@ -103,6 +103,13 @@ B2C - Reverse QC:
     The Reverse QC Flow in ONDC ensures quality checks before processing returns. After order fulfillment, the Buyer NP initiates a return (update_reverse_qc) , and the Seller NP conducts a quality check (on_update_interim_reverse_qc). If approved (on_update_approval), the item is picked up (on_update_picked) and settled by Buyer NP (update_settlement_reverse_qc) and delivered back to the seller/warehouse(on_update_delivered), ensuring a smooth return process.
   example_set:
     $ref: "./B2C/flow-6c/index.yaml"
+
+B2C - Offers Flow:
+  summary: B2C Offers Use Case Specification
+  description: >-
+    The Offers Flow in ONDC enables sellers to create and manage offers for their products and buyers to discover and redeem these offers.
+  example_set:
+    $ref: "./B2C/offers-flow/index.yaml"
 
 B2C - Discovery phase F&B:
   summary: B2C flow-1 Use Case Specification
