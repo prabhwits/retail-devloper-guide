@@ -3,6 +3,7 @@
 - $ref: "./B2C/flow-cod.yaml"
 - $ref: "./B2C/flow-buyerDelivery.yaml"
 - $ref: "./B2C/flow-offers.yaml"
+- $ref: "./B2C/flow-slottedDelivery.yaml"
 - $ref: "./B2C/commercial-flow.yaml"
 - $ref: "./B2C/bpp_collect_error.yaml"
 - $ref: "./B2C/bpp_collect_successful-payment_not_updated.yaml"
