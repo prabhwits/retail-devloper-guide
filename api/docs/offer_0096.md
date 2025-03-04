@@ -1,4 +1,4 @@
-# Offer (Delivery) - 0096
+## Offer (Delivery) - 0096
 
 ## Publish Offer
 SNP publishes offer, in full or incremental catalog refresh:

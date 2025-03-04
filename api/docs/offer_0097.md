@@ -1,4 +1,4 @@
-# Offer (Exchange) - 0097
+## Offer (Exchange) - 0097
 
 ## SNP Publishes Offer
 SNP publishes an offer, either as a full or incremental catalog refresh. The exchange flow is defined below:

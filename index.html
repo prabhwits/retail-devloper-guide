@@ -215,7 +215,6 @@
                     <option>Cancellation</option>
                     <option>Return</option>
                     <option>Weight Differential Charges</option>
-                    <option>Order Update Actions</option>
                     <option>Offers</option>
                     <option>Offer 0091</option>
                     <option>Offer 0092</option>
@@ -224,6 +223,10 @@
                     <option>Offer 0095</option>
                     <option>Offer 0096</option>
                     <option>Offer 0097</option>
+                    <option>Update Delivery Address 00F</option>
+                    <option>Update Sale Invoice 00E</option>
+                    <option>Update Delivery Auth 010</option>
+
                   </select>
                 </td>
               </tr>
@@ -349,7 +352,7 @@
       const selectedOption = document.getElementById("feature-sets-dropdown").value;
 
       // Takes the name, splits it with blank space, wraps any upper case word with %23 (escape encoding of #) and then rejoins with underscore to form the file name
-      const fileNameFinal = selectedOption.split(' ').map((word) => word === word.toUpperCase() ? `%23${word.toLowerCase()}%23` : word.toLowerCase()).join("_") + ".md";
+      const fileNameFinal = selectedOption.split(' ').map((word) => word === word.toUpperCase() ? `${word.toLowerCase()}` : word.toLowerCase()).join("_") + ".md";
       console.log(fileNameFinal, "fileNameFinal")
       const filePath = 'api/docs/' + fileNameFinal;
       console.log("File to Show", filePath);
