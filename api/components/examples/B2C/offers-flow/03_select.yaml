@@ -2,7 +2,7 @@ value:
   context:
     domain: ONDC:RET10
     action: select
-    core_version: 1.2.0
+    core_version: 1.2.5
     bap_id: buyerNP.com
     bap_uri: https://buyerNP.com/ondc
     bpp_id: sellerNP.com

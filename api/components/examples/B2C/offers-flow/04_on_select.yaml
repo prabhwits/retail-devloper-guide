@@ -3,7 +3,7 @@ value:
     domain: ONDC:RET10
     action: on_select
     country: IND
-    core_version: 1.2.0
+    core_version: 1.2.5
     bap_id: buyerNP.com
     bap_uri: https://buyerNP.com/ondc
     bpp_uri: https://sellerNP.com/ondc

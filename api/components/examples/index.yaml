@@ -2,7 +2,6 @@ B2C - Discovery phase:
   summary: B2C flow-1 Use Case Specification
   description: >-
     The Discovery Phase in ONDC enables buyers to search for products or services across the network. The Buyer NP initiates a /search request to specify the search intent (live search or catalog crawl), and the Seller NP responds with an /on_search call, providing relevant product listings based on the request.
-
   example_set:
     $ref: "./B2C/flow-1/index.yaml"
 
@@ -159,3 +158,10 @@ B2C - Liquidation F&B:
     The Liquidation Flow in ONDC manages returns where the Seller NP opts for liquidation instead of restocking. After order placement and delivery, the Buyer NP initiates a return (/update), and the Seller NP confirms it (on_update_return_initiated.json). The Seller NP then processes liquidation (on_update_liquidated.json) and updates payment.
   example_set:
     $ref: "./B2C-F&B/flow-6b/index.yaml"
+
+B2C - Commercial Model for BNP/SNP:
+  summary: B2C Commercial Model for BNP/SNP
+  description: >-
+    The Buyer NP (BNP) selects specific options for each item, including the convenience fee applied as a channel margin. The np_fees options are provided by the Seller NP (SNP) in the /on_select response, where they are included in the quote.breakup with a quote line item labeled title_type="misc". The BNP then selects the desired fee option for each item, which is sent as part of the /init request. In response, the SNP provides an updated quote, including the selected options, in the /on_init response. This ensures that both parties have aligned pricing details, reflecting any additional charges based on the selected fee options.
+  example_set:
+    $ref: "./B2C/commercial-flow/index.yaml"
