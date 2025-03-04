@@ -9,9 +9,8 @@ value:
     bpp_uri: https://sellerNP.com/ondc
     transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
     message_id: 8ded399c-89ea-4100-a7c8-343430a7c8d0
-    timestamp: '2024-12-23T06:58:35.754Z'
+    timestamp: "2024-12-23T06:58:35.754Z"
     bpp_id: sellerNP.com
-    ttl: PT30S
     city: std:022
   message:
     order:
@@ -22,41 +21,41 @@ value:
       fulfillments:
         - id: F1
           type: Delivery
-          '@ondc/org/provider_name': LSP or Provider Name
+          "@ondc/org/provider_name": LSP or Provider Name
           tracking: true
-          '@ondc/org/category': Immediate Delivery
-          '@ondc/org/TAT': PT60M
+          "@ondc/org/category": Immediate Delivery
+          "@ondc/org/TAT": PT60M
           state:
             descriptor:
               code: Serviceable
       quote:
         price:
-          value: '150.00'
+          value: "150.00"
           currency: INR
         breakup:
-          - '@ondc/org/item_id': F1
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": I1
+            "@ondc/org/item_quantity":
               count: 2
             title: Plain Atta
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '200.00'
+              value: "200.00"
             item:
               quantity:
                 available:
-                  count: '99'
+                  count: "99"
                 maximum:
-                  count: '99'
+                  count: "99"
               price:
                 currency: INR
-                value: '100.00'
-          - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                value: "100.00"
+          - "@ondc/org/item_id": 072ccd93-3928-49d4-b6ef-9c8bf69745f8
             title: Flat discount of ₹50 on minimum cart value of ₹100
-            '@ondc/org/title_type': offer
+            "@ondc/org/title_type": offer
             price:
               currency: INR
-              value: '-50.00'
+              value: "-50.00"
             item:
               tags:
                 - code: quote
@@ -70,27 +69,27 @@ value:
                     - code: type
                       value: discount
                     - code: auto
-                      value: 'yes'
+                      value: "yes"
                     - code: additive
-                      value: 'no'
+                      value: "no"
                     - code: item_id
-                      value: ''
+                      value: ""
                     - code: item_value
-                      value: ''
+                      value: ""
                     - code: item_count
-                      value: ''
-          - '@ondc/org/item_id': F1
+                      value: ""
+          - "@ondc/org/item_id": F1
             title: Delivery charges
-            '@ondc/org/title_type': delivery
+            "@ondc/org/title_type": delivery
             price:
               currency: INR
-              value: '00.00'
-          - '@ondc/org/item_id': F1
+              value: "00.00"
+          - "@ondc/org/item_id": F1
             title: Convenience Fee
-            '@ondc/org/title_type': misc
+            "@ondc/org/title_type": misc
             price:
               currency: INR
-              value: '00.00'
+              value: "00.00"
         ttl: P1D
       items:
         - id: I1

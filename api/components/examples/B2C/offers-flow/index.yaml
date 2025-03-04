@@ -37,3 +37,34 @@ on_confirm:
   examples:
     on_confirm:
       $ref: ./08_on_confirm.yaml
+
+on_update:
+  examples:
+    on_update - interim reverse QC:
+      $ref: ./14_on_update_interim_reverse_qc.yaml
+    on_update - approval:
+      $ref: ./15_on_update_approval.yaml
+    on_update - picked:
+      $ref: ./16_on_update_picked.yaml
+    on_update - delivered:
+      $ref: ./18_on_update_delivered.yaml
+
+update:
+  examples:
+    update - settlement reverse QC:
+      $ref: ./17_update_settlement.yaml
+    update - reverse QC:
+      $ref: ./13_update_reverse_qc.yaml
+
+on_status:
+  examples:
+    on_status - packed:
+      $ref: ./09_on_status_packed.yaml
+    on_status - agent assigned:
+      $ref: ./10_01_on_status_agent_assigned.yaml
+    on_status - picked:
+      $ref: ./10_on_status_picked.yaml
+    on_status - out for delivery:
+      $ref: ./11_on_status_out_for_delivery.yaml
+    on_status - delivered:
+      $ref: ./12_on_status_delivered.yaml

@@ -12959,6 +12959,30 @@ x-flows:
             
             B2C BAP ->> B2C BPP: **/confirm** - Buyer confirms order
             B2C BPP ->> B2C BAP: **/on_confirm** - Seller Accepts order
+      - description: Product Delivery
+        mermaidGraph: |-
+          sequenceDiagram
+            participant B2C BAP
+            participant B2C BPP
+
+            B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Pending
+            B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Packed
+            B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Agent Assigned
+            B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Picked Up
+            B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Out for Delivery
+            B2C BPP ->> B2C BAP: **/on_status** - Status Updates - Order Delivered
+      - description: Return reverseQc
+        mermaidGraph: |-
+          sequenceDiagram
+            participant B2C BAP
+            participant B2C BPP
+
+            B2C BAP ->> B2C BPP: **/update** - reverse qc - Return request from BAP
+            B2C BPP ->> B2C BAP: **/on_update** - interim reverse qc - Return initiate request from BPP
+            B2C BPP ->> B2C BAP: **/on_update** - approval - BPP approves return request
+            B2C BPP ->> B2C BAP: **/on_update** - picked - Order picked up confirmation
+            B2C BAP ->> B2C BPP: **/update** - reverse qc settlement - Settlement update
+            B2C BPP ->> B2C BAP: **/on_update** - return delivered - Order return delivered confirmation
     reference: if any
     steps:
       - summary: BAP sends the search request
@@ -12967,271 +12991,274 @@ x-flows:
         reference: if any
         example: &ref_215
           value:
-            context:
-              domain: ONDC:RET10
-              action: search
-              country: IND
-              core_version: 1.2.0
-              bap_id: buyerNP.com
-              bap_uri: https://buyerNP.com/ondc
-              transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
-              message_id: bc167440-16e7-4ba6-9132-9b25518f1da2
-              timestamp: '2024-12-23T06:54:34.035Z'
-              ttl: PT30S
-              city: std:022
-            message:
-              intent:
-                fulfillment:
-                  type: Delivery
-                payment:
-                  '@ondc/org/buyer_app_finder_fee_type': percent
-                  '@ondc/org/buyer_app_finder_fee_amount': '3'
+            value:
+              context:
+                domain: ONDC:RET10
+                action: search
+                country: IND
+                core_version: 1.2.0
+                bap_id: buyerNP.com
+                bap_uri: https://buyerNP.com/ondc
+                transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
+                message_id: bc167440-16e7-4ba6-9132-9b25518f1da2
+                timestamp: '2024-12-23T06:54:34.035Z'
+                ttl: PT30S
+                city: std:022
+              message:
+                intent:
+                  fulfillment:
+                    type: Delivery
+                  payment:
+                    '@ondc/org/buyer_app_finder_fee_type': percent
+                    '@ondc/org/buyer_app_finder_fee_amount': '3'
       - summary: BPP returns the full catalog refresh
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
         example: &ref_216
           value:
-            context:
-              domain: ONDC:RET10
-              action: on_search
-              country: IND
-              core_version: 1.2.0
-              bap_id: buyerNP.com
-              bap_uri: https://buyerNP.com/ondc
-              bpp_uri: https://sellerNP.com/ondc
-              transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
-              message_id: bc167440-16e7-4ba6-9132-9b25518f1da2
-              timestamp: '2024-12-23T06:55:45.035Z'
-              bpp_id: sellerNP.com
-              ttl: PT30S
-              city: std:022
-            message:
-              catalog:
-                bpp/fulfillments:
-                  - id: F1
-                    type: Delivery
-                bpp/descriptor:
-                  name: Seller NP
-                  symbol: https://sellerNP.com/images/np.png
-                  short_desc: Seller Marketplace
-                  long_desc: Seller Marketplace
-                  images:
-                    - https://sellerNP.com/images/np.png
-                  tags:
-                    - code: bpp_terms
-                      list:
-                        - code: np_type
-                          value: MSN
-                bpp/providers:
-                  - time:
-                      label: enable
-                      timestamp: '2024-12-23T06:55:45.035Z'
-                    descriptor:
-                      name: Store 1
-                      symbol: https://sellerNP.com/images/store1.png
-                      short_desc: Store 1
-                      long_desc: Store 1
-                      images:
-                        - https://sellerNP.com/images/store1.png
-                    ttl: P1D
-                    locations:
-                      - id: L1
-                        time:
-                          label: enable
-                          timestamp: '2024-12-23T06:55:45.035Z'
-                          days: 1,2,3,4,5,6,7
-                          schedule:
-                            holidays: []
-                          range:
-                            start: '0000'
-                            end: '2359'
-                        gps: 19.129076,72.825803
-                        address:
-                          street: 1 & 2,AMAR JYOTI CHS.BLDG.,OPP.NAND KRIPA HALL
-                          locality: ANDHERI FOUR BUNGLOW AMAR JYOTI CHS
-                          city: Mumbai
-                          state: Maharashtra
-                          area_code: '400053'
-                        circle:
-                          gps: 19.129076,72.825803
-                          radius:
-                            unit: km
-                            value: '3'
-                    fulfillments:
-                      - id: F1
-                        type: Delivery
-                        contact:
-                          phone: '9594663710'
-                          email: nobody@nomail.com
-                    items:
-                      - descriptor:
-                          name: Plain Atta
-                          code: 1:XXXXXXXXXXXXX
-                          symbol: https://sellerNP.com/images/i1.png
-                          short_desc: Plain Atta
-                          long_desc: Plain Atta
-                          images:
-                            - https://sellerNP.com/images/i1.png
-                        price:
-                          currency: INR
-                          value: '100.00'
-                          maximum_value: '100.00'
-                        quantity:
-                          unitized:
-                            measure:
-                              unit: kilogram
-                              value: '3'
-                          available:
-                            count: '99'
-                          maximum:
-                            count: '99'
-                        category_id: Atta, Flours and Sooji
-                        fulfillment_id: F1
-                        location_id: L1
-                        '@ondc/org/returnable': true
-                        '@ondc/org/cancellable': true
-                        '@ondc/org/return_window': P7D
-                        '@ondc/org/seller_pickup_return': false
-                        '@ondc/org/time_to_ship': PT5M
-                        '@ondc/org/available_on_cod': false
-                        '@ondc/org/contact_details_consumer_care': Ramesh,ramesh@abc.com,18004254444
-                        '@ondc/org/statutory_reqs_packaged_commodities':
-                          manufacturer_or_packer_name: ITC
-                          manufacturer_or_packer_address: >-
-                            ITC Quality Care Cell,P.O Box
-                            No.592,Bangalore-560005
-                          common_or_generic_name_of_commodity: Ashirwad Atta
-                          month_year_of_manufacture_packing_import: 01/2023
-                        time:
-                          label: enable
-                          timestamp: '2024-12-23T06:55:45.035Z'
-                        tags:
-                          - code: origin
-                            list:
-                              - code: country
-                                value: THA
-                        id: I1
-                        parent_item_id: V1
+            value:
+              context:
+                domain: ONDC:RET10
+                action: on_search
+                country: IND
+                core_version: 1.2.0
+                bap_id: buyerNP.com
+                bap_uri: https://buyerNP.com/ondc
+                bpp_uri: https://sellerNP.com/ondc
+                transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
+                message_id: bc167440-16e7-4ba6-9132-9b25518f1da2
+                timestamp: '2024-12-23T06:55:45.035Z'
+                bpp_id: sellerNP.com
+                ttl: PT30S
+                city: std:022
+              message:
+                catalog:
+                  bpp/fulfillments:
+                    - id: F1
+                      type: Delivery
+                  bpp/descriptor:
+                    name: Seller NP
+                    symbol: https://sellerNP.com/images/np.png
+                    short_desc: Seller Marketplace
+                    long_desc: Seller Marketplace
+                    images:
+                      - https://sellerNP.com/images/np.png
                     tags:
-                      - code: timing
+                      - code: bpp_terms
                         list:
-                          - code: type
-                            value: All
-                          - code: location
-                            value: L1
-                          - code: day_from
-                            value: '1'
-                          - code: day_to
-                            value: '7'
-                          - code: time_from
-                            value: '0000'
-                          - code: time_to
-                            value: '2359'
-                      - code: serviceability
-                        list:
-                          - code: location
-                            value: L1
-                          - code: category
-                            value: Atta, Flours and Sooji
-                          - code: type
-                            value: '10'
-                          - code: val
-                            value: '3'
-                          - code: unit
-                            value: km
-                    offers:
-                      - id: FLAT50
-                        descriptor:
-                          code: discount
-                          images:
-                            - https://sellerNP.com/images/offer2-banner.png
-                        location_ids:
-                          - L1
-                        item_ids:
-                          - I1
-                        time:
-                          label: valid
-                          range:
-                            start: '2024-12-23T06:55:45.035Z'
-                            end: '2024-12-23T08:12:15.033Z'
-                        tags:
-                          - code: qualifier
-                            list:
-                              - code: min_value
-                                value: '100.00'
-                          - code: benefit
-                            list:
-                              - code: value_type
-                                value: amount
-                              - code: value
-                                value: '-50.00'
-                          - code: meta
-                            list:
-                              - code: additive
-                                value: 'no'
-                              - code: auto
-                                value: 'yes'
-                    categories:
-                      - id: V1
-                        tags:
-                          - code: type
-                            list:
-                              - code: type
-                                value: variant_group
-                          - code: attr
-                            list:
-                              - code: name
-                                value: item.quantity.unitized.measure
-                              - code: seq
-                                value: '1'
-                        descriptor:
-                          name: Plain Atta
-                    id: P1
+                          - code: np_type
+                            value: MSN
+                  bpp/providers:
+                    - time:
+                        label: enable
+                        timestamp: '2024-12-23T06:55:45.035Z'
+                      descriptor:
+                        name: Store 1
+                        symbol: https://sellerNP.com/images/store1.png
+                        short_desc: Store 1
+                        long_desc: Store 1
+                        images:
+                          - https://sellerNP.com/images/store1.png
+                      ttl: P1D
+                      locations:
+                        - id: L1
+                          time:
+                            label: enable
+                            timestamp: '2024-12-23T06:55:45.035Z'
+                            days: 1,2,3,4,5,6,7
+                            schedule:
+                              holidays: []
+                            range:
+                              start: '0000'
+                              end: '2359'
+                          gps: 19.129076,72.825803
+                          address:
+                            street: 1 & 2,AMAR JYOTI CHS.BLDG.,OPP.NAND KRIPA HALL
+                            locality: ANDHERI FOUR BUNGLOW AMAR JYOTI CHS
+                            city: Mumbai
+                            state: Maharashtra
+                            area_code: '400053'
+                          circle:
+                            gps: 19.129076,72.825803
+                            radius:
+                              unit: km
+                              value: '3'
+                      fulfillments:
+                        - id: F1
+                          type: Delivery
+                          contact:
+                            phone: '9594663710'
+                            email: nobody@nomail.com
+                      items:
+                        - descriptor:
+                            name: Plain Atta
+                            code: 1:XXXXXXXXXXXXX
+                            symbol: https://sellerNP.com/images/i1.png
+                            short_desc: Plain Atta
+                            long_desc: Plain Atta
+                            images:
+                              - https://sellerNP.com/images/i1.png
+                          price:
+                            currency: INR
+                            value: '100.00'
+                            maximum_value: '100.00'
+                          quantity:
+                            unitized:
+                              measure:
+                                unit: kilogram
+                                value: '3'
+                            available:
+                              count: '99'
+                            maximum:
+                              count: '99'
+                          category_id: Atta, Flours and Sooji
+                          fulfillment_id: F1
+                          location_id: L1
+                          '@ondc/org/returnable': true
+                          '@ondc/org/cancellable': true
+                          '@ondc/org/return_window': P7D
+                          '@ondc/org/seller_pickup_return': false
+                          '@ondc/org/time_to_ship': PT5M
+                          '@ondc/org/available_on_cod': false
+                          '@ondc/org/contact_details_consumer_care': Ramesh,ramesh@abc.com,18004254444
+                          '@ondc/org/statutory_reqs_packaged_commodities':
+                            manufacturer_or_packer_name: ITC
+                            manufacturer_or_packer_address: >-
+                              ITC Quality Care Cell,P.O Box
+                              No.592,Bangalore-560005
+                            common_or_generic_name_of_commodity: Ashirwad Atta
+                            month_year_of_manufacture_packing_import: 01/2023
+                          time:
+                            label: enable
+                            timestamp: '2024-12-23T06:55:45.035Z'
+                          tags:
+                            - code: origin
+                              list:
+                                - code: country
+                                  value: THA
+                          id: I1
+                          parent_item_id: V1
+                      tags:
+                        - code: timing
+                          list:
+                            - code: type
+                              value: All
+                            - code: location
+                              value: L1
+                            - code: day_from
+                              value: '1'
+                            - code: day_to
+                              value: '7'
+                            - code: time_from
+                              value: '0000'
+                            - code: time_to
+                              value: '2359'
+                        - code: serviceability
+                          list:
+                            - code: location
+                              value: L1
+                            - code: category
+                              value: Atta, Flours and Sooji
+                            - code: type
+                              value: '10'
+                            - code: val
+                              value: '3'
+                            - code: unit
+                              value: km
+                      offers:
+                        - id: FLAT50
+                          descriptor:
+                            code: discount
+                            images:
+                              - https://sellerNP.com/images/offer2-banner.png
+                          location_ids:
+                            - L1
+                          item_ids:
+                            - I1
+                          time:
+                            label: valid
+                            range:
+                              start: '2024-12-23T06:55:45.035Z'
+                              end: '2024-12-23T08:12:15.033Z'
+                          tags:
+                            - code: qualifier
+                              list:
+                                - code: min_value
+                                  value: '100.00'
+                            - code: benefit
+                              list:
+                                - code: value_type
+                                  value: amount
+                                - code: value
+                                  value: '-50.00'
+                            - code: meta
+                              list:
+                                - code: additive
+                                  value: 'no'
+                                - code: auto
+                                  value: 'yes'
+                      categories:
+                        - id: V1
+                          tags:
+                            - code: type
+                              list:
+                                - code: type
+                                  value: variant_group
+                            - code: attr
+                              list:
+                                - code: name
+                                  value: item.quantity.unitized.measure
+                                - code: seq
+                                  value: '1'
+                          descriptor:
+                            name: Plain Atta
+                      id: P1
       - summary: BAP select the item
         api: select
         description: BAP select the item
         reference: if any
         example: &ref_217
           value:
-            context:
-              domain: ONDC:RET10
-              action: select
-              core_version: 1.2.0
-              bap_id: buyerNP.com
-              bap_uri: https://buyerNP.com/ondc
-              bpp_id: sellerNP.com
-              bpp_uri: https://sellerNP.com/ondc
-              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
-              message_id: 8ded399c-89ea-4100-a7c8-343430a7c8d0
-              city: std:022
-              country: IND
-              timestamp: '2024-12-23T06:58:34.035Z'
-              ttl: PT30S
-            message:
-              order:
-                provider:
-                  id: P1
-                  locations:
-                    - id: L1
-                items:
-                  - id: I1
-                    quantity:
-                      count: 2
-                    location_id: L1
-                offers:
-                  - id: FLAT50
-                    tags:
-                      - code: selection
-                        list:
-                          - code: apply
-                            value: 'yes'
-                fulfillments:
-                  - end:
-                      location:
-                        gps: 19.131140,72.834091
-                        address:
-                          area_code: '400053'
+            value:
+              context:
+                domain: ONDC:RET10
+                action: select
+                core_version: 1.2.0
+                bap_id: buyerNP.com
+                bap_uri: https://buyerNP.com/ondc
+                bpp_id: sellerNP.com
+                bpp_uri: https://sellerNP.com/ondc
+                transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                message_id: 8ded399c-89ea-4100-a7c8-343430a7c8d0
+                city: std:022
+                country: IND
+                timestamp: '2024-12-23T06:58:34.035Z'
+                ttl: PT30S
+              message:
+                order:
+                  provider:
+                    id: P1
+                    locations:
+                      - id: L1
+                  items:
+                    - id: I1
+                      quantity:
+                        count: 2
+                      location_id: L1
+                  offers:
+                    - id: FLAT50
+                      tags:
+                        - code: selection
+                          list:
+                            - code: apply
+                              value: 'yes'
+                  fulfillments:
+                    - end:
+                        location:
+                          gps: 19.131140,72.834091
+                          address:
+                            area_code: '400053'
       - summary: >-
           BPP returns item breakup when item is in stock and offer applied (if
           any)
@@ -13242,495 +13269,689 @@ x-flows:
         reference: if any
         example: &ref_218
           value:
-            context:
-              domain: ONDC:RET10
-              action: on_select
-              country: IND
-              core_version: 1.2.0
-              bap_id: buyerNP.com
-              bap_uri: https://buyerNP.com/ondc
-              bpp_uri: https://sellerNP.com/ondc
-              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
-              message_id: 8ded399c-89ea-4100-a7c8-343430a7c8d0
-              timestamp: '2024-12-23T06:58:35.754Z'
-              bpp_id: sellerNP.com
-              ttl: PT30S
-              city: std:022
-            message:
-              order:
-                provider:
-                  id: P1
-                  locations:
-                    - id: L1
-                fulfillments:
-                  - id: F1
-                    type: Delivery
-                    '@ondc/org/provider_name': LSP or Provider Name
-                    tracking: true
-                    '@ondc/org/category': Immediate Delivery
-                    '@ondc/org/TAT': PT60M
-                    state:
-                      descriptor:
-                        code: Serviceable
-                quote:
-                  price:
-                    value: '150.00'
-                    currency: INR
-                  breakup:
-                    - '@ondc/org/item_id': F1
-                      '@ondc/org/item_quantity':
-                        count: 2
-                      title: Plain Atta
-                      '@ondc/org/title_type': item
-                      price:
-                        currency: INR
-                        value: '200.00'
-                      item:
-                        quantity:
-                          available:
-                            count: '99'
-                          maximum:
-                            count: '99'
+            value:
+              context:
+                domain: ONDC:RET10
+                action: on_select
+                country: IND
+                core_version: 1.2.0
+                bap_id: buyerNP.com
+                bap_uri: https://buyerNP.com/ondc
+                bpp_uri: https://sellerNP.com/ondc
+                transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                message_id: 8ded399c-89ea-4100-a7c8-343430a7c8d0
+                timestamp: '2024-12-23T06:58:35.754Z'
+                bpp_id: sellerNP.com
+                ttl: PT30S
+                city: std:022
+              message:
+                order:
+                  provider:
+                    id: P1
+                    locations:
+                      - id: L1
+                  fulfillments:
+                    - id: F1
+                      type: Delivery
+                      '@ondc/org/provider_name': LSP or Provider Name
+                      tracking: true
+                      '@ondc/org/category': Immediate Delivery
+                      '@ondc/org/TAT': PT60M
+                      state:
+                        descriptor:
+                          code: Serviceable
+                  quote:
+                    price:
+                      value: '150.00'
+                      currency: INR
+                    breakup:
+                      - '@ondc/org/item_id': F1
+                        '@ondc/org/item_quantity':
+                          count: 2
+                        title: Plain Atta
+                        '@ondc/org/title_type': item
                         price:
                           currency: INR
-                          value: '100.00'
-                    - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
-                      title: Flat discount of ₹50 on minimum cart value of ₹100
-                      '@ondc/org/title_type': offer
-                      price:
-                        currency: INR
-                        value: '-50.00'
-                      item:
-                        tags:
-                          - code: quote
-                            list:
-                              - code: type
-                                value: order
-                          - code: offer
-                            list:
-                              - code: id
-                                value: FLAT50
-                              - code: type
-                                value: discount
-                              - code: auto
-                                value: 'yes'
-                              - code: additive
-                                value: 'no'
-                              - code: item_id
-                                value: ''
-                              - code: item_value
-                                value: ''
-                              - code: item_count
-                                value: ''
-                    - '@ondc/org/item_id': F1
-                      title: Delivery charges
-                      '@ondc/org/title_type': delivery
-                      price:
-                        currency: INR
-                        value: '00.00'
-                    - '@ondc/org/item_id': F1
-                      title: Convenience Fee
-                      '@ondc/org/title_type': misc
-                      price:
-                        currency: INR
-                        value: '00.00'
-                  ttl: P1D
-                items:
-                  - id: I1
-                    fulfillment_id: F1
+                          value: '200.00'
+                        item:
+                          quantity:
+                            available:
+                              count: '99'
+                            maximum:
+                              count: '99'
+                          price:
+                            currency: INR
+                            value: '100.00'
+                      - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                        title: Flat discount of ₹50 on minimum cart value of ₹100
+                        '@ondc/org/title_type': offer
+                        price:
+                          currency: INR
+                          value: '-50.00'
+                        item:
+                          tags:
+                            - code: quote
+                              list:
+                                - code: type
+                                  value: order
+                            - code: offer
+                              list:
+                                - code: id
+                                  value: FLAT50
+                                - code: type
+                                  value: discount
+                                - code: auto
+                                  value: 'yes'
+                                - code: additive
+                                  value: 'no'
+                                - code: item_id
+                                  value: ''
+                                - code: item_value
+                                  value: ''
+                                - code: item_count
+                                  value: ''
+                      - '@ondc/org/item_id': F1
+                        title: Delivery charges
+                        '@ondc/org/title_type': delivery
+                        price:
+                          currency: INR
+                          value: '00.00'
+                      - '@ondc/org/item_id': F1
+                        title: Convenience Fee
+                        '@ondc/org/title_type': misc
+                        price:
+                          currency: INR
+                          value: '00.00'
+                    ttl: P1D
+                  items:
+                    - id: I1
+                      fulfillment_id: F1
       - summary: Buyer initiate the product and send the updated fulfillment id
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
         example: &ref_219
           value:
-            context:
-              domain: ONDC:RET10
-              action: init
-              country: IND
-              core_version: 1.2.0
-              bap_id: buyerNP.com
-              bap_uri: https://buyerNP.com/ondc
-              bpp_uri: https://sellerNP.com/ondc
-              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
-              message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
-              timestamp: '2024-12-23T07:01:43.145Z'
-              bpp_id: sellerNP.com
-              ttl: PT30S
-              city: std:022
-            message:
-              order:
-                provider:
-                  id: P1
-                  locations:
-                    - id: L1
-                items:
-                  - id: I1
-                    quantity:
-                      count: 2
-                    location_id: L1
-                    fulfillment_id: F1
-                offers:
-                  - id: FLAT50
-                billing:
-                  address:
-                    building: my building name or house
-                    city: Mumbai
-                    state: Maharashtra
-                    country: IND
-                    area_code: '400053'
-                    locality: my street name
-                    name: my house or door or floor
-                  phone: '9898989898'
-                  name: ONDC buyer
-                  email: nobody@nomail.com
-                  created_at: '2024-12-23T07:01:43.145Z'
-                  updated_at: '2024-12-23T07:01:43.145Z'
-                fulfillments:
-                  - id: F1
-                    type: Delivery
-                    end:
-                      contact:
-                        email: nobody@nomail.com
-                        phone: '9898989898'
-                      location:
-                        gps: 19.131140,72.834091
-                        address:
-                          building: my building name or house
-                          city: Mumbai
-                          state: Maharashtra
-                          country: IND
-                          area_code: '400053'
-                          locality: my street name
-                          name: my house or door or floor
+            value:
+              context:
+                domain: ONDC:RET10
+                action: init
+                country: IND
+                core_version: 1.2.0
+                bap_id: buyerNP.com
+                bap_uri: https://buyerNP.com/ondc
+                bpp_uri: https://sellerNP.com/ondc
+                transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
+                timestamp: '2024-12-23T07:01:43.145Z'
+                bpp_id: sellerNP.com
+                ttl: PT30S
+                city: std:022
+              message:
+                order:
+                  provider:
+                    id: P1
+                    locations:
+                      - id: L1
+                  items:
+                    - id: I1
+                      quantity:
+                        count: 2
+                      location_id: L1
+                      fulfillment_id: F1
+                  offers:
+                    - id: FLAT50
+                  billing:
+                    address:
+                      building: my building name or house
+                      city: Mumbai
+                      state: Maharashtra
+                      country: IND
+                      area_code: '400053'
+                      locality: my street name
+                      name: my house or door or floor
+                    phone: '9898989898'
+                    name: ONDC buyer
+                    email: nobody@nomail.com
+                    created_at: '2024-12-23T07:01:43.145Z'
+                    updated_at: '2024-12-23T07:01:43.145Z'
+                  fulfillments:
+                    - id: F1
+                      type: Delivery
+                      end:
+                        contact:
+                          email: nobody@nomail.com
+                          phone: '9898989898'
+                        location:
+                          gps: 19.131140,72.834091
+                          address:
+                            building: my building name or house
+                            city: Mumbai
+                            state: Maharashtra
+                            country: IND
+                            area_code: '400053'
+                            locality: my street name
+                            name: my house or door or floor
       - summary: Respond to init
         api: on_init
         description: Respond to init
         reference: if any
         example: &ref_220
           value:
-            context:
-              domain: ONDC:RET10
-              action: on_init
-              country: IND
-              core_version: 1.2.0
-              bap_id: buyerNP.com
-              bap_uri: https://buyerNP.com/ondc
-              bpp_uri: https://sellerNP.com/ondc
-              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
-              message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
-              timestamp: '2024-12-23T07:01:44.759Z'
-              bpp_id: sellerNP.com
-              ttl: PT30S
-              city: std:022
-            message:
-              order:
-                provider:
-                  id: P1
-                  locations:
-                    - id: L1
-                items:
-                  - id: I1
-                    quantity:
-                      count: 2
-                    fulfillment_id: F1
-                billing:
-                  address:
-                    building: my building name or house
-                    city: Mumbai
-                    state: Maharashtra
-                    country: IND
-                    area_code: '400053'
-                    locality: my street name
-                    name: my house or door or floor
-                  phone: '9898989898'
-                  name: ONDC buyer
-                  email: nobody@nomail.com
-                  created_at: '2024-12-23T07:01:43.145Z'
-                  updated_at: '2024-12-23T07:01:43.145Z'
-                fulfillments:
-                  - id: F1
-                    type: Delivery
-                    end:
-                      contact:
-                        email: nobody@nomail.com
-                        phone: '9898989898'
-                      location:
-                        gps: 19.131140,72.834091
-                        address:
-                          building: my building name or house
-                          city: Mumbai
-                          state: Maharashtra
-                          country: IND
-                          area_code: '400053'
-                          locality: my street name
-                          name: my house or door or floor
-                    tracking: true
-                quote:
-                  price:
-                    value: '150'
-                    currency: INR
-                  breakup:
-                    - '@ondc/org/item_id': I1
-                      '@ondc/org/item_quantity':
+            value:
+              context:
+                domain: ONDC:RET10
+                action: on_init
+                country: IND
+                core_version: 1.2.0
+                bap_id: buyerNP.com
+                bap_uri: https://buyerNP.com/ondc
+                bpp_uri: https://sellerNP.com/ondc
+                transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                message_id: 56dd08ab-c183-49c4-ae1f-6040f0801618
+                timestamp: '2024-12-23T07:01:44.759Z'
+                bpp_id: sellerNP.com
+                ttl: PT30S
+                city: std:022
+              message:
+                order:
+                  provider:
+                    id: P1
+                    locations:
+                      - id: L1
+                  items:
+                    - id: I1
+                      quantity:
                         count: 2
-                      title: Plain Atta
-                      '@ondc/org/title_type': item
-                      price:
-                        currency: INR
-                        value: '200.00'
-                      item:
+                      fulfillment_id: F1
+                  billing:
+                    address:
+                      building: my building name or house
+                      city: Mumbai
+                      state: Maharashtra
+                      country: IND
+                      area_code: '400053'
+                      locality: my street name
+                      name: my house or door or floor
+                    phone: '9898989898'
+                    name: ONDC buyer
+                    email: nobody@nomail.com
+                    created_at: '2024-12-23T07:01:43.145Z'
+                    updated_at: '2024-12-23T07:01:43.145Z'
+                  fulfillments:
+                    - id: F1
+                      type: Delivery
+                      end:
+                        contact:
+                          email: nobody@nomail.com
+                          phone: '9898989898'
+                        location:
+                          gps: 19.131140,72.834091
+                          address:
+                            building: my building name or house
+                            city: Mumbai
+                            state: Maharashtra
+                            country: IND
+                            area_code: '400053'
+                            locality: my street name
+                            name: my house or door or floor
+                      tracking: true
+                  quote:
+                    price:
+                      value: '150'
+                      currency: INR
+                    breakup:
+                      - '@ondc/org/item_id': I1
+                        '@ondc/org/item_quantity':
+                          count: 2
+                        title: Plain Atta
+                        '@ondc/org/title_type': item
                         price:
                           currency: INR
-                          value: '100.00'
-                    - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
-                      title: Flat discount of ₹50 on minimum cart value of ₹100
-                      '@ondc/org/title_type': offer
-                      price:
-                        currency: INR
-                        value: '-50.00'
-                      item:
-                        tags:
-                          - code: quote
-                            list:
-                              - code: type
-                                value: order
-                          - code: offer
-                            list:
-                              - code: id
-                                value: FLAT50
-                              - code: type
-                                value: discount
-                              - code: auto
-                                value: 'yes'
-                              - code: additive
-                                value: 'no'
-                              - code: item_id
-                                value: ''
-                              - code: item_value
-                                value: ''
-                              - code: item_count
-                                value: ''
-                    - '@ondc/org/item_id': F1
-                      title: Delivery charges
-                      '@ondc/org/title_type': delivery
-                      price:
-                        currency: INR
-                        value: '00.00'
-                    - '@ondc/org/item_id': F1
-                      title: Convenience Fee
-                      '@ondc/org/title_type': misc
-                      price:
-                        currency: INR
-                        value: '00.00'
-                  ttl: P1D
-                payment:
-                  '@ondc/org/buyer_app_finder_fee_type': percent
-                  '@ondc/org/buyer_app_finder_fee_amount': '3'
-                  '@ondc/org/settlement_details':
-                    - settlement_counterparty: seller-app
-                      settlement_phase: sale-amount
-                      settlement_type: neft
-                      beneficiary_name: xxxx
-                      settlement_bank_account_no: XXXX
-                      settlement_ifsc_code: XXXX
-                      bank_name: XXXX
-                      branch_name: XXXX
-                tags:
-                  - code: bpp_terms
-                    list:
-                      - code: np_type
-                        value: MSN
-                      - code: tax_number
-                        value: gst_number_of_sellerNP
-                      - code: provider_tax_number
-                        value: PAN_number_of_provider
+                          value: '200.00'
+                        item:
+                          price:
+                            currency: INR
+                            value: '100.00'
+                      - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                        title: Flat discount of ₹50 on minimum cart value of ₹100
+                        '@ondc/org/title_type': offer
+                        price:
+                          currency: INR
+                          value: '-50.00'
+                        item:
+                          tags:
+                            - code: quote
+                              list:
+                                - code: type
+                                  value: order
+                            - code: offer
+                              list:
+                                - code: id
+                                  value: FLAT50
+                                - code: type
+                                  value: discount
+                                - code: auto
+                                  value: 'yes'
+                                - code: additive
+                                  value: 'no'
+                                - code: item_id
+                                  value: ''
+                                - code: item_value
+                                  value: ''
+                                - code: item_count
+                                  value: ''
+                      - '@ondc/org/item_id': F1
+                        title: Delivery charges
+                        '@ondc/org/title_type': delivery
+                        price:
+                          currency: INR
+                          value: '00.00'
+                      - '@ondc/org/item_id': F1
+                        title: Convenience Fee
+                        '@ondc/org/title_type': misc
+                        price:
+                          currency: INR
+                          value: '00.00'
+                    ttl: P1D
+                  payment:
+                    '@ondc/org/buyer_app_finder_fee_type': percent
+                    '@ondc/org/buyer_app_finder_fee_amount': '3'
+                    '@ondc/org/settlement_details':
+                      - settlement_counterparty: seller-app
+                        settlement_phase: sale-amount
+                        settlement_type: neft
+                        beneficiary_name: xxxx
+                        settlement_bank_account_no: XXXX
+                        settlement_ifsc_code: XXXX
+                        bank_name: XXXX
+                        branch_name: XXXX
+                  tags:
+                    - code: bpp_terms
+                      list:
+                        - code: np_type
+                          value: MSN
+                        - code: tax_number
+                          value: gst_number_of_sellerNP
+                        - code: provider_tax_number
+                          value: PAN_number_of_provider
       - summary: Buyer confirms product
         api: confirm
         description: Buyer confirms product
         reference: if any
         example: &ref_221
           value:
-            context:
-              domain: ONDC:RET10
-              action: confirm
-              country: IND
-              core_version: 1.2.0
-              bap_id: buyerNP.com
-              bap_uri: https://buyerNP.com/ondc
-              bpp_uri: https://sellerNP.com/ondc
-              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
-              message_id: 3dbb05b6-dbb0-4399-95e6-c51cf5be842d
-              timestamp: '2024-12-23T07:03:30.516Z'
-              bpp_id: sellerNP.com
-              ttl: PT30S
-              city: std:022
-            message:
-              order:
-                id: O1
-                state: Created
-                billing:
-                  address:
-                    building: my building name or house
-                    city: Mumbai
-                    state: Maharashtra
-                    country: IND
-                    area_code: '400053'
-                    locality: my street name
-                    name: my house or door or floor
-                  phone: '9898989898'
-                  name: ONDC buyer
-                  email: nobody@nomail.com
-                  created_at: '2024-12-23T07:01:43.145Z'
-                  updated_at: '2024-12-23T07:01:43.145Z'
-                items:
-                  - id: I1
-                    quantity:
-                      count: 2
-                    fulfillment_id: F1
-                provider:
-                  id: P1
-                  locations:
-                    - id: L1
-                fulfillments:
-                  - '@ondc/org/TAT': PT60M
-                    id: F1
-                    tracking: true
-                    end:
-                      contact:
-                        email: nobody@nomail.com
-                        phone: '9898989898'
-                      person:
-                        name: ONDC Buyer
-                      location:
-                        gps: 19.131140,72.834091
-                        address:
-                          building: my building name or house
-                          city: Mumbai
-                          state: Maharashtra
-                          country: IND
-                          area_code: '400053'
-                          locality: my street name
-                          name: my house or door or floor
-                    type: Delivery
-                offers:
-                  - id: FLAT50
-                payment:
-                  params:
-                    amount: '150.00'
-                    currency: INR
-                    transaction_id: order_PjggJp7MccQmAa
-                  status: PAID
-                  type: ON-ORDER
-                  collected_by: BAP
-                  '@ondc/org/buyer_app_finder_fee_type': percent
-                  '@ondc/org/buyer_app_finder_fee_amount': '3.0'
-                  '@ondc/org/settlement_details':
-                    - settlement_counterparty: seller-app
-                      settlement_phase: sale-amount
-                      settlement_type: neft
-                      beneficiary_name: xxxx
-                      settlement_bank_account_no: xxxx
-                      settlement_ifsc_code: xxxx
-                      bank_name: xxxx
-                      branch_name: xxxx
-                quote:
-                  price:
-                    currency: INR
-                    value: '150.00'
-                  breakup:
-                    - '@ondc/org/item_id': I1
-                      '@ondc/org/item_quantity':
+            value:
+              context:
+                domain: ONDC:RET10
+                action: confirm
+                country: IND
+                core_version: 1.2.0
+                bap_id: buyerNP.com
+                bap_uri: https://buyerNP.com/ondc
+                bpp_uri: https://sellerNP.com/ondc
+                transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                message_id: 3dbb05b6-dbb0-4399-95e6-c51cf5be842d
+                timestamp: '2024-12-23T07:03:30.516Z'
+                bpp_id: sellerNP.com
+                ttl: PT30S
+                city: std:022
+              message:
+                order:
+                  id: O1
+                  state: Created
+                  billing:
+                    address:
+                      building: my building name or house
+                      city: Mumbai
+                      state: Maharashtra
+                      country: IND
+                      area_code: '400053'
+                      locality: my street name
+                      name: my house or door or floor
+                    phone: '9898989898'
+                    name: ONDC buyer
+                    email: nobody@nomail.com
+                    created_at: '2024-12-23T07:01:43.145Z'
+                    updated_at: '2024-12-23T07:01:43.145Z'
+                  items:
+                    - id: I1
+                      quantity:
                         count: 2
-                      title: Plain Atta
-                      '@ondc/org/title_type': item
-                      price:
-                        currency: INR
-                        value: '200'
-                      item:
+                      fulfillment_id: F1
+                  provider:
+                    id: P1
+                    locations:
+                      - id: L1
+                  fulfillments:
+                    - '@ondc/org/TAT': PT60M
+                      id: F1
+                      tracking: true
+                      end:
+                        contact:
+                          email: nobody@nomail.com
+                          phone: '9898989898'
+                        person:
+                          name: ONDC Buyer
+                        location:
+                          gps: 19.131140,72.834091
+                          address:
+                            building: my building name or house
+                            city: Mumbai
+                            state: Maharashtra
+                            country: IND
+                            area_code: '400053'
+                            locality: my street name
+                            name: my house or door or floor
+                      type: Delivery
+                  offers:
+                    - id: FLAT50
+                  payment:
+                    params:
+                      amount: '150.00'
+                      currency: INR
+                      transaction_id: order_PjggJp7MccQmAa
+                    status: PAID
+                    type: ON-ORDER
+                    collected_by: BAP
+                    '@ondc/org/buyer_app_finder_fee_type': percent
+                    '@ondc/org/buyer_app_finder_fee_amount': '3.0'
+                    '@ondc/org/settlement_details':
+                      - settlement_counterparty: seller-app
+                        settlement_phase: sale-amount
+                        settlement_type: neft
+                        beneficiary_name: xxxx
+                        settlement_bank_account_no: xxxx
+                        settlement_ifsc_code: xxxx
+                        bank_name: xxxx
+                        branch_name: xxxx
+                  quote:
+                    price:
+                      currency: INR
+                      value: '150.00'
+                    breakup:
+                      - '@ondc/org/item_id': I1
+                        '@ondc/org/item_quantity':
+                          count: 2
+                        title: Plain Atta
+                        '@ondc/org/title_type': item
                         price:
                           currency: INR
-                          value: '100.00'
-                    - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
-                      title: Flat discount of ₹50 on minimum cart value of ₹100
-                      '@ondc/org/title_type': offer
-                      price:
-                        currency: INR
-                        value: '-50.00'
-                      item:
-                        tags:
-                          - code: quote
-                            list:
-                              - code: type
-                                value: order
-                          - code: offer
-                            list:
-                              - code: id
-                                value: FLAT50
-                              - code: type
-                                value: discount
-                              - code: auto
-                                value: 'yes'
-                              - code: additive
-                                value: 'no'
-                              - code: item_id
-                                value: ''
-                              - code: item_value
-                                value: ''
-                              - code: item_count
-                                value: ''
-                    - '@ondc/org/item_id': F1
-                      title: Delivery charges
-                      '@ondc/org/title_type': delivery
-                      price:
-                        currency: INR
-                        value: '00.00'
-                    - '@ondc/org/item_id': F1
-                      title: Convenience Fee
-                      '@ondc/org/title_type': misc
-                      price:
-                        currency: INR
-                        value: '00.00'
-                  ttl: P1D
-                tags:
-                  - code: bpp_terms
-                    list:
-                      - code: np_type
-                        value: MSN
-                      - code: tax_number
-                        value: gst_number_of_sellerNP
-                      - code: provider_tax_number
-                        value: PAN_number_of_provider
-                  - code: bap_terms
-                    list:
-                      - code: tax_number
-                        value: gst_number_of_buyerNP
-                created_at: '2024-12-23T07:03:30.516Z'
-                updated_at: '2024-12-23T07:03:30.516Z'
+                          value: '200'
+                        item:
+                          price:
+                            currency: INR
+                            value: '100.00'
+                      - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                        title: Flat discount of ₹50 on minimum cart value of ₹100
+                        '@ondc/org/title_type': offer
+                        price:
+                          currency: INR
+                          value: '-50.00'
+                        item:
+                          tags:
+                            - code: quote
+                              list:
+                                - code: type
+                                  value: order
+                            - code: offer
+                              list:
+                                - code: id
+                                  value: FLAT50
+                                - code: type
+                                  value: discount
+                                - code: auto
+                                  value: 'yes'
+                                - code: additive
+                                  value: 'no'
+                                - code: item_id
+                                  value: ''
+                                - code: item_value
+                                  value: ''
+                                - code: item_count
+                                  value: ''
+                      - '@ondc/org/item_id': F1
+                        title: Delivery charges
+                        '@ondc/org/title_type': delivery
+                        price:
+                          currency: INR
+                          value: '00.00'
+                      - '@ondc/org/item_id': F1
+                        title: Convenience Fee
+                        '@ondc/org/title_type': misc
+                        price:
+                          currency: INR
+                          value: '00.00'
+                    ttl: P1D
+                  tags:
+                    - code: bpp_terms
+                      list:
+                        - code: np_type
+                          value: MSN
+                        - code: tax_number
+                          value: gst_number_of_sellerNP
+                        - code: provider_tax_number
+                          value: PAN_number_of_provider
+                    - code: bap_terms
+                      list:
+                        - code: tax_number
+                          value: gst_number_of_buyerNP
+                  created_at: '2024-12-23T07:03:30.516Z'
+                  updated_at: '2024-12-23T07:03:30.516Z'
       - summary: Seller Accepts confirmation
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
         example: &ref_222
           value:
+            value:
+              context:
+                domain: ONDC:RET10
+                action: on_confirm
+                country: IND
+                core_version: 1.2.0
+                bap_id: buyerNP.com
+                bap_uri: https://buyerNP.com/ondc
+                bpp_uri: https://sellerNP.com/ondc
+                transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                message_id: 3dbb05b6-dbb0-4399-95e6-c51cf5be842d
+                timestamp: '2024-12-23T07:03:32.230Z'
+                bpp_id: sellerNP.com
+                ttl: PT30S
+                city: std:022
+              message:
+                order:
+                  id: O1
+                  state: Accepted
+                  provider:
+                    id: P1
+                    locations:
+                      - id: L1
+                  items:
+                    - id: I1
+                      quantity:
+                        count: 2
+                      fulfillment_id: F1
+                  billing:
+                    address:
+                      building: my building name or house
+                      city: Mumbai
+                      state: Maharashtra
+                      country: IND
+                      area_code: '400053'
+                      locality: my street name
+                      name: my house or door or floor
+                    phone: '9898989898'
+                    name: ONDC buyer
+                    email: nobody@nomail.com
+                    created_at: '2024-12-23T07:01:43.145Z'
+                    updated_at: '2024-12-23T07:01:43.145Z'
+                  fulfillments:
+                    - id: F1
+                      '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
+                      state:
+                        descriptor:
+                          code: Pending
+                      type: Delivery
+                      tracking: true
+                      '@ondc/org/TAT': PT60M
+                      start:
+                        location:
+                          id: L1
+                          descriptor:
+                            name: ABC Store
+                          gps: 19.129076,72.825803
+                          address:
+                            building: my building name or house
+                            city: Mumbai
+                            state: Maharashtra
+                            country: IND
+                            area_code: '400053'
+                            locality: my street name
+                            name: my house or door or floor
+                        time:
+                          range:
+                            start: '2024-12-23T07:03:32.230Z'
+                            end: '2024-12-23T07:33:32.230Z'
+                        contact:
+                          phone: '9594663710'
+                          email: nobody@nomail.com
+                      end:
+                        person:
+                          name: John Doe
+                        contact:
+                          email: nobody@nomail.com
+                          phone: '9898989898'
+                        location:
+                          gps: 19.131140,72.834091
+                          address:
+                            building: my building name or house
+                            city: Mumbai
+                            state: Maharashtra
+                            country: IND
+                            area_code: '400053'
+                            locality: my street name
+                            name: my house or door or floor
+                        time:
+                          range:
+                            start: '2024-12-23T07:33:32.230Z'
+                            end: '2024-12-23T07:04:32.230Z'
+                  quote:
+                    price:
+                      currency: INR
+                      value: '150.00'
+                    breakup:
+                      - '@ondc/org/item_id': I1
+                        '@ondc/org/item_quantity':
+                          count: 2
+                        title: Plain Atta
+                        '@ondc/org/title_type': item
+                        price:
+                          currency: INR
+                          value: '200'
+                        item:
+                          price:
+                            currency: INR
+                            value: '100.00'
+                      - '@ondc/org/item_id': F1
+                        title: Delivery charges
+                        '@ondc/org/title_type': delivery
+                        price:
+                          currency: INR
+                          value: '00.00'
+                      - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                        title: Flat discount of ₹50 on minimum cart value of ₹100
+                        '@ondc/org/title_type': offer
+                        price:
+                          currency: INR
+                          value: '-50.00'
+                        item:
+                          tags:
+                            - code: quote
+                              list:
+                                - code: type
+                                  value: order
+                            - code: offer
+                              list:
+                                - code: id
+                                  value: FLAT50
+                                - code: type
+                                  value: discount
+                                - code: auto
+                                  value: 'yes'
+                                - code: additive
+                                  value: 'no'
+                                - code: item_id
+                                  value: ''
+                                - code: item_value
+                                  value: ''
+                                - code: item_count
+                                  value: ''
+                      - '@ondc/org/item_id': F1
+                        title: Convenience Fee
+                        '@ondc/org/title_type': misc
+                        price:
+                          currency: INR
+                          value: '00.00'
+                    ttl: P1D
+                  payment:
+                    params:
+                      amount: '150.00'
+                      currency: INR
+                      transaction_id: order_PjggJp7MccQmAa
+                    status: PAID
+                    type: ON-ORDER
+                    collected_by: BAP
+                    '@ondc/org/buyer_app_finder_fee_type': percent
+                    '@ondc/org/buyer_app_finder_fee_amount': '3.0'
+                    '@ondc/org/settlement_details':
+                      - settlement_counterparty: seller-app
+                        settlement_phase: sale-amount
+                        settlement_type: neft
+                        beneficiary_name: xxxx
+                        settlement_bank_account_no: xxxx
+                        settlement_ifsc_code: xxxx
+                        bank_name: xxxx
+                        branch_name: xxxx
+                  tags:
+                    - code: bpp_terms
+                      list:
+                        - code: np_type
+                          value: MSN
+                        - code: tax_number
+                          value: gst_number_of_sellerNP
+                        - code: provider_tax_number
+                          value: PAN_number_of_provider
+                    - code: bap_terms
+                      list:
+                        - code: tax_number
+                          value: gst_number_of_buyerNP
+                  created_at: '2024-12-23T07:03:30.516Z'
+                  updated_at: '2024-12-23T07:03:32.230Z'
+      - summary: Status updates - order packed
+        api: on_status - packed
+        description: Status updates - order packed
+        reference: if any
+        example: &ref_229
+          value:
             context:
               domain: ONDC:RET10
-              action: on_confirm
+              action: on_status
               country: IND
               core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
               transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
-              message_id: 3dbb05b6-dbb0-4399-95e6-c51cf5be842d
-              timestamp: '2024-12-23T07:03:32.230Z'
+              message_id: e76eb2fe-a149-41f8-9c5b-2f82dcfe71dd
+              timestamp: '2024-12-23T07:03:35.230Z'
               bpp_id: sellerNP.com
               ttl: PT30S
               city: std:022
             message:
               order:
                 id: O1
-                state: Accepted
+                state: In-progress
                 provider:
                   id: P1
                   locations:
@@ -13759,7 +13980,7 @@ x-flows:
                     '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
                     state:
                       descriptor:
-                        code: Pending
+                        code: Packed
                     type: Delivery
                     tracking: true
                     '@ondc/org/TAT': PT60M
@@ -13804,6 +14025,19 @@ x-flows:
                         range:
                           start: '2024-12-23T07:33:32.230Z'
                           end: '2024-12-23T07:04:32.230Z'
+                    tags:
+                      - code: routing
+                        list:
+                          - code: type
+                            value: P2P
+                      - code: tracking
+                        list:
+                          - code: gps_enabled
+                            value: 'yes'
+                          - code: url_enabled
+                            value: 'no'
+                          - code: url
+                            value: https://sellerNP.com/ondc/tracking_url
                 quote:
                   price:
                     currency: INR
@@ -13881,21 +14115,1884 @@ x-flows:
                       settlement_ifsc_code: xxxx
                       bank_name: xxxx
                       branch_name: xxxx
-                tags:
-                  - code: bpp_terms
-                    list:
-                      - code: np_type
-                        value: MSN
-                      - code: tax_number
-                        value: gst_number_of_sellerNP
-                      - code: provider_tax_number
-                        value: PAN_number_of_provider
-                  - code: bap_terms
-                    list:
-                      - code: tax_number
-                        value: gst_number_of_buyerNP
                 created_at: '2024-12-23T07:03:30.516Z'
-                updated_at: '2024-12-23T07:03:32.230Z'
+                updated_at: '2024-12-23T07:03:35.230Z'
+      - summary: Status updates - agent assigned
+        api: on_status - agent assigned
+        description: Status updates - agent assigned
+        reference: if any
+        example: &ref_230
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_status
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 7d250ae3-f34a-49d4-bc10-9f89e9e46f2a
+              timestamp: '2024-12-23T07:04:58.230Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: In-progress
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 2
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
+                    state:
+                      descriptor:
+                        code: Agent-assigned
+                    type: Delivery
+                    tracking: true
+                    '@ondc/org/TAT': PT60M
+                    start:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:03:32.230Z'
+                          end: '2024-12-23T07:33:32.230Z'
+                      contact:
+                        phone: '9594663710'
+                        email: nobody@nomail.com
+                    end:
+                      person:
+                        name: John Doe
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:33:32.230Z'
+                          end: '2024-12-23T07:04:32.230Z'
+                    tags:
+                      - code: routing
+                        list:
+                          - code: type
+                            value: P2P
+                      - code: tracking
+                        list:
+                          - code: gps_enabled
+                            value: 'yes'
+                          - code: url_enabled
+                            value: 'no'
+                          - code: url
+                            value: https://sellerNP.com/ondc/tracking_url
+                quote:
+                  price:
+                    currency: INR
+                    value: '150.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 2
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '200'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                      title: Flat discount of ₹50 on minimum cart value of ₹100
+                      '@ondc/org/title_type': offer
+                      price:
+                        currency: INR
+                        value: '-50.00'
+                      item:
+                        tags:
+                          - code: quote
+                            list:
+                              - code: type
+                                value: order
+                          - code: offer
+                            list:
+                              - code: id
+                                value: FLAT50
+                              - code: type
+                                value: discount
+                              - code: auto
+                                value: 'yes'
+                              - code: additive
+                                value: 'no'
+                              - code: item_id
+                                value: ''
+                              - code: item_value
+                                value: ''
+                              - code: item_count
+                                value: ''
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  params:
+                    amount: '150.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  status: PAID
+                  type: ON-ORDER
+                  collected_by: BAP
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3.0'
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: seller-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-23T07:04:58.230Z'
+      - summary: Status updates - order picked up
+        api: on_status - picked
+        description: Status updates - order picked up
+        reference: if any
+        example: &ref_231
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_status
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 5c08577f-a75d-4ca4-b7c1-9b22ae705473
+              timestamp: '2024-12-23T07:25:32.230Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: In-progress
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 2
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
+                    state:
+                      descriptor:
+                        code: Order-picked-up
+                    type: Delivery
+                    tracking: true
+                    '@ondc/org/TAT': PT60M
+                    start:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:03:32.230Z'
+                          end: '2024-12-23T07:33:32.230Z'
+                        timestamp: '2024-12-23T07:25:32.230Z'
+                      contact:
+                        phone: '9594663710'
+                        email: nobody@nomail.com
+                    end:
+                      person:
+                        name: John Doe
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:33:32.230Z'
+                          end: '2024-12-23T07:04:32.230Z'
+                    tags:
+                      - code: routing
+                        list:
+                          - code: type
+                            value: P2P
+                      - code: tracking
+                        list:
+                          - code: gps_enabled
+                            value: 'yes'
+                          - code: url_enabled
+                            value: 'no'
+                          - code: url
+                            value: https://sellerNP.com/ondc/tracking_url
+                quote:
+                  price:
+                    currency: INR
+                    value: '150.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 2
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '200'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                      title: Flat discount of ₹50 on minimum cart value of ₹100
+                      '@ondc/org/title_type': offer
+                      price:
+                        currency: INR
+                        value: '-50.00'
+                      item:
+                        tags:
+                          - code: quote
+                            list:
+                              - code: type
+                                value: order
+                          - code: offer
+                            list:
+                              - code: id
+                                value: FLAT50
+                              - code: type
+                                value: discount
+                              - code: auto
+                                value: 'yes'
+                              - code: additive
+                                value: 'no'
+                              - code: item_id
+                                value: ''
+                              - code: item_value
+                                value: ''
+                              - code: item_count
+                                value: ''
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  params:
+                    amount: '150.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  status: PAID
+                  type: ON-ORDER
+                  collected_by: BAP
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3.0'
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: seller-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                documents:
+                  - url: https://invoice_url
+                    label: Invoice
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-23T07:25:32.230Z'
+      - summary: Status updates - order out for delivery
+        api: on_status - out_for_delivery
+        description: Status updates - order out for delivery
+        reference: if any
+        example: &ref_232
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_status
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: de2d64b0-3326-42cc-90f9-d781e395fef4
+              timestamp: '2024-12-23T07:35:32.230Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: In-progress
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 2
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
+                    state:
+                      descriptor:
+                        code: Out-for-delivery
+                    type: Delivery
+                    tracking: true
+                    '@ondc/org/TAT': PT60M
+                    start:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:03:32.230Z'
+                          end: '2024-12-23T07:33:32.230Z'
+                        timestamp: '2024-12-23T07:25:32.230Z'
+                      contact:
+                        phone: '9594663710'
+                        email: nobody@nomail.com
+                    end:
+                      person:
+                        name: John Doe
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:33:32.230Z'
+                          end: '2024-12-23T07:04:32.230Z'
+                    tags:
+                      - code: routing
+                        list:
+                          - code: type
+                            value: P2P
+                      - code: tracking
+                        list:
+                          - code: gps_enabled
+                            value: 'yes'
+                          - code: url_enabled
+                            value: 'no'
+                          - code: url
+                            value: https://sellerNP.com/ondc/tracking_url
+                quote:
+                  price:
+                    currency: INR
+                    value: '150.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 2
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '200'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                      title: Flat discount of ₹50 on minimum cart value of ₹100
+                      '@ondc/org/title_type': offer
+                      price:
+                        currency: INR
+                        value: '-50.00'
+                      item:
+                        tags:
+                          - code: quote
+                            list:
+                              - code: type
+                                value: order
+                          - code: offer
+                            list:
+                              - code: id
+                                value: FLAT50
+                              - code: type
+                                value: discount
+                              - code: auto
+                                value: 'yes'
+                              - code: additive
+                                value: 'no'
+                              - code: item_id
+                                value: ''
+                              - code: item_value
+                                value: ''
+                              - code: item_count
+                                value: ''
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  status: PAID
+                  type: ON-ORDER
+                  collected_by: BAP
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3.0'
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: seller-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                documents:
+                  - url: https://invoice_url
+                    label: Invoice
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-23T07:35:32.230Z'
+      - summary: Status updates - order delivered
+        api: on_status - order_delivered
+        description: Status updates - order delivered
+        reference: if any
+        example: &ref_233
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_status
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 77a6cd09-9194-4600-b274-6a5080363b4d
+              timestamp: '2024-12-23T07:45:32.230Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: Completed
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 2
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
+                    state:
+                      descriptor:
+                        code: Order-delivered
+                    type: Delivery
+                    tracking: true
+                    '@ondc/org/TAT': PT60M
+                    start:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:03:32.230Z'
+                          end: '2024-12-23T07:33:32.230Z'
+                        timestamp: '2024-12-23T07:25:32.230Z'
+                      contact:
+                        phone: '9594663710'
+                        email: nobody@nomail.com
+                    end:
+                      person:
+                        name: John Doe
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:33:32.230Z'
+                          end: '2024-12-23T07:04:32.230Z'
+                        timestamp: '2024-12-23T07:45:32.230Z'
+                    tags:
+                      - code: routing
+                        list:
+                          - code: type
+                            value: P2P
+                      - code: tracking
+                        list:
+                          - code: gps_enabled
+                            value: 'yes'
+                          - code: url_enabled
+                            value: 'no'
+                          - code: url
+                            value: https://sellerNP.com/ondc/tracking_url
+                quote:
+                  price:
+                    currency: INR
+                    value: '150.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 2
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '200'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                      title: Flat discount of ₹50 on minimum cart value of ₹100
+                      '@ondc/org/title_type': offer
+                      price:
+                        currency: INR
+                        value: '-50.00'
+                      item:
+                        tags:
+                          - code: quote
+                            list:
+                              - code: type
+                                value: order
+                          - code: offer
+                            list:
+                              - code: id
+                                value: FLAT50
+                              - code: type
+                                value: discount
+                              - code: auto
+                                value: 'yes'
+                              - code: additive
+                                value: 'no'
+                              - code: item_id
+                                value: ''
+                              - code: item_value
+                                value: ''
+                              - code: item_count
+                                value: ''
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  status: PAID
+                  type: ON-ORDER
+                  collected_by: BAP
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3.0'
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: seller-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                documents:
+                  - url: https://invoice_url
+                    label: Invoice
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-23T07:45:32.230Z'
+      - summary: BAP requests to return the items
+        api: update - reverse qc
+        description: BAP requests to return the items
+        reference: if any
+        example: &ref_228
+          value:
+            context:
+              domain: ONDC:RET10
+              action: update
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 8729d395-0c7a-48b3-802b-332b9e305404
+              timestamp: '2024-12-23T07:47:30.231Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              update_target: item
+              order:
+                id: O1
+                fulfillments:
+                  - type: Return
+                    tags:
+                      - code: return_request
+                        list:
+                          - code: id
+                            value: R1
+                          - code: item_id
+                            value: I1
+                          - code: parent_item_id
+                            value: ''
+                          - code: item_quantity
+                            value: '1'
+                          - code: reason_id
+                            value: '001'
+                          - code: reason_desc
+                            value: detailed description for return
+                          - code: images
+                            value: https://sellerNP.com/images/np.png
+                          - code: ttl_approval
+                            value: PT24H
+                          - code: ttl_reverseqc
+                            value: P3D
+      - summary: BPP sends the return initiate request
+        api: on_update - interim reverseQc
+        description: BPP sends the return initiate request
+        reference: if any
+        example: &ref_223
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_update
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 77a6cd09-9194-4600-b274-6a5080363b4d
+              timestamp: '2024-12-23T07:49:30.231Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: Completed
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 2
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
+                    state:
+                      descriptor:
+                        code: Order-delivered
+                    type: Delivery
+                    tracking: true
+                    '@ondc/org/TAT': PT60M
+                    start:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:03:32.230Z'
+                          end: '2024-12-23T07:33:32.230Z'
+                        timestamp: '2024-12-23T07:25:32.230Z'
+                      contact:
+                        phone: '9594663710'
+                        email: nobody@nomail.com
+                    end:
+                      person:
+                        name: John Doe
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:33:32.230Z'
+                          end: '2024-12-23T07:04:32.230Z'
+                        timestamp: '2024-12-23T07:45:32.230Z'
+                    tags:
+                      - code: routing
+                        list:
+                          - code: type
+                            value: P2P
+                      - code: tracking
+                        list:
+                          - code: gps_enabled
+                            value: 'yes'
+                          - code: url_enabled
+                            value: 'no'
+                          - code: url
+                            value: https://sellerNP.com/ondc/tracking_url
+                  - id: R1
+                    type: Return
+                    state:
+                      descriptor:
+                        code: Return_Initiated
+                    tags:
+                      - code: return_request
+                        list:
+                          - code: id
+                            value: R1
+                          - code: item_id
+                            value: I1
+                          - code: parent_item_id
+                            value: ''
+                          - code: item_quantity
+                            value: '1'
+                          - code: reason_id
+                            value: '001'
+                          - code: reason_desc
+                            value: detailed description for return
+                          - code: images
+                            value: >-
+                              https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/2024-08-08-923965/85d1d96b-a8d1-4384-8533-199690a005b6.png
+                          - code: ttl_approval
+                            value: PT24H
+                          - code: ttl_reverseqc
+                            value: P3D
+                          - code: initiated_by
+                            value: buyerNP.com
+                quote:
+                  price:
+                    currency: INR
+                    value: '150.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 2
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '200'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                      title: Flat discount of ₹50 on minimum cart value of ₹100
+                      '@ondc/org/title_type': offer
+                      price:
+                        currency: INR
+                        value: '-50.00'
+                      item:
+                        tags:
+                          - code: quote
+                            list:
+                              - code: type
+                                value: order
+                          - code: offer
+                            list:
+                              - code: id
+                                value: FLAT50
+                              - code: type
+                                value: discount
+                              - code: auto
+                                value: 'yes'
+                              - code: additive
+                                value: 'no'
+                              - code: item_id
+                                value: ''
+                              - code: item_value
+                                value: ''
+                              - code: item_count
+                                value: ''
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  status: PAID
+                  type: ON-ORDER
+                  collected_by: BAP
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3.0'
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: seller-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                documents:
+                  - url: https://invoice_url
+                    label: Invoice
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-23T07:49:30.231Z'
+      - summary: BPP approves return request
+        api: on_update - approved
+        description: BPP approves return request and liquidates the items
+        reference: if any
+        example: &ref_224
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_update
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 1f9d61da-f16d-46af-abce-0bf490ca9441
+              timestamp: '2024-12-23T08:49:30.231Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: Completed
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 2
+                    fulfillment_id: F1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
+                    state:
+                      descriptor:
+                        code: Order-delivered
+                    type: Delivery
+                    tracking: true
+                    '@ondc/org/TAT': PT60M
+                    start:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:03:32.230Z'
+                          end: '2024-12-23T07:33:32.230Z'
+                        timestamp: '2024-12-23T07:25:32.230Z'
+                      contact:
+                        phone: '9594663710'
+                        email: nobody@nomail.com
+                    end:
+                      person:
+                        name: John Doe
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:33:32.230Z'
+                          end: '2024-12-23T07:04:32.230Z'
+                        timestamp: '2024-12-23T07:45:32.230Z'
+                    tags:
+                      - code: routing
+                        list:
+                          - code: type
+                            value: P2P
+                      - code: tracking
+                        list:
+                          - code: gps_enabled
+                            value: 'yes'
+                          - code: url_enabled
+                            value: 'no'
+                          - code: url
+                            value: https://sellerNP.com/ondc/tracking_url
+                  - id: R1
+                    type: Return
+                    state:
+                      descriptor:
+                        code: Return_Approved
+                    start:
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T08:49:30.231Z'
+                          end: '2024-12-24T08:49:30.231Z'
+                    end:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-24T08:49:30.231Z'
+                          end: '2024-12-25T08:49:30.231Z'
+                    tags:
+                      - code: return_request
+                        list:
+                          - code: id
+                            value: R1
+                          - code: item_id
+                            value: I1
+                          - code: parent_item_id
+                            value: ''
+                          - code: item_quantity
+                            value: '1'
+                          - code: reason_id
+                            value: '001'
+                          - code: reason_desc
+                            value: detailed description for return
+                          - code: images
+                            value: >-
+                              https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/2024-08-08-923965/85d1d96b-a8d1-4384-8533-199690a005b6.png
+                          - code: ttl_approval
+                            value: PT24H
+                          - code: ttl_reverseqc
+                            value: P3D
+                          - code: initiated_by
+                            value: buyerNP.com
+                quote:
+                  price:
+                    currency: INR
+                    value: '150.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 2
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '200'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                      title: Flat discount of ₹50 on minimum cart value of ₹100
+                      '@ondc/org/title_type': offer
+                      price:
+                        currency: INR
+                        value: '-50.00'
+                      item:
+                        tags:
+                          - code: quote
+                            list:
+                              - code: type
+                                value: order
+                          - code: offer
+                            list:
+                              - code: id
+                                value: FLAT50
+                              - code: type
+                                value: discount
+                              - code: auto
+                                value: 'yes'
+                              - code: additive
+                                value: 'no'
+                              - code: item_id
+                                value: ''
+                              - code: item_value
+                                value: ''
+                              - code: item_count
+                                value: ''
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  status: PAID
+                  type: ON-ORDER
+                  collected_by: BAP
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3.0'
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: seller-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                documents:
+                  - url: https://invoice_url
+                    label: Invoice
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-23T08:49:30.231Z'
+      - summary: BPP sends the request that order picked up
+        api: on_update - picked
+        description: BPP sends the request that order picked up
+        reference: if any
+        example: &ref_225
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_update
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 23f28b1e-9bd9-4930-b501-ebe54a8e9c54
+              timestamp: '2024-12-24T06:30:30.231Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: Completed
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: R1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
+                    state:
+                      descriptor:
+                        code: Order-delivered
+                    type: Delivery
+                    tracking: true
+                    '@ondc/org/TAT': PT60M
+                    start:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:03:32.230Z'
+                          end: '2024-12-23T07:33:32.230Z'
+                        timestamp: '2024-12-23T07:25:32.230Z'
+                      contact:
+                        phone: '9594663710'
+                        email: nobody@nomail.com
+                    end:
+                      person:
+                        name: John Doe
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:33:32.230Z'
+                          end: '2024-12-23T07:04:32.230Z'
+                        timestamp: '2024-12-23T07:45:32.230Z'
+                    tags:
+                      - code: routing
+                        list:
+                          - code: type
+                            value: P2P
+                      - code: tracking
+                        list:
+                          - code: gps_enabled
+                            value: 'yes'
+                          - code: url_enabled
+                            value: 'no'
+                          - code: url
+                            value: https://sellerNP.com/ondc/tracking_url
+                  - id: R1
+                    type: Return
+                    state:
+                      descriptor:
+                        code: Return_Picked
+                    start:
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T08:49:30.231Z'
+                          end: '2024-12-24T08:49:30.231Z'
+                        timestamp: '2024-12-24T06:30:30.231Z'
+                    end:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-24T08:49:30.231Z'
+                          end: '2024-12-25T08:49:30.231Z'
+                    tags:
+                      - code: return_request
+                        list:
+                          - code: id
+                            value: R1
+                          - code: item_id
+                            value: I1
+                          - code: parent_item_id
+                            value: ''
+                          - code: item_quantity
+                            value: '1'
+                          - code: reason_id
+                            value: '001'
+                          - code: reason_desc
+                            value: detailed description for return
+                          - code: images
+                            value: >-
+                              https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/2024-08-08-923965/85d1d96b-a8d1-4384-8533-199690a005b6.png
+                          - code: ttl_approval
+                            value: PT24H
+                          - code: ttl_reverseqc
+                            value: P3D
+                          - code: initiated_by
+                            value: buyerNP.com
+                      - code: quote_trail
+                        list:
+                          - code: type
+                            value: item
+                          - code: id
+                            value: I1
+                          - code: currency
+                            value: INR
+                          - code: value
+                            value: '-100.00'
+                quote:
+                  price:
+                    currency: INR
+                    value: '50.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                      title: Flat discount of ₹50 on minimum cart value of ₹100
+                      '@ondc/org/title_type': offer
+                      price:
+                        currency: INR
+                        value: '-50.00'
+                      item:
+                        tags:
+                          - code: quote
+                            list:
+                              - code: type
+                                value: order
+                          - code: offer
+                            list:
+                              - code: id
+                                value: FLAT50
+                              - code: type
+                                value: discount
+                              - code: auto
+                                value: 'yes'
+                              - code: additive
+                                value: 'no'
+                              - code: item_id
+                                value: ''
+                              - code: item_value
+                                value: ''
+                              - code: item_count
+                                value: ''
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  status: PAID
+                  type: ON-ORDER
+                  collected_by: BAP
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3.0'
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: seller-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                documents:
+                  - url: https://invoice_url
+                    label: Invoice
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-24T06:30:30.231Z'
+      - summary: Update Settlement - reverse qc
+        api: update - reverse qc settlement
+        description: Update Settlement - reverse qc
+        example: &ref_227
+          value:
+            context:
+              domain: ONDC:RET10
+              action: update
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: 68b77c3b-28fa-41cc-b004-80058376b5f5
+              timestamp: '2024-12-24T06:30:35.231Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              update_target: payment
+              order:
+                id: O1
+                fulfillments:
+                  - id: R1
+                    type: Return
+                payment:
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: buyer
+                      settlement_phase: refund
+                      settlement_type: netbanking
+                      settlement_amount: '100.00'
+                      settlement_timestamp: '2024-12-24T06:30:35.231Z'
+      - summary: BPP sends the request that order picked up
+        api: on_update - return delivered
+        description: BPP sends the request that order is delivered
+        reference: if any
+        example: &ref_226
+          value:
+            context:
+              domain: ONDC:RET10
+              action: on_update
+              country: IND
+              core_version: 1.2.0
+              bap_id: buyerNP.com
+              bap_uri: https://buyerNP.com/ondc
+              bpp_uri: https://sellerNP.com/ondc
+              transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+              message_id: b2f61b2b-8c34-4c77-a9d0-a879ff8ab6d3
+              timestamp: '2024-12-24T09:40:35.231Z'
+              bpp_id: sellerNP.com
+              ttl: PT30S
+              city: std:022
+            message:
+              order:
+                id: O1
+                state: Completed
+                provider:
+                  id: P1
+                  locations:
+                    - id: L1
+                items:
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: F1
+                  - id: I1
+                    quantity:
+                      count: 1
+                    fulfillment_id: R1
+                billing:
+                  address:
+                    building: my building name or house
+                    city: Mumbai
+                    state: Maharashtra
+                    country: IND
+                    area_code: '400053'
+                    locality: my street name
+                    name: my house or door or floor
+                  phone: '9898989898'
+                  name: ONDC buyer
+                  email: nobody@nomail.com
+                  created_at: '2024-12-23T07:01:43.145Z'
+                  updated_at: '2024-12-23T07:01:43.145Z'
+                fulfillments:
+                  - id: F1
+                    '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
+                    state:
+                      descriptor:
+                        code: Order-delivered
+                    type: Delivery
+                    tracking: true
+                    '@ondc/org/TAT': PT60M
+                    start:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:03:32.230Z'
+                          end: '2024-12-23T07:33:32.230Z'
+                        timestamp: '2024-12-23T07:25:32.230Z'
+                      contact:
+                        phone: '9594663710'
+                        email: nobody@nomail.com
+                    end:
+                      person:
+                        name: John Doe
+                      contact:
+                        email: nobody@nomail.com
+                        phone: '9898989898'
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T07:33:32.230Z'
+                          end: '2024-12-23T07:04:32.230Z'
+                        timestamp: '2024-12-23T07:45:32.230Z'
+                    tags:
+                      - code: routing
+                        list:
+                          - code: type
+                            value: P2P
+                      - code: tracking
+                        list:
+                          - code: gps_enabled
+                            value: 'yes'
+                          - code: url_enabled
+                            value: 'no'
+                          - code: url
+                            value: https://sellerNP.com/ondc/tracking_url
+                  - id: R1
+                    type: Return
+                    state:
+                      descriptor:
+                        code: Return_Picked
+                    start:
+                      location:
+                        gps: 19.131140,72.834091
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-23T08:49:30.231Z'
+                          end: '2024-12-24T08:49:30.231Z'
+                        timestamp: '2024-12-24T06:30:30.231Z'
+                    end:
+                      location:
+                        id: L1
+                        descriptor:
+                          name: ABC Store
+                        gps: 19.129076,72.825803
+                        address:
+                          building: my building name or house
+                          city: Mumbai
+                          state: Maharashtra
+                          country: IND
+                          area_code: '400053'
+                          locality: my street name
+                          name: my house or door or floor
+                      time:
+                        range:
+                          start: '2024-12-24T08:49:30.231Z'
+                          end: '2024-12-25T08:49:30.231Z'
+                        timestamp: '2024-12-24T09:40:35.231Z'
+                    tags:
+                      - code: return_request
+                        list:
+                          - code: id
+                            value: R1
+                          - code: item_id
+                            value: I1
+                          - code: parent_item_id
+                            value: ''
+                          - code: item_quantity
+                            value: '1'
+                          - code: reason_id
+                            value: '001'
+                          - code: reason_desc
+                            value: detailed description for return
+                          - code: images
+                            value: >-
+                              https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/2024-08-08-923965/85d1d96b-a8d1-4384-8533-199690a005b6.png
+                          - code: ttl_approval
+                            value: PT24H
+                          - code: ttl_reverseqc
+                            value: P3D
+                          - code: initiated_by
+                            value: buyerNP.com
+                      - code: quote_trail
+                        list:
+                          - code: type
+                            value: item
+                          - code: id
+                            value: I1
+                          - code: currency
+                            value: INR
+                          - code: value
+                            value: '-100.00'
+                quote:
+                  price:
+                    currency: INR
+                    value: '50.00'
+                  breakup:
+                    - '@ondc/org/item_id': I1
+                      '@ondc/org/item_quantity':
+                        count: 1
+                      title: Plain Atta
+                      '@ondc/org/title_type': item
+                      price:
+                        currency: INR
+                        value: '100'
+                      item:
+                        price:
+                          currency: INR
+                          value: '100.00'
+                    - '@ondc/org/item_id': F1
+                      title: Delivery charges
+                      '@ondc/org/title_type': delivery
+                      price:
+                        currency: INR
+                        value: '00.00'
+                    - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                      title: Flat discount of ₹50 on minimum cart value of ₹100
+                      '@ondc/org/title_type': offer
+                      price:
+                        currency: INR
+                        value: '-50.00'
+                      item:
+                        tags:
+                          - code: quote
+                            list:
+                              - code: type
+                                value: order
+                          - code: offer
+                            list:
+                              - code: id
+                                value: FLAT50
+                              - code: type
+                                value: discount
+                              - code: auto
+                                value: 'yes'
+                              - code: additive
+                                value: 'no'
+                              - code: item_id
+                                value: ''
+                              - code: item_value
+                                value: ''
+                              - code: item_count
+                                value: ''
+                    - '@ondc/org/item_id': F1
+                      title: Convenience Fee
+                      '@ondc/org/title_type': misc
+                      price:
+                        currency: INR
+                        value: '00.00'
+                  ttl: P1D
+                payment:
+                  params:
+                    amount: '100.00'
+                    currency: INR
+                    transaction_id: order_PjggJp7MccQmAa
+                  status: PAID
+                  type: ON-ORDER
+                  collected_by: BAP
+                  '@ondc/org/buyer_app_finder_fee_type': percent
+                  '@ondc/org/buyer_app_finder_fee_amount': '3.0'
+                  '@ondc/org/settlement_details':
+                    - settlement_counterparty: seller-app
+                      settlement_phase: sale-amount
+                      settlement_type: neft
+                      beneficiary_name: xxxx
+                      settlement_bank_account_no: xxxx
+                      settlement_ifsc_code: xxxx
+                      bank_name: xxxx
+                      branch_name: xxxx
+                    - settlement_counterparty: buyer
+                      settlement_phase: refund
+                      settlement_type: netbanking
+                      settlement_amount: '100.00'
+                      settlement_timestamp: '2024-12-24T06:30:35.231Z'
+                documents:
+                  - url: https://invoice_url
+                    label: Invoice
+                created_at: '2024-12-23T07:03:30.516Z'
+                updated_at: '2024-12-24T09:40:35.231Z'
   - summary: Retail 1.2.0 (Payment Collection Error)
     description: >-
       The buyer attempts payment, but an error occurs (e.g., payment gateway
@@ -31789,7 +33886,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_223
+        example: &ref_234
           value:
             context:
               domain: ONDC:RET11
@@ -31814,7 +33911,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_225
+        example: &ref_236
           value:
             context:
               domain: ONDC:RET11
@@ -33210,7 +35307,7 @@ x-flows:
         api: search - inc
         description: Bap sends search for incremental changes
         reference: if any
-        example: &ref_224
+        example: &ref_235
           value:
             context:
               domain: ONDC:RET11
@@ -33240,7 +35337,7 @@ x-flows:
         api: on_search - inc
         description: BPP returns the incremental changes
         reference: if any
-        example: &ref_226
+        example: &ref_237
           value:
             context:
               domain: ONDC:RET11
@@ -33396,7 +35493,7 @@ x-flows:
           buyer NP specifies the search intent for live search or for catalog
           crawl
         reference: if any
-        example: &ref_227
+        example: &ref_238
           value:
             context:
               domain: ONDC:RET11
@@ -33421,7 +35518,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_228
+        example: &ref_239
           value:
             context:
               domain: ONDC:RET11
@@ -34817,7 +36914,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_229
+        example: &ref_240
           value:
             context:
               domain: ONDC:RET11
@@ -34986,7 +37083,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_230
+        example: &ref_241
           value:
             context:
               domain: ONDC:RET11
@@ -35583,7 +37680,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_231
+        example: &ref_242
           value:
             context:
               domain: ONDC:RET11
@@ -35783,7 +37880,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_232
+        example: &ref_243
           value:
             context:
               domain: ONDC:RET11
@@ -36397,7 +38494,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_233
+        example: &ref_244
           value:
             context:
               domain: ONDC:RET11
@@ -37054,7 +39151,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_234
+        example: &ref_245
           value:
             context:
               domain: ONDC:RET11
@@ -37704,7 +39801,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order accepted
         reference: if any
-        example: &ref_235
+        example: &ref_246
           value:
             context:
               domain: ONDC:RET11
@@ -38350,7 +40447,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_236
+        example: &ref_247
           value:
             context:
               domain: ONDC:RET11
@@ -39007,7 +41104,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_237
+        example: &ref_248
           value:
             context:
               domain: ONDC:RET11
@@ -39669,7 +41766,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_238
+        example: &ref_249
           value:
             context:
               domain: ONDC:RET11
@@ -40331,7 +42428,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_239
+        example: &ref_250
           value:
             context:
               domain: ONDC:RET11
@@ -40994,7 +43091,7 @@ x-flows:
         api: track
         description: BAP request to track the order
         reference: if any
-        example: &ref_240
+        example: &ref_251
           value:
             context:
               domain: ONDC:RET11
@@ -41016,7 +43113,7 @@ x-flows:
         api: on_track
         description: BPP sends the tracking information
         reference: if any
-        example: &ref_241
+        example: &ref_252
           value:
             context:
               domain: ONDC:RET11
@@ -41133,7 +43230,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_242
+        example: &ref_253
           value:
             context:
               domain: ONDC:RET11
@@ -41158,7 +43255,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_243
+        example: &ref_254
           value:
             context:
               domain: ONDC:RET11
@@ -42554,7 +44651,7 @@ x-flows:
         api: select - out of stock
         description: BAP may add unavailable or out-of-stock items to the cart
         reference: if any
-        example: &ref_244
+        example: &ref_255
           value:
             context:
               domain: ONDC:RET11
@@ -42719,7 +44816,7 @@ x-flows:
         api: on_select - out of stock
         description: BPP returns item breakup when item is out of stock
         reference: if any
-        example: &ref_246
+        example: &ref_257
           value:
             context:
               domain: ONDC:RET11
@@ -43320,7 +45417,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_245
+        example: &ref_256
           value:
             context:
               domain: ONDC:RET11
@@ -43423,7 +45520,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_247
+        example: &ref_258
           value:
             context:
               domain: ONDC:RET11
@@ -43752,7 +45849,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_248
+        example: &ref_259
           value:
             context:
               domain: ONDC:RET11
@@ -43882,7 +45979,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_249
+        example: &ref_260
           value:
             context:
               domain: ONDC:RET11
@@ -44243,7 +46340,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_250
+        example: &ref_261
           value:
             context:
               domain: ONDC:RET11
@@ -44647,7 +46744,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_251
+        example: &ref_262
           value:
             context:
               domain: ONDC:RET11
@@ -45044,7 +47141,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order accepted
         reference: if any
-        example: &ref_252
+        example: &ref_263
           value:
             context:
               domain: ONDC:RET11
@@ -45437,7 +47534,7 @@ x-flows:
         api: on_status - agent_assigned
         description: Status updates - agent packed
         reference: if any
-        example: &ref_253
+        example: &ref_264
           value:
             context:
               domain: ONDC:RET11
@@ -45841,7 +47938,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_254
+        example: &ref_265
           value:
             context:
               domain: ONDC:RET11
@@ -46249,7 +48346,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_255
+        example: &ref_266
           value:
             context:
               domain: ONDC:RET11
@@ -46657,7 +48754,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_256
+        example: &ref_267
           value:
             context:
               domain: ONDC:RET11
@@ -47066,7 +49163,7 @@ x-flows:
         api: track
         description: BAP request to track the order
         reference: if any
-        example: &ref_257
+        example: &ref_268
           value:
             context:
               domain: ONDC:RET11
@@ -47088,7 +49185,7 @@ x-flows:
         api: on_track
         description: BPP sends the tracking information
         reference: if any
-        example: &ref_258
+        example: &ref_269
           value:
             context:
               domain: ONDC:RET11
@@ -47191,7 +49288,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_259
+        example: &ref_270
           value:
             context:
               domain: ONDC:RET11
@@ -47216,7 +49313,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_260
+        example: &ref_271
           value:
             context:
               domain: ONDC:RET11
@@ -48612,7 +50709,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_261
+        example: &ref_272
           value:
             context:
               domain: ONDC:RET11
@@ -48781,7 +50878,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_262
+        example: &ref_273
           value:
             context:
               domain: ONDC:RET11
@@ -49378,7 +51475,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_263
+        example: &ref_274
           value:
             context:
               domain: ONDC:RET11
@@ -49579,7 +51676,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_264
+        example: &ref_275
           value:
             context:
               domain: ONDC:RET11
@@ -50193,7 +52290,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_265
+        example: &ref_276
           value:
             context:
               domain: ONDC:RET11
@@ -50850,7 +52947,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_266
+        example: &ref_277
           value:
             context:
               domain: ONDC:RET11
@@ -51500,7 +53597,7 @@ x-flows:
         api: cancel
         description: Buyer request for the cancellation of the order
         reference: if any
-        example: &ref_267
+        example: &ref_278
           value:
             context:
               domain: ONDC:RET11
@@ -51523,7 +53620,7 @@ x-flows:
         api: on_cancel
         description: Seller confirms the cancellation of the order
         reference: if any
-        example: &ref_268
+        example: &ref_279
           value:
             context:
               domain: ONDC:RET11
@@ -52525,7 +54622,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_269
+        example: &ref_280
           value:
             context:
               domain: ONDC:RET11
@@ -52550,7 +54647,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_270
+        example: &ref_281
           value:
             context:
               domain: ONDC:RET11
@@ -53946,7 +56043,7 @@ x-flows:
         api: select
         description: BAP select the item
         reference: if any
-        example: &ref_271
+        example: &ref_282
           value:
             context:
               domain: ONDC:RET11
@@ -54115,7 +56212,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_272
+        example: &ref_283
           value:
             context:
               domain: ONDC:RET11
@@ -54712,7 +56809,7 @@ x-flows:
         api: init
         description: Buyer initiate the product and send the updated fulfillment id
         reference: if any
-        example: &ref_273
+        example: &ref_284
           value:
             context:
               domain: ONDC:RET11
@@ -54913,7 +57010,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_274
+        example: &ref_285
           value:
             context:
               domain: ONDC:RET11
@@ -55527,7 +57624,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_275
+        example: &ref_286
           value:
             context:
               domain: ONDC:RET11
@@ -56184,7 +58281,7 @@ x-flows:
         api: on_confirm
         description: Seller Accepts confirmation
         reference: if any
-        example: &ref_276
+        example: &ref_287
           value:
             context:
               domain: ONDC:RET11
@@ -56834,7 +58931,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order pending
         reference: if any
-        example: &ref_277
+        example: &ref_288
           value:
             context:
               domain: ONDC:RET11
@@ -57480,7 +59577,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_278
+        example: &ref_289
           value:
             context:
               domain: ONDC:RET11
@@ -58137,7 +60234,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_279
+        example: &ref_290
           value:
             context:
               domain: ONDC:RET11
@@ -58798,7 +60895,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_280
+        example: &ref_291
           value:
             context:
               domain: ONDC:RET11
@@ -59459,7 +61556,7 @@ x-flows:
         api: on_cancel
         description: Order updates - seller side full-order cancellation
         reference: if any
-        example: &ref_282
+        example: &ref_293
           value:
             context:
               domain: ONDC:RET11
@@ -60447,7 +62544,7 @@ x-flows:
         api: on_status - rto_delivered/disposed
         description: Status updates - rto order delivered
         reference: if any
-        example: &ref_281
+        example: &ref_292
           value:
             context:
               domain: ONDC:RET11
@@ -61485,7 +63582,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_283
+        example: &ref_294
           value:
             context:
               domain: ONDC:RET11
@@ -61510,7 +63607,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_284
+        example: &ref_295
           value:
             context:
               domain: ONDC:RET11
@@ -62906,7 +65003,7 @@ x-flows:
         api: select
         description: BAP selects the item
         reference: if any
-        example: &ref_285
+        example: &ref_296
           value:
             context:
               domain: ONDC:RET11
@@ -63075,7 +65172,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_286
+        example: &ref_297
           value:
             context:
               domain: ONDC:RET11
@@ -63672,7 +65769,7 @@ x-flows:
         api: init
         description: Buyer initiates the product and sends the updated fulfillment ID
         reference: if any
-        example: &ref_287
+        example: &ref_298
           value:
             context:
               domain: ONDC:RET11
@@ -63873,7 +65970,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_288
+        example: &ref_299
           value:
             context:
               domain: ONDC:RET11
@@ -64487,7 +66584,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_289
+        example: &ref_300
           value:
             context:
               domain: ONDC:RET11
@@ -65144,7 +67241,7 @@ x-flows:
         api: on_confirm
         description: Seller accepts confirmation
         reference: if any
-        example: &ref_290
+        example: &ref_301
           value:
             context:
               domain: ONDC:RET11
@@ -65794,7 +67891,7 @@ x-flows:
         api: on_update - part cancel
         description: Seller side partial cancellation
         reference: if any
-        example: &ref_291
+        example: &ref_302
           value:
             context:
               domain: ONDC:RET11
@@ -66617,7 +68714,7 @@ x-flows:
         api: update - partial cancel settlement
         description: Update settlement - partial cancel
         reference: if any
-        example: &ref_297
+        example: &ref_308
           value:
             context:
               domain: ONDC:RET11
@@ -66650,7 +68747,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order accepted
         reference: if any
-        example: &ref_292
+        example: &ref_303
           value:
             context:
               domain: ONDC:RET11
@@ -67487,7 +69584,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_293
+        example: &ref_304
           value:
             context:
               domain: ONDC:RET11
@@ -68335,7 +70432,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_294
+        example: &ref_305
           value:
             context:
               domain: ONDC:RET11
@@ -69187,7 +71284,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_295
+        example: &ref_306
           value:
             context:
               domain: ONDC:RET11
@@ -70039,7 +72136,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_296
+        example: &ref_307
           value:
             context:
               domain: ONDC:RET11
@@ -70892,7 +72989,7 @@ x-flows:
         api: track
         description: Track order status
         reference: if any
-        example: &ref_298
+        example: &ref_309
           value:
             context:
               domain: ONDC:RET11
@@ -70914,7 +73011,7 @@ x-flows:
         api: on_track
         description: On track update status
         reference: if any
-        example: &ref_299
+        example: &ref_310
           value:
             context:
               domain: ONDC:RET11
@@ -71031,7 +73128,7 @@ x-flows:
         api: search
         description: BAP sends the search request
         reference: if any
-        example: &ref_300
+        example: &ref_311
           value:
             context:
               domain: ONDC:RET11
@@ -71056,7 +73153,7 @@ x-flows:
         api: on_search
         description: BPP returns the full catalog refresh
         reference: if any
-        example: &ref_301
+        example: &ref_312
           value:
             context:
               domain: ONDC:RET11
@@ -72452,7 +74549,7 @@ x-flows:
         api: select
         description: BAP selects the item
         reference: if any
-        example: &ref_302
+        example: &ref_313
           value:
             context:
               domain: ONDC:RET11
@@ -72621,7 +74718,7 @@ x-flows:
           BPP returns item breakup when item is in stock and offer applied (if
           any)
         reference: if any
-        example: &ref_303
+        example: &ref_314
           value:
             context:
               domain: ONDC:RET11
@@ -73218,7 +75315,7 @@ x-flows:
         api: init
         description: Buyer initiates the product and sends the updated fulfillment ID
         reference: if any
-        example: &ref_304
+        example: &ref_315
           value:
             context:
               domain: ONDC:RET11
@@ -73419,7 +75516,7 @@ x-flows:
         api: on_init
         description: Respond to init
         reference: if any
-        example: &ref_305
+        example: &ref_316
           value:
             context:
               domain: ONDC:RET11
@@ -74033,7 +76130,7 @@ x-flows:
         api: confirm
         description: Buyer confirms product
         reference: if any
-        example: &ref_306
+        example: &ref_317
           value:
             context:
               domain: ONDC:RET11
@@ -74690,7 +76787,7 @@ x-flows:
         api: on_confirm
         description: Seller accepts confirmation
         reference: if any
-        example: &ref_307
+        example: &ref_318
           value:
             context:
               domain: ONDC:RET11
@@ -75340,7 +77437,7 @@ x-flows:
         api: on_status - pending
         description: Status updates - order accepted
         reference: if any
-        example: &ref_308
+        example: &ref_319
           value:
             context:
               domain: ONDC:RET11
@@ -75978,7 +78075,7 @@ x-flows:
         api: on_status - packed
         description: Status updates - order packed
         reference: if any
-        example: &ref_309
+        example: &ref_320
           value:
             context:
               domain: ONDC:RET11
@@ -76616,7 +78713,7 @@ x-flows:
         api: on_status - picked
         description: Status updates - order picked up
         reference: if any
-        example: &ref_310
+        example: &ref_321
           value:
             context:
               domain: ONDC:RET11
@@ -77258,7 +79355,7 @@ x-flows:
         api: on_status - out_for_delivery
         description: Status updates - order out for delivery
         reference: if any
-        example: &ref_311
+        example: &ref_322
           value:
             context:
               domain: ONDC:RET11
@@ -77900,7 +79997,7 @@ x-flows:
         api: on_status - order_delivered
         description: Status updates - order delivered
         reference: if any
-        example: &ref_312
+        example: &ref_323
           value:
             context:
               domain: ONDC:RET11
@@ -78542,7 +80639,7 @@ x-flows:
         api: update - liquidated
         description: BAP requests to return the items
         reference: if any
-        example: &ref_313
+        example: &ref_324
           value:
             context:
               domain: ONDC:RET11
@@ -78674,7 +80771,7 @@ x-flows:
         api: on_update - interim liquidated
         description: BPP sends the return initiate request
         reference: if any
-        example: &ref_315
+        example: &ref_326
           value:
             context:
               domain: ONDC:RET11
@@ -79437,7 +81534,7 @@ x-flows:
         api: on_update - liquidated
         description: BPP approves return request and liquidates the items
         reference: if any
-        example: &ref_316
+        example: &ref_327
           value:
             context:
               domain: ONDC:RET11
@@ -80382,7 +82479,7 @@ x-flows:
       - summary: Update settlement - liquidated
         api: update - liquidated settlement
         description: Update settlement - liquidated
-        example: &ref_314
+        example: &ref_325
           value:
             context:
               domain: ONDC:RET11
@@ -83293,6 +85390,23 @@ x-examples:
       on_confirm:
         examples:
           on_confirm: *ref_222
+      on_update:
+        examples:
+          on_update - interim reverse QC: *ref_223
+          on_update - approval: *ref_224
+          on_update - picked: *ref_225
+          on_update - delivered: *ref_226
+      update:
+        examples:
+          update - settlement reverse QC: *ref_227
+          update - reverse QC: *ref_228
+      on_status:
+        examples:
+          on_status - packed: *ref_229
+          on_status - agent assigned: *ref_230
+          on_status - picked: *ref_231
+          on_status - out for delivery: *ref_232
+          on_status - delivered: *ref_233
   B2C - Discovery phase F&B:
     summary: B2C flow-1 Use Case Specification
     description: >-
@@ -83304,12 +85418,12 @@ x-examples:
     example_set:
       search:
         examples:
-          search - full catalog refresh: *ref_223
-          search - incremental refresh: *ref_224
+          search - full catalog refresh: *ref_234
+          search - incremental refresh: *ref_235
       on_search:
         examples:
-          on_search - on full catalog refresh: *ref_225
-          on_search - on incremental refresh: *ref_226
+          on_search - on full catalog refresh: *ref_236
+          on_search - on incremental refresh: *ref_237
   B2C - Delivery F&B:
     summary: B2C flow-2 Use Case Specification
     description: >-
@@ -83322,41 +85436,41 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_227
+          search: *ref_238
       on_search:
         examples:
-          on_search: *ref_228
+          on_search: *ref_239
       select:
         examples:
-          select: *ref_229
+          select: *ref_240
       on_select:
         examples:
-          on_select: *ref_230
+          on_select: *ref_241
       init:
         examples:
-          init: *ref_231
+          init: *ref_242
       on_init:
         examples:
-          on_init: *ref_232
+          on_init: *ref_243
       confirm:
         examples:
-          confirm: *ref_233
+          confirm: *ref_244
       on_confirm:
         examples:
-          on_confirm: *ref_234
+          on_confirm: *ref_245
       on_status:
         examples:
-          on_status - accepted: *ref_235
-          on_status - packed: *ref_236
-          on_status - picked: *ref_237
-          on_status - out for delivery: *ref_238
-          on_status - delivered: *ref_239
+          on_status - accepted: *ref_246
+          on_status - packed: *ref_247
+          on_status - picked: *ref_248
+          on_status - out for delivery: *ref_249
+          on_status - delivered: *ref_250
       track:
         examples:
-          track: *ref_240
+          track: *ref_251
       on_track:
         examples:
-          on_track: *ref_241
+          on_track: *ref_252
   B2C - Item Out-of-stock F&B:
     summary: B2C flow-3 Use Case Specification
     description: >-
@@ -83371,43 +85485,43 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_242
+          search: *ref_253
       on_search:
         examples:
-          on_search: *ref_243
+          on_search: *ref_254
       select:
         examples:
-          select - out of stock: *ref_244
-          select: *ref_245
+          select - out of stock: *ref_255
+          select: *ref_256
       on_select:
         examples:
-          on_select - out of stock: *ref_246
-          on_select: *ref_247
+          on_select - out of stock: *ref_257
+          on_select: *ref_258
       init:
         examples:
-          init: *ref_248
+          init: *ref_259
       on_init:
         examples:
-          on_init: *ref_249
+          on_init: *ref_260
       confirm:
         examples:
-          confirm: *ref_250
+          confirm: *ref_261
       on_confirm:
         examples:
-          on_confirm: *ref_251
+          on_confirm: *ref_262
       on_status:
         examples:
-          on_status - accepted: *ref_252
-          on_status - packed: *ref_253
-          on_status - picked: *ref_254
-          on_status - out for delivery: *ref_255
-          on_status - delivered: *ref_256
+          on_status - accepted: *ref_263
+          on_status - packed: *ref_264
+          on_status - picked: *ref_265
+          on_status - out for delivery: *ref_266
+          on_status - delivered: *ref_267
       track:
         examples:
-          track: *ref_257
+          track: *ref_268
       on_track:
         examples:
-          on_track: *ref_258
+          on_track: *ref_269
   B2C - Buyer Side Cancellation F&B:
     summary: B2C flow-4 Use Case Specification
     description: >-
@@ -83419,34 +85533,34 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_259
+          search: *ref_270
       on_search:
         examples:
-          on_search: *ref_260
+          on_search: *ref_271
       select:
         examples:
-          select: *ref_261
+          select: *ref_272
       on_select:
         examples:
-          on_select: *ref_262
+          on_select: *ref_273
       init:
         examples:
-          init: *ref_263
+          init: *ref_274
       on_init:
         examples:
-          on_init: *ref_264
+          on_init: *ref_275
       confirm:
         examples:
-          confirm: *ref_265
+          confirm: *ref_276
       on_confirm:
         examples:
-          on_confirm: *ref_266
+          on_confirm: *ref_277
       cancel:
         examples:
-          cancel: *ref_267
+          cancel: *ref_278
       on_cancel:
         examples:
-          on_cancel: *ref_268
+          on_cancel: *ref_279
   B2C - Seller side Cancellation F&B:
     summary: B2C flow-5 Use Case Specification
     description: >-
@@ -83459,38 +85573,38 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_269
+          search: *ref_280
       on_search:
         examples:
-          on_search: *ref_270
+          on_search: *ref_281
       select:
         examples:
-          select: *ref_271
+          select: *ref_282
       on_select:
         examples:
-          on_select: *ref_272
+          on_select: *ref_283
       init:
         examples:
-          init: *ref_273
+          init: *ref_284
       on_init:
         examples:
-          on_init: *ref_274
+          on_init: *ref_285
       confirm:
         examples:
-          confirm: *ref_275
+          confirm: *ref_286
       on_confirm:
         examples:
-          on_confirm: *ref_276
+          on_confirm: *ref_287
       on_status:
         examples:
-          on_status - accepted: *ref_277
-          on_status - packed: *ref_278
-          on_status - picked: *ref_279
-          on_status - out for delivery: *ref_280
-          on_status - rto disposed: *ref_281
+          on_status - accepted: *ref_288
+          on_status - packed: *ref_289
+          on_status - picked: *ref_290
+          on_status - out for delivery: *ref_291
+          on_status - rto disposed: *ref_292
       on_cancel:
         examples:
-          on_cancel - RTO: *ref_282
+          on_cancel - RTO: *ref_293
       track:
         examples:
           track:
@@ -83580,47 +85694,47 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_283
+          search: *ref_294
       on_search:
         examples:
-          on_search: *ref_284
+          on_search: *ref_295
       select:
         examples:
-          select: *ref_285
+          select: *ref_296
       on_select:
         examples:
-          on_select: *ref_286
+          on_select: *ref_297
       init:
         examples:
-          init: *ref_287
+          init: *ref_298
       on_init:
         examples:
-          on_init: *ref_288
+          on_init: *ref_299
       confirm:
         examples:
-          confirm: *ref_289
+          confirm: *ref_300
       on_confirm:
         examples:
-          on_confirm: *ref_290
+          on_confirm: *ref_301
       on_update:
         examples:
-          on_update - partial cancel: *ref_291
+          on_update - partial cancel: *ref_302
       on_status:
         examples:
-          on_status - accepted: *ref_292
-          on_status - packed: *ref_293
-          on_status - picked: *ref_294
-          on_status - out for delivery: *ref_295
-          on_status - delivered: *ref_296
+          on_status - accepted: *ref_303
+          on_status - packed: *ref_304
+          on_status - picked: *ref_305
+          on_status - out for delivery: *ref_306
+          on_status - delivered: *ref_307
       update:
         examples:
-          update - partial cancel payment: *ref_297
+          update - partial cancel payment: *ref_308
       track:
         examples:
-          track: *ref_298
+          track: *ref_309
       on_track:
         examples:
-          on_track: *ref_299
+          on_track: *ref_310
   B2C - Liquidation F&B:
     summary: B2C flow-6b Use Case Specification
     description: >-
@@ -83632,43 +85746,43 @@ x-examples:
     example_set:
       search:
         examples:
-          search: *ref_300
+          search: *ref_311
       on_search:
         examples:
-          on_search: *ref_301
+          on_search: *ref_312
       select:
         examples:
-          select: *ref_302
+          select: *ref_313
       on_select:
         examples:
-          on_select: *ref_303
+          on_select: *ref_314
       init:
         examples:
-          init: *ref_304
+          init: *ref_315
       on_init:
         examples:
-          on_init: *ref_305
+          on_init: *ref_316
       confirm:
         examples:
-          confirm: *ref_306
+          confirm: *ref_317
       on_confirm:
         examples:
-          on_confirm: *ref_307
+          on_confirm: *ref_318
       on_status:
         examples:
-          on_status - accepted: *ref_308
-          on_status - packed: *ref_309
-          on_status - picked: *ref_310
-          on_status - out for delivery: *ref_311
-          on_status - delivered: *ref_312
+          on_status - accepted: *ref_319
+          on_status - packed: *ref_320
+          on_status - picked: *ref_321
+          on_status - out for delivery: *ref_322
+          on_status - delivered: *ref_323
       update:
         examples:
-          update - return initiated: *ref_313
-          update - liquidated payment: *ref_314
+          update - return initiated: *ref_324
+          update - liquidated payment: *ref_325
       on_update:
         examples:
-          on_update - return initiated: *ref_315
-          on_update - liquidated: *ref_316
+          on_update - return initiated: *ref_326
+          on_update - liquidated: *ref_327
       track:
         examples:
           track:

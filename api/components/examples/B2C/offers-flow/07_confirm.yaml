@@ -9,7 +9,7 @@ value:
     bpp_uri: https://sellerNP.com/ondc
     transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
     message_id: 3dbb05b6-dbb0-4399-95e6-c51cf5be842d
-    timestamp: '2024-12-23T07:03:30.516Z'
+    timestamp: "2024-12-23T07:03:30.516Z"
     bpp_id: sellerNP.com
     ttl: PT30S
     city: std:022
@@ -23,14 +23,14 @@ value:
           city: Mumbai
           state: Maharashtra
           country: IND
-          area_code: '400053'
+          area_code: "400053"
           locality: my street name
           name: my house or door or floor
-        phone: '9898989898'
+        phone: "9898989898"
         name: ONDC buyer
         email: nobody@nomail.com
-        created_at: '2024-12-23T07:01:43.145Z'
-        updated_at: '2024-12-23T07:01:43.145Z'
+        created_at: "2024-12-23T07:01:43.145Z"
+        updated_at: "2024-12-23T07:01:43.145Z"
       items:
         - id: I1
           quantity:
@@ -41,13 +41,13 @@ value:
         locations:
           - id: L1
       fulfillments:
-        - '@ondc/org/TAT': PT60M
+        - "@ondc/org/TAT": PT60M
           id: F1
           tracking: true
           end:
             contact:
               email: nobody@nomail.com
-              phone: '9898989898'
+              phone: "9898989898"
             person:
               name: ONDC Buyer
             location:
@@ -57,7 +57,7 @@ value:
                 city: Mumbai
                 state: Maharashtra
                 country: IND
-                area_code: '400053'
+                area_code: "400053"
                 locality: my street name
                 name: my house or door or floor
           type: Delivery
@@ -65,15 +65,15 @@ value:
         - id: FLAT50
       payment:
         params:
-          amount: '150.00'
+          amount: "150.00"
           currency: INR
           transaction_id: order_PjggJp7MccQmAa
         status: PAID
         type: ON-ORDER
         collected_by: BAP
-        '@ondc/org/buyer_app_finder_fee_type': percent
-        '@ondc/org/buyer_app_finder_fee_amount': '3.0'
-        '@ondc/org/settlement_details':
+        "@ondc/org/buyer_app_finder_fee_type": percent
+        "@ondc/org/buyer_app_finder_fee_amount": "3.0"
+        "@ondc/org/settlement_details":
           - settlement_counterparty: seller-app
             settlement_phase: sale-amount
             settlement_type: neft
@@ -85,26 +85,26 @@ value:
       quote:
         price:
           currency: INR
-          value: '150.00'
+          value: "150.00"
         breakup:
-          - '@ondc/org/item_id': I1
-            '@ondc/org/item_quantity':
+          - "@ondc/org/item_id": I1
+            "@ondc/org/item_quantity":
               count: 2
             title: Plain Atta
-            '@ondc/org/title_type': item
+            "@ondc/org/title_type": item
             price:
               currency: INR
-              value: '200'
+              value: "200"
             item:
               price:
                 currency: INR
-                value: '100.00'
-          - '@ondc/org/item_id': 072ccd93-3928-49d4-b6ef-9c8bf69745f8
+                value: "100.00"
+          - "@ondc/org/item_id": 072ccd93-3928-49d4-b6ef-9c8bf69745f8
             title: Flat discount of ₹50 on minimum cart value of ₹100
-            '@ondc/org/title_type': offer
+            "@ondc/org/title_type": offer
             price:
               currency: INR
-              value: '-50.00'
+              value: "-50.00"
             item:
               tags:
                 - code: quote
@@ -118,27 +118,27 @@ value:
                     - code: type
                       value: discount
                     - code: auto
-                      value: 'yes'
+                      value: "yes"
                     - code: additive
-                      value: 'no'
+                      value: "no"
                     - code: item_id
-                      value: ''
+                      value: ""
                     - code: item_value
-                      value: ''
+                      value: ""
                     - code: item_count
-                      value: ''
-          - '@ondc/org/item_id': F1
+                      value: ""
+          - "@ondc/org/item_id": F1
             title: Delivery charges
-            '@ondc/org/title_type': delivery
+            "@ondc/org/title_type": delivery
             price:
               currency: INR
-              value: '00.00'
-          - '@ondc/org/item_id': F1
+              value: "00.00"
+          - "@ondc/org/item_id": F1
             title: Convenience Fee
-            '@ondc/org/title_type': misc
+            "@ondc/org/title_type": misc
             price:
               currency: INR
-              value: '00.00'
+              value: "00.00"
         ttl: P1D
       tags:
         - code: bpp_terms
@@ -153,5 +153,5 @@ value:
           list:
             - code: tax_number
               value: gst_number_of_buyerNP
-      created_at: '2024-12-23T07:03:30.516Z'
-      updated_at: '2024-12-23T07:03:30.516Z'
+      created_at: "2024-12-23T07:03:30.516Z"
+      updated_at: "2024-12-23T07:03:30.516Z"
