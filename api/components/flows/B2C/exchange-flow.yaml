@@ -1,5 +1,5 @@
 summary: Retail 1.2.5 (Exchange Flow)
-description: The Offers Flow in ONDC enables sellers to create and manage offers for their products and buyers to discover and redeem these offers.
+description: The Exchange Flow begins with the Seller NP (SNP). During the On_Search phase, providers publish available exchange offers in their catalog, which buyers can view on the product listing page. Buyers can raise an exchange request after receiving the item. The process is similar to the return-with-pickup flow, with some modifications to the exchange request (/update).
 details:
   - description: Buyer Search & Quotation
     mermaidGraph: >-
@@ -51,7 +51,6 @@ details:
         B2C BPP ->> B2C BAP: **/on_update** - interim reverse qc - Return initiate request from BPP
         B2C BPP ->> B2C BAP: **/on_update** - approval - BPP approves return request
         B2C BPP ->> B2C BAP: **/on_update** - picked - Order picked up confirmation
-        B2C BAP ->> B2C BPP: **/update** - reverse qc settlement - Settlement update
         B2C BPP ->> B2C BAP: **/on_update** - return delivered - Order return delivered confirmation
 reference: if any
 steps:
@@ -103,65 +102,65 @@ steps:
     reference: if any
     example:
       $ref: "../../examples/B2C/exchange-flow/08_on_confirm.yaml"
+  - summary: Status updates - order pending
+    api: on_status - pending
+    description: Status updates - order pending
+    reference: if any
+    example:
+      $ref: "../../examples/B2C/exchange-flow/09_on_status_pending.yaml"
   - summary: Status updates - order packed
     api: on_status - packed
     description: Status updates - order packed
     reference: if any
     example:
-      $ref: "../../examples/B2C/exchange-flow/09_on_status_packed.yaml"
-  - summary: Status updates - agent assigned
-    api: on_status - agent assigned
-    description: Status updates - agent assigned
-    reference: if any
-    example:
-      $ref: "../../examples/B2C/exchange-flow/10_01_on_status_agent_assigned.yaml"
+      $ref: "../../examples/B2C/exchange-flow/10_on_status_packed.yaml"
   - summary: Status updates - order picked up
     api: on_status - picked
     description: Status updates - order picked up
     reference: if any
     example:
-      $ref: "../../examples/B2C/exchange-flow/10_on_status_picked.yaml"
+      $ref: "../../examples/B2C/exchange-flow/11_on_status_picked.yaml"
   - summary: Status updates - order out for delivery
     api: on_status - out_for_delivery
     description: Status updates - order out for delivery
     reference: if any
     example:
-      $ref: "../../examples/B2C/exchange-flow/11_on_status_out_for_delivery.yaml"
+      $ref: "../../examples/B2C/exchange-flow/12_on_status_out_for_delivery.yaml"
   - summary: Status updates - order delivered
     api: on_status - order_delivered
     description: Status updates - order delivered
     reference: if any
     example:
-      $ref: "../../examples/B2C/exchange-flow/12_on_status_delivered.yaml"
+      $ref: "../../examples/B2C/exchange-flow/13_on_status_delivered.yaml"
   - summary: BAP requests to return the items
     api: update - reverse qc
     description: BAP requests to return the items
     reference: if any
     example:
-      $ref: "../../examples/B2C/exchange-flow/13_update_reverse_qc.yaml"
+      $ref: "../../examples/B2C/exchange-flow/14_update_reverse_qc.yaml"
   - summary: BPP sends the return initiate request
     api: on_update - interim reverseQc
     description: BPP sends the return initiate request
     reference: if any
     example:
-      $ref: "../../examples/B2C/exchange-flow/14_on_update_interim_reverse_qc.yaml"
+      $ref: "../../examples/B2C/exchange-flow/15_on_update_interim_reverse_qc.yaml"
   - summary: BPP approves return request
     api: on_update - approved
-    description: BPP approves return request and liquidates the items
+    description: BPP approves return request
     reference: if any
     example:
-      $ref: "../../examples/B2C/exchange-flow/15_on_update_approval.yaml"
+      $ref: "../../examples/B2C/exchange-flow/16_on_update_approval.yaml"
   - summary: BPP sends the request that order picked up
     api: on_update - picked
     description: BPP sends the request that order picked up
     reference: if any
     example:
-      $ref: "../../examples/B2C/exchange-flow/16_on_update_picked.yaml"
-  - summary: Update Settlement - reverse qc
-    api: update - reverse qc settlement
-    description: Update Settlement - reverse qc
-    example:
-      $ref: "../../examples/B2C/exchange-flow/17_update_settlement.yaml"
+      $ref: "../../examples/B2C/exchange-flow/17_on_update_picked.yaml"
+  # - summary: Update Settlement - reverse qc
+  #   api: update - reverse qc settlement
+  #   description: Update Settlement - reverse qc
+  #   example:
+  #     $ref: "../../examples/B2C/exchange-flow/17_update_settlement.yaml"
   - summary: BPP sends the request that order picked up
     api: on_update - return delivered
     description: BPP sends the request that order is delivered

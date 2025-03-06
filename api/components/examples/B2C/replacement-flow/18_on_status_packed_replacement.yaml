@@ -28,12 +28,8 @@ value:
           fulfillment_id: F1
         - id: I1
           quantity:
-            count: 0
-          fulfillment_id: R1
-        - id: I1
-          quantity:
             count: 1
-          fulfillment_id: FR1
+          fulfillment_id: R1
       billing:
         address:
           building: my building name or house
