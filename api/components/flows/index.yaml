@@ -23,3 +23,4 @@
 - $ref: "./B2C/bpp_collect_successful-payment_not_updated.yaml"
 - $ref: "./B2C/bpp_collect_successful-payment_updated.yaml"
 - $ref: "./B2C/replacement-flow.yaml"
+- $ref: "./B2C/exchange-flow.yaml"

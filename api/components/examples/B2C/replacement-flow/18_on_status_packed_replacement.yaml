@@ -1,22 +1,22 @@
 value:
   context:
     domain: ONDC:RET10
-    action: on_update
+    action: on_status
     country: IND
     core_version: 1.2.5
     bap_id: buyerNP.com
     bap_uri: https://buyerNP.com/ondc
     bpp_uri: https://sellerNP.com/ondc
     transaction_id: 072ccd93-3928-49d4-b6ef-9c8bf69745f8
-    message_id: b2f61b2b-8c34-4c77-a9d0-a879ff8ab6d3
-    timestamp: '2024-12-24T09:40:35.231Z'
+    message_id: e76eb2fe-a149-41f8-9c5b-2f82dcfe71dd
+    timestamp: '2024-12-24T09:50:35.231Z'
     bpp_id: sellerNP.com
     ttl: PT30S
     city: std:022
   message:
     order:
       id: O1
-      state: Completed
+      state: In-progress
       provider:
         id: P1
         locations:
@@ -24,12 +24,16 @@ value:
       items:
         - id: I1
           quantity:
-            count: 1
+            count: 0
           fulfillment_id: F1
         - id: I1
           quantity:
-            count: 1
+            count: 0
           fulfillment_id: R1
+        - id: I1
+          quantity:
+            count: 1
+          fulfillment_id: FR1
       billing:
         address:
           building: my building name or house
@@ -113,7 +117,7 @@ value:
           type: Return
           state:
             descriptor:
-              code: Return_Picked
+              code: Return_Delivered
           start:
             location:
               gps: 19.131140,72.834091
@@ -187,7 +191,7 @@ value:
           '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
           state:
             descriptor:
-              code: Delivery
+              code: Packed
           type: Delivery
           tracking: true
           '@ondc/org/TAT': PT60M
@@ -207,9 +211,8 @@ value:
                 name: my house or door or floor
             time:
               range:
-                start: '2024-12-23T07:03:32.230Z'
-                end: '2024-12-23T07:33:32.230Z'
-              timestamp: '2024-12-23T07:25:32.230Z'
+                start: '2024-12-25T07:03:32.230Z'
+                end: '2024-12-26T07:33:32.230Z'
             contact:
               phone: '9594663710'
               email: nobody@nomail.com
@@ -231,9 +234,8 @@ value:
                 name: my house or door or floor
             time:
               range:
-                start: '2024-12-23T07:33:32.230Z'
-                end: '2024-12-23T07:04:32.230Z'
-              timestamp: '2024-12-23T07:45:32.230Z'
+                start: '2024-12-27T07:33:32.230Z'
+                end: '2024-12-28T07:04:32.230Z'
           tags:
             - code: routing
               list:
@@ -324,13 +326,5 @@ value:
             settlement_ifsc_code: xxxx
             bank_name: xxxx
             branch_name: xxxx
-          - settlement_counterparty: buyer
-            settlement_phase: refund
-            settlement_type: netbanking
-            settlement_amount: '100.00'
-            settlement_timestamp: '2024-12-24T06:30:35.231Z'
-      documents:
-        - url: https://invoice_url
-          label: Invoice
-      created_at: '2024-12-23T07:03:30.516Z'
-      updated_at: '2024-12-24T09:40:35.231Z'
+      created_at: '2024-12-24T09:42:35.231Z'
+      updated_at: '2024-12-24T09:50:35.231Z'

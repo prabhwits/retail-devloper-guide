@@ -24,7 +24,7 @@ value:
       items:
         - id: I1
           quantity:
-            count: 1
+            count: 0
           fulfillment_id: F1
         - id: I1
           quantity:
@@ -192,7 +192,7 @@ value:
           '@ondc/org/provider_name': 24x7 Wellness Forever - ANDHERI FOUR BUNGLOW
           state:
             descriptor:
-              code: Delivery
+              code: Pending
           type: Delivery
           tracking: true
           '@ondc/org/TAT': PT60M
@@ -214,7 +214,6 @@ value:
               range:
                 start: '2024-12-25T07:03:32.230Z'
                 end: '2024-12-26T07:33:32.230Z'
-              timestamp: '2024-12-25T07:25:32.230Z'
             contact:
               phone: '9594663710'
               email: nobody@nomail.com
@@ -238,7 +237,6 @@ value:
               range:
                 start: '2024-12-27T07:33:32.230Z'
                 end: '2024-12-28T07:04:32.230Z'
-              timestamp: '2024-12-27T07:45:32.230Z'
           tags:
             - code: routing
               list:

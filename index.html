@@ -210,24 +210,35 @@
                 <td><b>Feature Set</b></td>
                 <td>
                   <select id="feature-sets-dropdown" class="form-select" onchange="markdownConverter()">
-                    <option>Baseline Features</option>
-                    <option>Item Availability 001</option>
-                    <option>Cancellation</option>
-                    <option>Return</option>
-                    <option>Weight Differential Charges</option>
+                    <option>Feature Discovery (000)</option>
+                    <option>Other Baseline Features (000)</option>
+                    <option>Item Availability (001)</option>
+                    <option>Self Pickup (002)</option>
+                    <option>Slotted Delivery (003)</option>
+                    <option>Fulfillment By BNP (004)</option>
+                    <option>Force Cancellation (005)</option>
+                    <option>Return with Pickup (006)</option>
+                    <option>SNP Collecting Payment (007)</option>
+                    <option>Minimum Order Value (008)</option>
                     <option>Offers</option>
-                    <option>Offer 0091</option>
-                    <option>Offer 0092</option>
-                    <option>Offer 0093</option>
-                    <option>Offer 0094</option>
-                    <option>Offer 0095</option>
-                    <option>Offer 0096</option>
-                    <option>Offer 0097</option>
-                    <option>Update Delivery Address 00F</option>
-                    <option>Update Sale Invoice 00E</option>
-                    <option>Update Delivery Auth 010</option>
-                    <option>Minimum Order Value 008</option>
-                    <option>Force Cancellation 005</option>
+                    <option>Offer Discount (0091)</option>
+                    <option>Offer BuyXGetY (0092)</option>
+                    <option>Offer Freebie (0093)</option>
+                    <option>Offer Slab (0094)</option>
+                    <option>Offer Combo (0095)</option>
+                    <option>Offer Delivery (0096)</option>
+                    <option>Offer Exchange (0097)</option>
+                    <option>Offer Financing (0098)</option>
+                    <option>Purchase Finance by BNP (0099)</option>
+                    <option>Commercial Model for BNP SNP (00A)</option>
+                    <option>Replacement Flow (00B)</option>
+                    <option>Exchange Flow (00C)</option>
+                    <option>Cancel Return Request (00D)</option>
+                    <option>Update Sale Invoice (00E)</option>
+                    <option>Update Delivery Address (00F)</option>
+                    <option>Update Delivery Auth (010)</option>
+                    <option>Buyer Instructions (011)</option>
+                    <option>Cash on Delivery Order (012)</option>
                   </select>
                 </td>
               </tr>
@@ -353,7 +364,13 @@
       const selectedOption = document.getElementById("feature-sets-dropdown").value;
 
       // Takes the name, splits it with blank space, wraps any upper case word with %23 (escape encoding of #) and then rejoins with underscore to form the file name
-      const fileNameFinal = selectedOption.split(' ').map((word) => word === word.toUpperCase() ? `${word.toLowerCase()}` : word.toLowerCase()).join("_") + ".md";
+      const fileNameFinal = selectedOption
+        .replace(/\s*\(|\)\s*/g, ' ') // Remove only the parentheses, keep the number
+        .trim() // Remove extra spaces
+        .split(' ')
+        .map(word => word.toLowerCase())
+        .join("_") + ".md";
+
       console.log(fileNameFinal, "fileNameFinal")
       const filePath = 'api/docs/' + fileNameFinal;
       console.log("File to Show", filePath);

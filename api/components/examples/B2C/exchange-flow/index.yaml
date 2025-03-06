@@ -47,16 +47,17 @@ on_update:
     on_update - picked:
       $ref: ./16_on_update_picked.yaml
     on_update - delivered:
-      $ref: ./17_on_update_delivered.yaml
+      $ref: ./18_on_update_delivered.yaml
 
 update:
   examples:
+    update - settlement reverse QC:
+      $ref: ./17_update_settlement.yaml
     update - reverse QC:
       $ref: ./13_update_reverse_qc.yaml
 
 on_status:
   examples:
-    # Standard Status Updates
     on_status - packed:
       $ref: ./09_on_status_packed.yaml
     on_status - agent assigned:
@@ -67,11 +68,3 @@ on_status:
       $ref: ./11_on_status_out_for_delivery.yaml
     on_status - delivered:
       $ref: ./12_on_status_delivered.yaml
-    on_status - packed (replacement):
-      $ref: ./18_on_status_packed_replacement.yaml
-    on_status - picked (replacement):
-      $ref: ./19_on_status_picked_replacement.yaml
-    on_status - out for delivery (replacement):
-      $ref: ./20_on_status_out_for_delivery_replacement.yaml
-    on_status - delivered (replacement):
-      $ref: ./21_on_status_delivered_replacement.yaml

@@ -1,13 +1,23 @@
-## Update Delivery Address - 00F
+# Update Delivery Address - 00F
 
-Delivery address, contact person, and phone number can be updated. Updated delivery address details will become a part of the order & will be available in all post-order API callbacks, i.e., `/on_status`, `/on_update`, `/on_cancel`.
+- **Update Delivery Details**:  
+  - Allows updating the delivery address, contact person, and phone number.  
+  - The updated details become part of the order and are reflected in all post-order API callbacks:  
+    - `/on_status`  
+    - `/on_update`  
+    - `/on_cancel`  
 
+---
+
+**Payload changes**
+
+### Update Delivery Address in `/update`
 ```json
 {
   "context": {
     "action": "update",
     "core_version": "1.2.5",
-    ..
+    "...": ""
   },
   "message": {
     "update_target": "fulfillment",
@@ -42,5 +52,3 @@ Delivery address, contact person, and phone number can be updated. Updated deliv
   }
 }
 ```
-
----
