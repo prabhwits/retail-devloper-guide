@@ -89186,12 +89186,14 @@ x-flows:
                 updated_at: '2024-12-27T07:36:32.230Z'
   - summary: Retail 1.2.5 (Exchange Flow)
     description: >-
-      The Exchange Flow begins with the Seller NP (SNP). During the On_Search
-      phase, providers publish available exchange offers in their catalog, which
-      buyers can view on the product listing page. Buyers can raise an exchange
-      request after receiving the item. The process is similar to the
-      return-with-pickup flow, with some modifications to the exchange request
-      (/update).
+      The exchange process starts with the Seller NP (SNP) listing exchange
+      offers, which are published by the provider and displayed to buyers on the
+      product listing page.Once the buyer receives delivery of an item eligible
+      for exchange, they can raise an exchange request. The process follows the
+      return-with-pickup flow with minor modifications in the /update request,
+      such as item condition checks and potential price adjustments. After
+      pickup and validation, the new product is dispatched, and the exchange is
+      completed upon successful delivery.
     details:
       - description: Buyer Search & Quotation
         mermaidGraph: |-
@@ -95248,12 +95250,14 @@ x-examples:
   B2C - Exchange Flow:
     summary: B2C Exchange Flow Use Case Specification
     description: >-
-      The Exchange Flow begins with the Seller NP (SNP). During the On_Search
-      phase, providers publish available exchange offers in their catalog, which
-      buyers can view on the product listing page. Buyers can raise an exchange
-      request after receiving the item. The process is similar to the
-      return-with-pickup flow, with some modifications to the exchange request
-      (/update).
+      The exchange process starts with the Seller NP (SNP) listing exchange
+      offers, which are published by the provider and displayed to buyers on the
+      product listing page.Once the buyer receives delivery of an item eligible
+      for exchange, they can raise an exchange request. The process follows the
+      return-with-pickup flow with minor modifications in the /update request,
+      such as item condition checks and potential price adjustments. After
+      pickup and validation, the new product is dispatched, and the exchange is
+      completed upon successful delivery.
     example_set:
       search:
         examples:
