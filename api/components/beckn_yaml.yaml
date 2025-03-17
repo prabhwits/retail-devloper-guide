@@ -363,86 +363,6 @@ paths:
                     $ref: '#/components/schemas/Error'
                 required:
                   - message
-  # /rating:
-  #   post:
-  #     tags:
-  #       - ONDC Seller App
-  #     description: Provide feedback on a service
-  #     requestBody:
-  #       description: Buyer rates for one or more rating categories
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                 $ref: '#/components/schemas/Context'
-  #               message:
-  #                 $ref: '#/components/schemas/Rating'
-  #             required:
-  #               - context
-  #               - message
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # # /support:
-  #   post:
-  #     tags:
-  #       - ONDC Seller App
-  #     description: Contact support
-  #     requestBody:
-  #       description: Buyer searches for Support Contact details
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                 $ref: '#/components/schemas/Context'
-  #               message:
-  #                 type: object
-  #                 properties:
-  #                   ref_id:
-  #                     type: string
-  #                     description: ID of the element for which support is needed
-  #             required:
-  #               - context
-  #               - message
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
   /on_search:
     post:
       tags:
@@ -464,8 +384,6 @@ paths:
                       $ref: '#/components/schemas/Catalog'
                   required:
                     - catalog
-                error:
-                  $ref: '#/components/schemas/Error'
               required:
                 - context
       responses:
@@ -795,453 +713,6 @@ paths:
                     $ref: '#/components/schemas/Error'
                 required:
                   - message
-  # /on_rating:
-  #   post:
-  #     tags:
-  #       - ONDC Buyer App
-  #     description: Provide feedback on a service
-  #     requestBody:
-  #       description: Seller provides response to rating provided by buyer
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                 $ref: '#/components/schemas/Context'
-  #               message:
-  #                 $ref: '#/components/schemas/RatingAck'
-  #               error:
-  #                 $ref: '#/components/schemas/Error'
-  #             required:
-  #               - context
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # # /on_support:
-  #   post:
-  #     tags:
-  #       - ONDC Buyer App
-  #     description: Contact Support
-  #     requestBody:
-  #       description: Seller provides Contact Support details
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                 $ref: '#/components/schemas/Context'
-  #               message:
-  #                 type: object
-  #                 properties:
-  #                   phone:
-  #                     type: string
-  #                     format: phone
-  #                   email:
-  #                     type: string
-  #                     format: email
-  #                   uri:
-  #                     type: string
-  #                     format: uri
-  #               error:
-  #                 $ref: '#/components/schemas/Error'
-  #             required:
-  #               - context
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # /get_cancellation_reasons:
-  #   post:
-  #     tags:
-  #       - Seller App Meta APIs
-  #     description: Get cancellation reasons from the Seller App
-  #     requestBody:
-  #       description: Context header is sent as the request
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                 $ref: '#/components/schemas/Context'
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # /cancellation_reasons:
-  #   post:
-  #     tags:
-  #       - Buyer App Meta APIs
-  #     description: Get cancellation reasons from the Seller App
-  #     requestBody:
-  #       description: List of cancellation reasons.
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                   $ref: '#/components/schemas/Context'
-  #               message:
-  #                 type: object
-  #                 properties:
-  #                   cancellation_reasons:
-  #                     type: array
-  #                     items:
-  #                         $ref: '#/components/schemas/Option'
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # /get_return_reasons:
-  #   post:
-  #     tags:
-  #       - Seller App Meta APIs
-  #     description: Get return reasons from the Seller App
-  #     requestBody:
-  #       description: Context header is sent as the request
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                 $ref: '#/components/schemas/Context'
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # /return_reasons:
-  #   post:
-  #     tags:
-  #       - Buyer App Meta APIs
-  #     description: Get return reasons from the Seller App
-  #     requestBody:
-  #       description: List of return reasons
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                   $ref: '#/components/schemas/Context'
-  #               return_reasons:
-  #                 type: array
-  #                 items:
-  #                     $ref: '#/components/schemas/Option'
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # /get_rating_categories:
-  #   post:
-  #     tags:
-  #       - Seller App Meta APIs
-  #     description: Get a list of categories that can be rated by the Seller App
-  #     requestBody:
-  #       description: Context header is sent as the request
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                   $ref: '#/components/schemas/Context'
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # /rating_categories:
-  #   post:
-  #     tags:
-  #       - Buyer App Meta APIs
-  #     description: Get a list of categories that can be rated by the Buyer App
-  #     requestBody:
-  #       description: Array of categories which can be rated
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                   $ref: '#/components/schemas/Context'
-  #               rating_categories:
-  #                   type: array
-  #                   items:
-  #                     $ref: '#/components/schemas/Rating/properties/rating_category'
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # /get_feedback_categories:
-  #   post:
-  #     tags:
-  #       - Seller Meta APIs
-  #     description: Get a list of categories for which feedback can be given by the Buyer App
-  #     requestBody:
-  #       description: Context header is sent as the request
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                   $ref: '#/components/schemas/Context'
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # /feedback_categories:
-  #   post:
-  #     tags:
-  #       - Buyer App Meta APIs
-  #     description: Get a list of categories for which feedback can be given by the Buyer App
-  #     requestBody:
-  #       description: Array of categories for which feedback can be given by the Buyer App
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                   $ref: '#/components/schemas/Context'
-  #               feedback_categories:
-  #                 type: array
-  #                 items:
-  #                   $ref: '#/components/schemas/Rating/properties/rating_category'
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # /get_feedback_form:
-  #   post:
-  #     tags:
-  #       - Seller App Meta APIs
-  #     description: Request a feedback form from the Seller App
-  #     requestBody:
-  #       description: The rating value and category is sent by the Buyer App
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                 $ref: '#/components/schemas/Context'
-  #               message:
-  #                 type: object
-  #                 properties:
-  #                   rating_value:
-  #                     $ref: '#/components/schemas/Rating/properties/value'
-  #                   rating_category:
-  #                     $ref: '#/components/schemas/Rating/properties/rating_category'
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-  # /feedback_form:
-  #   post:
-  #     tags:
-  #       - Buyer App Meta APIs
-  #     description: Get a feedback form from the Seller App
-  #     requestBody:
-  #       description: Feedback form sent by the Buyer App
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               context:
-  #                 $ref: '#/components/schemas/Context'
-  #               message:
-  #                   $ref: '#/components/schemas/Feedback'
-  #     responses:
-  #       '200':
-  #         description: Acknowledgement of message received
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: object
-  #                   properties:
-  #                     ack:
-  #                       $ref: '#/components/schemas/Ack'
-  #                   required:
-  #                     - ack
-  #                 error:
-  #                   $ref: '#/components/schemas/Error'
-  #               required:
-  #                 - message
-
 components:
   securitySchemes:
     SubscriberAuth:
@@ -1277,24 +748,10 @@ components:
             $ref: '#/components/schemas/TagGroup'
       required:
         - status
-    AddOn:
-      description: Describes an add-on
-      type: object
-      properties:
-        id:
-          type: string
-          description: 'ID of the add-on. This follows the syntax {item.id}/add-on/{add-on unique id} for item specific add-on OR '
-        descriptor:
-          $ref: '#/components/schemas/Descriptor'
-        price:
-          $ref: '#/components/schemas/Price'
     Address:
       description: Describes an address
       type: object
       properties:
-        door:
-          type: string
-          description: Door / Shop number of the address
         name:
           type: string
           description: 'Name of address if applicable. Example, shop name'
@@ -1307,9 +764,6 @@ components:
         locality:
           type: string
           description: 'Name of the locality, apartments'
-        ward:
-          type: string
-          description: Name or number of the ward if applicable
         city:
           type: string
           description: City name
@@ -1325,12 +779,7 @@ components:
     Agent:
       description: Describes an order executor
       allOf:
-        - $ref: '#/components/schemas/Person'
         - $ref: '#/components/schemas/Contact'
-        - type: object
-          properties:
-            rateable:
-              $ref: '#/components/schemas/Rateable'
     Authorization:
       description: Describes an authorization mechanism
       type: object
@@ -1359,19 +808,12 @@ components:
         name:
           description: Personal details of the customer needed for billing.
           type: string
-        organization:
-          $ref: '#/components/schemas/Organization'
         address:
           $ref: '#/components/schemas/Address'
         email:
           type: string
           format: email
         phone:
-          type: string
-        time:
-          $ref: '#/components/schemas/Time'
-        tax_number:
-          description: GST number
           type: string
         created_at:
           type: string
@@ -1412,58 +854,12 @@ components:
       description: Describes the cancellation terms of an item or an order. This can be referenced at an item or order level. Item-level cancellation terms can override the terms at the order level.
       type: object
       properties:
-        reason_required:
-          description: Indicates whether a reason is required to cancel the order
-          type: boolean
-        refund_eligible:
-          description: Indicates if cancellation will result in a refund
-          type: boolean
-        return_eligible:
-          description: Indicates if cancellation will result in a return to origin
-          type: boolean
         fulfillment_state:
           description: The state of fulfillment during which these terms are applicable.
           allOf:
             - $ref: '#/components/schemas/State'
-        return_policy:
-          description: Describes the return policy of an item or an order
-          type: object
-          properties:
-            return_eligible:
-              description: Indicates whether the item is eligible for return
-              type: boolean
-            return_within:
-              description: 'Applicable only for buyer managed returns where the buyer has to return the item to the origin before a certain date-time, failing which they will not be eligible for refund.'
-              allOf:
-                - $ref: '#/components/schemas/Time'
-            return_location:
-              $ref: '#/components/schemas/Location'
-            fulfillment_managed_by:
-              enum:
-                - customer
-                - provider
-        refund_policy:
-          type: object
-          properties:
-            refund_eligible:
-              description: Indicates if cancellation will result in a refund
-              type: boolean
-            refund_within:
-              description: Time within which refund will be processed after successful cancellation.
-              allOf:
-                - $ref: '#/components/schemas/Time'
-            refund_amount:
-              $ref: '#/components/schemas/Price'
-        cancel_by:
-          description: Information related to the time of cancellation.
-          allOf:
-            - $ref: '#/components/schemas/Time'
         cancellation_fee:
           $ref: '#/components/schemas/Fee'
-        xinput_required:
-          $ref: '#/components/schemas/XInput'
-        xinput_response:
-          $ref: '#/components/schemas/XInputResponse'
         external_ref:
           $ref: '#/components/schemas/MediaFile'
     Catalog:
@@ -1472,30 +868,14 @@ components:
       properties:
         bpp/descriptor:
           $ref: '#/components/schemas/Descriptor'
-        bpp/categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-        bpp/fulfillments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Fulfillment'
-        bpp/payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payment'
-        bpp/offers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Offer'
         bpp/providers:
           type: array
           items:
             $ref: '#/components/schemas/Provider'
-        exp:
-          type: string
-          description: Time after which catalog has to be refreshed
-          format: date-time
+        bpp/fulfillments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fulfillment'
     Category:
       description: Describes a category
       type: object
@@ -1540,8 +920,6 @@ components:
           type: string
         email:
           type: string
-        tags:
-          $ref: '#/components/schemas/TagGroup'
     Context:
       description: Describes a ONDC message context
       type: object
@@ -1564,8 +942,6 @@ components:
             - status
             - track
             - cancel
-            - rating
-            - support
             - on_search
             - on_select
             - on_init
@@ -1574,8 +950,6 @@ components:
             - on_status
             - on_track
             - on_cancel
-            - on_rating
-            - on_support
         core_version:
           type: string
           description: Version of ONDC core API specification being used
@@ -1673,12 +1047,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Image'
-        audio:
-          type: string
-          format: uri
-        3d_render:
-          type: string
-          format: uri
+        tags:
+          $ref: '#/components/schemas/TagGroup'
     Dimensions:
       description: Describes the dimensions of a real-world object
       type: object
@@ -1702,7 +1072,15 @@ components:
       description: Codification of domain for ONDC
       type: string
       enum:
-        - nic2004:52110
+        - ONDC:RET10
+        - ONDC:RET11
+        - ONDC:RET12
+        - ONDC:RET13
+        - ONDC:RET14
+        - ONDC:RET15
+        - ONDC:RET16
+        - ONDC:RET18
+        - ONDC:RET19
     Duration:
       description: Describes duration as per ISO8601 format
       type: string
@@ -1846,21 +1224,6 @@ components:
           type: boolean
           description: Indicates whether the fulfillment allows tracking
           default: false
-        customer:
-          type: object
-          properties:
-            person:
-              $ref: '#/components/schemas/Person'
-            contact:
-              $ref: '#/components/schemas/Contact'
-        agent:
-          $ref: '#/components/schemas/Agent'
-        person:
-          $ref: '#/components/schemas/Person'
-        contact:
-          $ref: '#/components/schemas/Contact'
-        vehicle:
-          $ref: '#/components/schemas/Vehicle'
         start:
           description: Details on the start of fulfillment
           type: object
@@ -2092,9 +1455,6 @@ components:
             manufacturer_or_packer_address:
               description: address of manufacturer or packer (for non-retail containers)
               type: string
-            brand_owner_name:
-              description: name of brand owner
-              type: string
             brand_owner_address:
               description: address of brand owner
               type: string
@@ -2154,8 +1514,6 @@ components:
           $ref: '#/components/schemas/Gps'
         address:
           $ref: '#/components/schemas/Address'
-        station_code:
-          type: string
         city:
           $ref: '#/components/schemas/City'
         country:
@@ -2163,8 +1521,6 @@ components:
         circle:
           $ref: '#/components/schemas/Circle'
         polygon:
-          type: string
-        3dspace:
           type: string
         time:
           $ref: '#/components/schemas/Time'
@@ -2227,7 +1583,6 @@ components:
                   type: string
                 unit:
                   type: string
-
     Option:
       description: Describes a selectable option
       type: object
@@ -2262,13 +1617,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Item'
-        add_ons:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                $ref: '#/components/schemas/AddOn/properties/id'
         offers:
           type: array
           items:
@@ -2367,13 +1715,6 @@ components:
           enum:
             - BAP
             - BPP
-        "@ondc/org/collected_by_status":
-          type: string
-          enum:
-            - Assert
-            - Agree
-            - Disagree
-            - Terminate
         "@ondc/org/buyer_app_finder_fee_type":
           type: string
           enum:
@@ -2383,23 +1724,9 @@ components:
           $ref: '#/components/schemas/DecimalValue'
         "@ondc/org/withholding_amount":
           $ref: '#/components/schemas/DecimalValue'
-        "@ondc/org/withholding_amount_status":
-          type: string
-          enum:
-            - Assert
-            - Agree
-            - Disagree
-            - Terminate
         "@ondc/org/return_window":
           description: return window for withholding amount in ISO8601 durations format e.g. 'PT24H' indicates 24 hour return window
           type: string
-        "@ondc/org/return_window_status":
-          type: string
-          enum:
-            - Assert
-            - Agree
-            - Disagree
-            - Terminate
         "@ondc/org/settlement_basis":
           description: In case of prepaid payment, whether settlement between counterparties should be on the basis of collection, shipment or delivery
           type: string
@@ -2407,23 +1734,9 @@ components:
             - shipment
             - delivery
             - return_window_expiry
-        "@ondc/org/settlement_basis_status":
-          type: string
-          enum:
-            - Assert
-            - Agree
-            - Disagree
-            - Terminate
         "@ondc/org/settlement_window":
           description: settlement window for the counterparty in ISO8601 durations format e.g. 'PT48H' indicates 48 hour return window
           type: string
-        "@ondc/org/settlement_window_status":
-          type: string
-          enum:
-            - Assert
-            - Agree
-            - Disagree
-            - Terminate
         "@ondc/org/settlement_details":
           type: array
           items:
@@ -2450,7 +1763,6 @@ components:
                   - neft
                   - rtgs
                   - upi
-                  - credit
               settlement_bank_account_no:
                 type: string
               settlement_ifsc_code:
@@ -2475,9 +1787,6 @@ components:
                 enum:
                   - PAID
                   - NOT-PAID
-              settlement_reference:
-                description: Settlement transaction reference number
-                type: string
               settlement_timestamp:
                 description: Settlement transaction timestamp
                 type: string
@@ -2488,16 +1797,6 @@ components:
       properties:
         name:
           $ref: '#/components/schemas/Name'
-        image:
-          $ref: '#/components/schemas/Image'
-        dob:
-          type: string
-          format: date
-        gender:
-          type: string
-          description: 'Gender of something, typically a Person, but possibly also fictional characters, animals, etc. While Male and Female may be used, text strings are also acceptable for people who do not identify as a binary gender'
-        tags:
-          $ref: '#/components/schemas/TagGroup'
     Policy:
       description: Describes a policy. Allows for domain extension.
       type: object
@@ -2518,18 +1817,6 @@ components:
           type: string
           description: ISO 4217 alphabetic currency code e.g. 'INR'
         value:
-          $ref: '#/components/schemas/DecimalValue'
-        estimated_value:
-          $ref: '#/components/schemas/DecimalValue'
-        computed_value:
-          $ref: '#/components/schemas/DecimalValue'
-        listed_value:
-          $ref: '#/components/schemas/DecimalValue'
-        offered_value:
-          $ref: '#/components/schemas/DecimalValue'
-        minimum_value:
-          $ref: '#/components/schemas/DecimalValue'
-        maximum_value:
           $ref: '#/components/schemas/DecimalValue'
         tags:
           $ref: '#/components/schemas/TagGroup'
@@ -2564,10 +1851,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Fulfillment'
-        payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payment'
         locations:
           type: array
           items:
@@ -2588,10 +1871,6 @@ components:
         ttl:
           type: string
           description: Validity of catalog in ISO8601 durations format after which it has to be refreshed e.g. 'P7D' indicates validity of 7 days; value of 0 indicates catalog is not cacheable
-        exp:
-          type: string
-          description: Time after which catalog has to be refreshed
-          format: date-time
         rateable:
           $ref: '#/components/schemas/Rateable'
         tags:
@@ -2635,30 +1914,11 @@ components:
       description: Describes the rating of a person or an object.
       type: object
       properties:
-        rating_category:
-          description: Category of the object being rated
-          type: string
-        id:
-          description: Id of the object being rated
-          type: string
         value:
           description: Rating value given to the object (1 - Poor; 2 - Needs improvement; 3 - Satisfactory; 4 - Good; 5 - Excellent)
           type: number
           minimum: 1
           maximum: 5
-        feedback_form:
-          $ref: '#/components/schemas/FeedbackForm'
-        feedback_id:
-          $ref: '#/components/schemas/FeedbackUrl/properties/params/properties/feedback_id'
-    RatingAck:
-      type: object
-      properties:
-        feedback_ack:
-          description: If feedback has been recorded or not
-          type: boolean
-        rating_ack:
-          description: If rating has been recorded or not
-          type: boolean
     Scalar:
       description: An object representing a scalar quantity.
       type: object
@@ -2788,17 +2048,10 @@ components:
         value:
           description: The value of the tag. This set by the BPP and rendered as-is by the BAP.
           type: string
-        display:
-          description: 'This value indicates if the tag is intended for display purposes. If set to `true`, then this tag must be displayed. If it is set to `false`, it should not be displayed. This value can override the group display value.'
-          type: boolean
     TagGroup:
       description: 'A collection of tag objects with group level attributes. For detailed documentation on the Tags and Tag Groups schema go to https://github.com/beckn/protocol-specifications/discussions/316'
       type: object
       properties:
-        display:
-          description: 'Indicates the display properties of the tag group. If display is set to false, then the group will not be displayed. If it is set to true, it should be displayed. However, group-level display properties can be overriden by individual tag-level display property. As this schema is purely for catalog display purposes, it is not recommended to send this value during search.'
-          type: boolean
-          default: true
         code:
           description: 'The machine-readable name of the tag group. The allowed values of this property can be published at three levels namely, a) Core specification, b) industry sector-specific adaptations, and c) Network-specific adaptations. Except core, each adaptation (sector or network) should prefix a unique namespace with the allowed value. Values outside the allowed values may or may not be ignored by the rendering platform. As this schema is purely for catalog display purposes, it is not recommended to send this value during search.'
           type: string
@@ -2819,8 +2072,6 @@ components:
         timestamp:
           type: string
           format: date-time
-        duration:
-          $ref: '#/components/schemas/Duration'
         range:
           type: object
           properties:
@@ -2862,37 +2113,5 @@ components:
       description: Describes the properties of a vehicle used in a mobility service
       type: object
       properties:
-        category:
-          type: string
-        capacity:
-          type: integer
-        make:
-          type: string
-        model:
-          type: string
-        size:
-          type: string
-        variant:
-          type: string
-        color:
-          type: string
-        energy_type:
-          type: string
         registration:
           type: string
-    XInput:
-      description: 'Contains any additional or extended inputs required to confirm an order. This is typically a Form Input. Sometimes, selection of catalog elements is not enough for the BPP to confirm an order. For example, to confirm a flight ticket, the airline requires details of the passengers along with information on baggage, identity, in addition to the class of ticket. Similarly, a logistics company may require details on the nature of shipment in order to confirm the shipping. A recruiting firm may require additional details on the applicant in order to confirm a job application. For all such purposes, the BPP can choose to send this object attached to any object in the catalog that is required to be sent while placing the order. This object can typically be sent at an item level or at the order level. The item level XInput will override the Order level XInput as it indicates a special requirement of information for that particular item. Hence the BAP must render a separate form for the Item and another form at the Order level before confirmation.'
-      allOf:
-        - $ref: '#/components/schemas/Form'
-    XInputResponse:
-      description: The response to the form fetched via the XInput URL
-      type: array
-      items:
-        type: object
-        properties:
-          input:
-            description: The _name_ attribute of the input tag in the XInput form
-            type: string
-          value:
-            description: 'The value of the input field. Files must be sent as data URLs. For more information on Data URLs visit https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs'
-            type: string
