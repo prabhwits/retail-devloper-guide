@@ -71,7 +71,58 @@ paths:
                   type: object
                   properties:
                     order:
-                      $ref: '#/components/schemas/Order'
+                      description: Describes the details of an order
+                      type: object
+                      properties:
+                        provider:
+                          type: object
+                          properties:
+                            id:
+                              $ref: '#/components/schemas/Provider/properties/id'
+                            locations:
+                              type: array
+                              maxItems: 1
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    $ref: >-
+                                      #/components/schemas/Location/properties/id
+                        items:
+                          type: array
+                          items:
+                            description: >-
+                              Describes a product or a service offered to the
+                              end consumer by the provider
+                            type: object
+                            properties:
+                              id:
+                                description: >-
+                                  This is the most unique identifier of a
+                                  service item. An example of an Item ID could
+                                  be the SKU of a product.
+                                type: string
+                              quantity:
+                                count:
+                                  type: integer
+                                  minimum: 0
+                                measure:
+                                  $ref: '#/components/schemas/Scalar'
+                              location_id:
+                                $ref: '#/components/schemas/Location/properties/id'
+                              tags:
+                                $ref: '#/components/schemas/TagGroup'
+                        offers:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                $ref: '#/components/schemas/Offer/properties/id'
+                        fulfillments:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Fulfillment'
                   required:
                     - order
               required:
@@ -156,8 +207,68 @@ paths:
                 message:
                   type: object
                   properties:
+                    properties: null
                     order:
-                      $ref: '#/components/schemas/Order'
+                      description: Describes the details of an order
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier for Order across the network
+                        state:
+                          type: string
+                        provider:
+                          type: object
+                          properties:
+                            id:
+                              $ref: '#/components/schemas/Provider/properties/id'
+                            locations:
+                              type: array
+                              maxItems: 1
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    $ref: >-
+                                      #/components/schemas/Location/properties/id
+                        items:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Item'
+                        offers:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                $ref: '#/components/schemas/Offer/properties/id'
+                        documents:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Document'
+                        billing:
+                          $ref: '#/components/schemas/Billing'
+                        fulfillments:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Fulfillment'
+                        cancellation_terms:
+                          description: >-
+                            The cancellation terms of this order. This can be
+                            overriden at the item level cancellation terms.
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/CancellationTerm'
+                        quote:
+                          $ref: '#/components/schemas/Quotation'
+                        payment:
+                          $ref: '#/components/schemas/Payment'
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
                   required:
                     - order
               required:
@@ -385,12 +496,11 @@ paths:
                 message:
                   type: object
                   properties:
-                    catalog:
+                    intent:
                       $ref: '#/components/schemas/Catalog'
-                  required:
-                    - catalog
               required:
                 - context
+                - message
       responses:
         '200':
           description: Acknowledgement of message received
@@ -1393,14 +1503,6 @@ components:
       description: Describes count or amount of an item
       type: object
       properties:
-        allocated:
-          type: object
-          properties:
-            count:
-              type: integer
-              minimum: 0
-            measure:
-              $ref: '#/components/schemas/Scalar'
         available:
           type: object
           properties:
@@ -1415,14 +1517,6 @@ components:
             count:
               type: integer
               minimum: 1
-            measure:
-              $ref: '#/components/schemas/Scalar'
-        minimum:
-          type: object
-          properties:
-            count:
-              type: integer
-              minimum: 0
             measure:
               $ref: '#/components/schemas/Scalar'
         selected:
@@ -1900,6 +1994,8 @@ components:
             settlement window for the counterparty in ISO8601 durations format
             e.g. 'PT48H' indicates 48 hour return window
           type: string
+        tags:
+          $ref: '#/components/schemas/TagGroup'
         '@ondc/org/settlement_details':
           type: array
           items:
@@ -95007,7 +95103,3587 @@ x-examples:
           on_status - out for delivery: *ref_382
           on_status - delivered: *ref_383
 x-attributes:
-  B2C: null
+  B2C:
+    attribute_set:
+      search_full_catalog:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: search
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:022
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 169c2fd2-d34a-4757-a80c-c7d3131f2c20
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-19T07:09:08.876Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          intent:
+            parent: true
+            fulfillment:
+              parent: true
+              type:
+                description: Specifies fulfillment type for search.
+                required: optional
+                usage: Delivery
+                reference: if any
+            payment:
+              parent: true
+              '@ondc/org/buyer_app_finder_fee_type':
+                description: Buyer NP finder fee type.
+                required: required
+                usage: percent
+                reference: if any
+              '@ondc/org/buyer_app_finder_fee_amount':
+                description: Buyer NP finder fee amount.
+                required: required
+                usage: '3'
+                reference: if any
+      search_incremental:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: search
+            reference: if any
+          country:
+            description: Country code for identifying the country of operation.
+            required: required
+            usage: IND
+            reference: if any
+          core_version:
+            description: API core version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 169c2fd2-d34a-4757-a80c-c7d3131f2c20
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-10T06:22:12.094Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+          city:
+            description: City code for search identifying seller locations.
+            required: required
+            usage: std:022
+            reference: if any
+        message:
+          parent: true
+          intent:
+            parent: true
+            payment:
+              parent: true
+              '@ondc/org/buyer_app_finder_fee_type':
+                description: Buyer NP finder fee type.
+                required: required
+                usage: percent
+                reference: if any
+              '@ondc/org/buyer_app_finder_fee_amount':
+                description: Buyer NP finder fee amount.
+                required: required
+                usage: '3'
+                reference: if any
+            tags:
+              - code:
+                  description: Tag to indicate catalog increment mode.
+                  required: required
+                  usage: catalog_inc
+                  reference: if any
+                list:
+                  - code:
+                      description: Tag code representing the specific mode.
+                      required: required
+                      usage: mode
+                      reference: if any
+                    value:
+                      description: Tag value indicating the start of incremental search.
+                      required: required
+                      usage: start
+                      reference: if any
+      on_search_full_catalog:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: >-
+              updated domain namespace is
+              https://docs.google.com/document/d/1brvcltG_DagZ3kGr1ZZQk4hG4tze3zvcxmGV4NMTzr8/edit#heading=h.w9zlp87xdha1
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: API action type
+            required: required
+            usage: on_search
+            reference: if any
+          country:
+            description: country code
+            required: required
+            usage: IND
+            reference: if any
+          core_version:
+            description: ONDC core version
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: buyer app ID
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: buyer app URI
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          transaction_id:
+            description: unique transaction ID
+            required: required
+            usage: 169c2fd2-d34a-4757-a80c-c7d3131f2c20
+            reference: if any
+          message_id:
+            description: unique message ID
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: timestamp for request
+            required: required
+            usage: '2025-01-14T18:30:01.247Z'
+            reference: if any
+          bpp_id:
+            description: seller app ID
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          ttl:
+            description: time-to-live for request
+            required: required
+            usage: PT30S
+            reference: if any
+          city:
+            description: city code
+            required: required
+            usage: std:022
+            reference: if any
+        message:
+          parent: true
+          catalog:
+            parent: true
+            bpp/descriptor:
+              parent: true
+              descriptor:
+                description: descriptor for seller NP
+                required: required
+                usage: Seller NP
+                reference: if any
+              symbol:
+                description: logo or image for seller NP
+                required: required
+                usage: https://sellerNP.com/images/np.png
+                reference: if any
+            bpp/providers:
+              parent: true
+              id:
+                description: unique id for provider
+                required: required
+                usage: '1'
+                reference: if any
+              time:
+                label:
+                  description: enum - "enable" (default), "disable"
+                  required: required
+                  usage: enable
+                  reference: if any
+                timestamp:
+                  description: timestamp when the snapshot for this provider was generated
+                  required: required
+                  usage: '2025-01-13T09:48:10.825Z'
+                  reference: if any
+              fulfillments:
+                description: provider level fulfillment options
+                required: required
+                usage: '-'
+                reference: if any
+              contact:
+                description: contact details for merchant
+                required: required
+                usage: '-'
+                reference: if any
+              phone:
+                description: valid 10 digit phone number
+                required: required
+                usage: '9594663710'
+                reference: if any
+              email:
+                description: email ID of merchant
+                required: required
+                usage: 15@wfstore.in
+                reference: if any
+              ttl:
+                description: ISO8601 duration format for validity of provider catalog
+                required: required
+                usage: P1D
+                reference: if any
+              locations:
+                description: provider locations
+                required: required
+                usage: L1
+                reference: if any
+                time:
+                  label:
+                    description: enum - "enable", "disable"
+                    required: required
+                    usage: enable
+                    reference: if any
+                  timestamp:
+                    description: timestamp for location event
+                    required: required
+                    usage: '2025-01-13T09:48:10.825Z'
+                    reference: if any
+              address:
+                street:
+                  description: street address
+                  required: required
+                  usage: 1 & 2,AMAR JYOTI CHS.BLDG.,OPP.NAND KRIPA HALL
+                  reference: if any
+                locality:
+                  description: locality name
+                  required: required
+                  usage: ANDHERI FOUR BUNGLOW AMAR JYOTI CHS
+                  reference: if any
+                city:
+                  description: city name
+                  required: required
+                  usage: Mumbai
+                  reference: if any
+                state:
+                  description: state name
+                  required: required
+                  usage: Maharashtra
+                  reference: if any
+                area_code:
+                  description: area code
+                  required: required
+                  usage: '400053'
+                  reference: if any
+              items:
+                descriptor:
+                  name:
+                    description: item name
+                    required: required
+                    usage: Plain Atta
+                    reference: if any
+                  code:
+                    description: unique code for item
+                    required: required
+                    usage: 1:XXXXXXXXXXXXX
+                    reference: if any
+                  symbol:
+                    description: item image URL
+                    required: required
+                    usage: https://sellerNP.com/images/i1.png
+                    reference: if any
+                price:
+                  currency:
+                    description: currency type
+                    required: required
+                    usage: INR
+                    reference: if any
+                  value:
+                    description: item price
+                    required: required
+                    usage: '100'
+                    reference: if any
+                category_id:
+                  description: category enum reference
+                  required: required
+                  usage: Foodgrains
+                  reference: if any
+      on_search_incremental:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: >-
+              updated domain namespace is
+              https://docs.google.com/document/d/1brvcltG_DagZ3kGr1ZZQk4hG4tze3zvcxmGV4NMTzr8/edit#heading=h.w9zlp87xdha1
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: API action type
+            required: required
+            usage: on_search
+            reference: if any
+          country:
+            description: country code
+            required: required
+            usage: IND
+            reference: if any
+          core_version:
+            description: ONDC core version
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: buyer app ID
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: buyer app URI
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          transaction_id:
+            description: unique transaction ID
+            required: required
+            usage: 169c2fd2-d34a-4757-a80c-c7d3131f2c20
+            reference: if any
+          message_id:
+            description: unique message ID
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: timestamp for request
+            required: required
+            usage: '2024-12-10T06:24:32.623Z'
+            reference: if any
+          bpp_id:
+            description: seller app ID
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          ttl:
+            description: time-to-live for request
+            required: required
+            usage: PT30S
+            reference: if any
+          city:
+            description: city code
+            required: required
+            usage: std:022
+            reference: if any
+        message:
+          parent: true
+          catalog:
+            parent: true
+            bpp/providers:
+              parent: true
+              id:
+                description: unique id for provider
+                required: required
+                usage: L1
+                reference: if any
+              items:
+                descriptor:
+                  name:
+                    description: item name
+                    required: required
+                    usage: Plain Atta
+                    reference: if any
+                  code:
+                    description: unique code for item
+                    required: required
+                    usage: 1:XXXXXXXXXXXXX
+                    reference: if any
+                  symbol:
+                    description: item image URL
+                    required: required
+                    usage: https://sellerNP.com/images/i1.png
+                    reference: if any
+                  short_desc:
+                    description: short description
+                    required: required
+                    usage: Plain Atta
+                    reference: if any
+                  long_desc:
+                    description: long description
+                    required: required
+                    usage: Plain Atta
+                    reference: if any
+                  images:
+                    description: image URL list
+                    required: required
+                    usage: https://sellerNP.com/images/i1.png
+                    reference: if any
+                price:
+                  currency:
+                    description: currency type
+                    required: required
+                    usage: INR
+                    reference: if any
+                  value:
+                    description: item price
+                    required: required
+                    usage: '100'
+                    reference: if any
+                  maximum_value:
+                    description: maximum price
+                    required: required
+                    usage: '100'
+                    reference: if any
+                quantity:
+                  unitized:
+                    measure:
+                      unit:
+                        description: unit of measure
+                        required: required
+                        usage: kilogram
+                        reference: if any
+                      value:
+                        description: measure value
+                        required: required
+                        usage: 3
+                        reference: if any
+                  available:
+                    count:
+                      description: available count
+                      required: required
+                      usage: 99
+                      reference: if any
+                  maximum:
+                    count:
+                      description: maximum count
+                      required: required
+                      usage: 99
+                      reference: if any
+                category_id:
+                  description: category enum reference
+                  required: required
+                  usage: Foodgrains
+                  reference: if any
+                fulfillment_id:
+                  description: fulfillment ID
+                  required: required
+                  usage: F1
+                  reference: if any
+                location_id:
+                  description: location ID
+                  required: required
+                  usage: L1
+                  reference: if any
+                '@ondc/org/returnable':
+                  description: returnable flag
+                  required: required
+                  usage: true
+                  reference: if any
+                '@ondc/org/cancellable':
+                  description: cancellable flag
+                  required: required
+                  usage: true
+                  reference: if any
+                '@ondc/org/return_window':
+                  description: return window duration
+                  required: required
+                  usage: P7D
+                  reference: if any
+                '@ondc/org/seller_pickup_return':
+                  description: seller pickup return flag
+                  required: required
+                  usage: false
+                  reference: if any
+                '@ondc/org/time_to_ship':
+                  description: shipping time
+                  required: required
+                  usage: PT5M
+                  reference: if any
+                '@ondc/org/available_on_cod':
+                  description: cash on delivery available
+                  required: required
+                  usage: false
+                  reference: if any
+                '@ondc/org/contact_details_consumer_care':
+                  description: consumer care contact details
+                  required: required
+                  usage: Ramesh,ramesh@abc.com,18004254444
+                  reference: if any
+                time:
+                  label:
+                    description: enum - "enable", "disable"
+                    required: required
+                    usage: enable
+                    reference: if any
+                  timestamp:
+                    description: timestamp
+                    required: required
+                    usage: '2024-12-10T06:24:32.623Z'
+                    reference: if any
+                tags:
+                  - code:
+                      description: tag code
+                      required: required
+                      usage: origin
+                      reference: if any
+                    list:
+                      - code:
+                          description: list code
+                          required: required
+                          usage: country
+                          reference: if any
+                        value:
+                          description: list value
+                          required: required
+                          usage: IND
+                          reference: if any
+                id:
+                  description: unique item ID
+                  required: required
+                  usage: P1
+                  reference: if any
+      select:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: select
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:080
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          bpp_uri:
+            description: Subscriber URI for the seller app.
+            required: required
+            usage: https://sellerNP.com/ondc
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M2
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-23T06:58:34.035Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: P1
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: L1
+                      reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: P1
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  location_id:
+                    description: Location identifier for item fulfillment.
+                    required: required
+                    usage: L1
+                    reference: if any
+            fulfillments:
+              parent: true
+              list:
+                - end:
+                    parent: true
+                    location:
+                      parent: true
+                      gps:
+                        description: GPS coordinates for fulfillment location.
+                        required: required
+                        usage: 13.077430,77.591444
+                        reference: if any
+                      address:
+                        parent: true
+                        area_code:
+                          description: Postal code for fulfillment location.
+                          required: required
+                          usage: '560065'
+                          reference: if any
+      on_select:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_select
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:080
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          bpp_uri:
+            description: Subscriber URI for the seller app.
+            required: required
+            usage: https://sellerNP.com/ondc
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M3
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-23T06:58:35.754Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: P1
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: L1
+                      reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: P1
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  location_id:
+                    description: Location identifier for item fulfillment.
+                    required: required
+                    usage: L1
+                    reference: if any
+            fulfillments:
+              parent: true
+              list:
+                - id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: F1
+                    reference: if any
+                  type:
+                    description: Type of fulfillment.
+                    required: required
+                    usage: Delivery
+                    reference: if any
+                  '@ondc/org/provider_name':
+                    description: Name of the logistics provider.
+                    required: required
+                    usage: LSP or Provider Name
+                    reference: if any
+                  tracking:
+                    description: Indicates whether tracking is enabled.
+                    required: required
+                    usage: true
+                    reference: if any
+                  '@ondc/org/category':
+                    description: Category of the fulfillment.
+                    required: required
+                    usage: Immediate Delivery
+                    reference: if any
+                  '@ondc/org/TAT':
+                    description: Turnaround time for delivery.
+                    required: required
+                    usage: PT60M
+                    reference: if any
+                  end:
+                    parent: true
+                    location:
+                      parent: true
+                      gps:
+                        description: GPS coordinates for fulfillment location.
+                        required: required
+                        usage: 13.077430,77.591444
+                        reference: if any
+                      address:
+                        parent: true
+                        area_code:
+                          description: Postal code for fulfillment location.
+                          required: required
+                          usage: '560065'
+                          reference: if any
+            quote:
+              parent: true
+              price:
+                parent: true
+                value:
+                  description: Total price value.
+                  required: required
+                  usage: '100.00'
+                  reference: if any
+                currency:
+                  description: Currency type.
+                  required: required
+                  usage: INR
+                  reference: if any
+              breakup:
+                parent: true
+                list:
+                  - '@ondc/org/item_id': P1
+                    '@ondc/org/item_quantity':
+                      count:
+                        description: Count of the item.
+                        required: required
+                        usage: 1
+                        reference: if any
+                    title:
+                      description: Name of the item.
+                      required: required
+                      usage: Plain Atta
+                      reference: if any
+                    '@ondc/org/title_type':
+                      description: Type of the title.
+                      required: required
+                      usage: item
+                      reference: if any
+                    price:
+                      currency: INR
+                      value: '100.00'
+                  - '@ondc/org/item_id': P1
+                    title:
+                      description: Delivery charges title.
+                      required: required
+                      usage: Delivery charges
+                      reference: if any
+                    '@ondc/org/title_type':
+                      description: Type of title.
+                      required: required
+                      usage: delivery
+                      reference: if any
+                    price:
+                      currency: INR
+                      value: '00.00'
+                  - '@ondc/org/item_id': P1
+                    title:
+                      description: Convenience Fee title.
+                      required: required
+                      usage: Convenience Fee
+                      reference: if any
+                    '@ondc/org/title_type':
+                      description: Type of title.
+                      required: required
+                      usage: misc
+                      reference: if any
+                    price:
+                      currency: INR
+                      value: '00.00'
+              ttl:
+                description: Quote validity period.
+                required: required
+                usage: P1D
+                reference: if any
+      init:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: init
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:022
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-23T07:01:43.145Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: '1'
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: L1
+                      reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: P1
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  location_id:
+                    description: Location identifier for item fulfillment.
+                    required: required
+                    usage: L1
+                    reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: F1
+                    reference: if any
+            billing:
+              parent: true
+              address:
+                parent: true
+                building:
+                  description: Building name or house number.
+                  required: required
+                  usage: my building name or house
+                  reference: if any
+                city:
+                  description: City name.
+                  required: required
+                  usage: Mumbai
+                  reference: if any
+                state:
+                  description: State name.
+                  required: required
+                  usage: Maharashtra
+                  reference: if any
+                country:
+                  description: Country code.
+                  required: required
+                  usage: IND
+                  reference: if any
+                area_code:
+                  description: Postal code.
+                  required: required
+                  usage: '400053'
+                  reference: if any
+                locality:
+                  description: Street name.
+                  required: required
+                  usage: my street name
+                  reference: if any
+                name:
+                  description: House or floor name.
+                  required: required
+                  usage: my house or door or floor
+                  reference: if any
+              phone:
+                description: Contact number.
+                required: required
+                usage: '9898989898'
+                reference: if any
+              name:
+                description: Name of the buyer.
+                required: required
+                usage: ONDC buyer
+                reference: if any
+              email:
+                description: Contact email.
+                required: required
+                usage: nobody@nomail.com
+                reference: if any
+              created_at:
+                description: Order creation timestamp.
+                required: required
+                usage: '2025-01-15T10:32:53.343Z'
+                reference: if any
+              updated_at:
+                description: Order update timestamp.
+                required: required
+                usage: '2025-01-15T10:32:53.343Z'
+                reference: if any
+            fulfillments:
+              parent: true
+              list:
+                - id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: F1
+                    reference: if any
+                  type:
+                    description: Type of fulfillment.
+                    required: required
+                    usage: Delivery
+                    reference: if any
+                  end:
+                    parent: true
+                    contact:
+                      parent: true
+                      email:
+                        description: Email of recipient.
+                        required: required
+                        usage: ajinkya101@gmail.com
+                        reference: if any
+                      phone:
+                        description: Contact number.
+                        required: required
+                        usage: '9898989898'
+                        reference: if any
+                    location:
+                      parent: true
+                      gps:
+                        description: GPS coordinates.
+                        required: required
+                        usage: 19.131140,72.834091
+                        reference: if any
+                      address:
+                        parent: true
+                        building:
+                          description: Building name or house number.
+                          required: required
+                          usage: my building name or house
+                          reference: if any
+                        city:
+                          description: City name.
+                          required: required
+                          usage: Mumbai
+                          reference: if any
+                        state:
+                          description: State name.
+                          required: required
+                          usage: Maharashtra
+                          reference: if any
+                        country:
+                          description: Country code.
+                          required: required
+                          usage: IND
+                          reference: if any
+                        area_code:
+                          description: Postal code.
+                          required: required
+                          usage: '400053'
+                          reference: if any
+                        locality:
+                          description: Street name.
+                          required: required
+                          usage: my street name
+                          reference: if any
+                        name:
+                          description: House or floor name.
+                          required: required
+                          usage: my house or door or floor
+                          reference: if any
+      on_init:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_init
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:022
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-23T07:01:44.759Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: '1'
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: L1
+                      reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: P1
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: F1
+                    reference: if any
+            billing:
+              parent: true
+              address:
+                parent: true
+                building:
+                  description: Building name or house number.
+                  required: required
+                  usage: my building name or house
+                  reference: if any
+                city:
+                  description: City name.
+                  required: required
+                  usage: Mumbai
+                  reference: if any
+                state:
+                  description: State name.
+                  required: required
+                  usage: Maharashtra
+                  reference: if any
+                country:
+                  description: Country code.
+                  required: required
+                  usage: IND
+                  reference: if any
+                area_code:
+                  description: Postal code.
+                  required: required
+                  usage: '400053'
+                  reference: if any
+                locality:
+                  description: Street name.
+                  required: required
+                  usage: my street name
+                  reference: if any
+                name:
+                  description: House or floor name.
+                  required: required
+                  usage: my house or door or floor
+                  reference: if any
+              phone:
+                description: Contact number.
+                required: required
+                usage: '9898989898'
+                reference: if any
+              name:
+                description: Name of the buyer.
+                required: required
+                usage: ONDC buyer
+                reference: if any
+              email:
+                description: Contact email.
+                required: required
+                usage: nobody@nomail.com
+                reference: if any
+              created_at:
+                description: Order creation timestamp.
+                required: required
+                usage: '2025-01-15T10:32:53.343Z'
+                reference: if any
+              updated_at:
+                description: Order update timestamp.
+                required: required
+                usage: '2025-01-15T10:32:53.343Z'
+                reference: if any
+            fulfillments:
+              parent: true
+              list:
+                - id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: F1
+                    reference: if any
+                  type:
+                    description: Type of fulfillment.
+                    required: required
+                    usage: Delivery
+                    reference: if any
+                  end:
+                    parent: true
+                    contact:
+                      parent: true
+                      email:
+                        description: Email of recipient.
+                        required: required
+                        usage: nobody@nomail.com
+                        reference: if any
+                      phone:
+                        description: Contact number.
+                        required: required
+                        usage: '9898989898'
+                        reference: if any
+                    location:
+                      parent: true
+                      gps:
+                        description: GPS coordinates.
+                        required: required
+                        usage: 19.131140,72.834091
+                        reference: if any
+                      address:
+                        parent: true
+                        building:
+                          description: Building name or house number.
+                          required: required
+                          usage: my building name or house
+                          reference: if any
+                        city:
+                          description: City name.
+                          required: required
+                          usage: Mumbai
+                          reference: if any
+                        state:
+                          description: State name.
+                          required: required
+                          usage: Maharashtra
+                          reference: if any
+                        country:
+                          description: Country code.
+                          required: required
+                          usage: IND
+                          reference: if any
+                        area_code:
+                          description: Postal code.
+                          required: required
+                          usage: '400053'
+                          reference: if any
+                        locality:
+                          description: Street name.
+                          required: required
+                          usage: my street name
+                          reference: if any
+                        name:
+                          description: House or floor name.
+                          required: required
+                          usage: my house or door or floor
+                          reference: if any
+      confirm:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: confirm
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:022
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-23T07:03:30.516Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            id:
+              description: Unique identifier for the order.
+              required: required
+              usage: O1
+              reference: if any
+            state:
+              description: Current state of the order.
+              required: required
+              usage: Created
+              reference: if any
+            billing:
+              parent: true
+              address:
+                parent: true
+                building:
+                  description: Building name or house number.
+                  required: required
+                  usage: my building name or house
+                  reference: if any
+                city:
+                  description: City name.
+                  required: required
+                  usage: Mumbai
+                  reference: if any
+                state:
+                  description: State name.
+                  required: required
+                  usage: Maharashtra
+                  reference: if any
+                country:
+                  description: Country code.
+                  required: required
+                  usage: IND
+                  reference: if any
+                area_code:
+                  description: Postal code.
+                  required: required
+                  usage: '400053'
+                  reference: if any
+                locality:
+                  description: Street name.
+                  required: required
+                  usage: my street name
+                  reference: if any
+                name:
+                  description: House or floor name.
+                  required: required
+                  usage: my house or door or floor
+                  reference: if any
+              phone:
+                description: Contact number.
+                required: required
+                usage: '9898989898'
+                reference: if any
+              name:
+                description: Name of the buyer.
+                required: required
+                usage: ONDC buyer
+                reference: if any
+              email:
+                description: Contact email.
+                required: required
+                usage: nobody@nomail.com
+                reference: if any
+              created_at:
+                description: Order creation timestamp.
+                required: required
+                usage: '2024-12-23T07:03:30.516Z'
+                reference: if any
+              updated_at:
+                description: Order update timestamp.
+                required: required
+                usage: '2024-12-23T07:03:30.516Z'
+                reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: P1
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: F1
+                    reference: if any
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: '1'
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: L1
+                      reference: if any
+      on_confirm:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_confirm
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:022
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 6c4feca7-87e4-4437-965c-5f7bd25bc4f3
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-23T07:03:32.230Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            id:
+              description: Unique identifier for the order.
+              required: required
+              usage: O1
+              reference: if any
+            state:
+              description: Current state of the order.
+              required: required
+              usage: Accepted
+              reference: if any
+            billing:
+              parent: true
+              address:
+                parent: true
+                building:
+                  description: Building name or house number.
+                  required: required
+                  usage: my building name or house
+                  reference: if any
+                city:
+                  description: City name.
+                  required: required
+                  usage: Mumbai
+                  reference: if any
+                state:
+                  description: State name.
+                  required: required
+                  usage: Maharashtra
+                  reference: if any
+                country:
+                  description: Country code.
+                  required: required
+                  usage: IND
+                  reference: if any
+                area_code:
+                  description: Postal code.
+                  required: required
+                  usage: '400053'
+                  reference: if any
+                locality:
+                  description: Street name.
+                  required: required
+                  usage: my street name
+                  reference: if any
+                name:
+                  description: House or floor name.
+                  required: required
+                  usage: my house or door or floor
+                  reference: if any
+              phone:
+                description: Contact number.
+                required: required
+                usage: '9898989898'
+                reference: if any
+              name:
+                description: Name of the buyer.
+                required: required
+                usage: ONDC buyer
+                reference: if any
+              email:
+                description: Contact email.
+                required: required
+                usage: nobody@nomail.com
+                reference: if any
+              created_at:
+                description: Order creation timestamp.
+                required: required
+                usage: '2024-12-23T07:03:32.230Z'
+                reference: if any
+              updated_at:
+                description: Order update timestamp.
+                required: required
+                usage: '2024-12-23T07:03:32.230Z'
+                reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: P1
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: F1
+                    reference: if any
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: '1'
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: L1
+                      reference: if any
+      on_status_agent_assigned:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_status
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:022
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 553de205-7609-46a3-9cfd-6a8d448705d1
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-10T08:45:48.199Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            id:
+              description: Unique identifier for the order.
+              required: required
+              usage: O1
+              reference: if any
+            state:
+              description: Current state of the order.
+              required: required
+              usage: In-progress
+              reference: if any
+            billing:
+              parent: true
+              address:
+                parent: true
+                building:
+                  description: Building name or house number.
+                  required: required
+                  usage: my building name or house
+                  reference: if any
+                city:
+                  description: City name.
+                  required: required
+                  usage: Mumbai
+                  reference: if any
+                state:
+                  description: State name.
+                  required: required
+                  usage: Maharashtra
+                  reference: if any
+                country:
+                  description: Country code.
+                  required: required
+                  usage: IND
+                  reference: if any
+                area_code:
+                  description: Postal code.
+                  required: required
+                  usage: '400053'
+                  reference: if any
+                locality:
+                  description: Street name.
+                  required: required
+                  usage: my street name
+                  reference: if any
+                name:
+                  description: House or floor name.
+                  required: required
+                  usage: my house or door or floor
+                  reference: if any
+              phone:
+                description: Contact number.
+                required: required
+                usage: '9898989898'
+                reference: if any
+              name:
+                description: Name of the buyer.
+                required: required
+                usage: ONDC buyer
+                reference: if any
+              email:
+                description: Contact email.
+                required: required
+                usage: nobody@nomail.com
+                reference: if any
+              created_at:
+                description: Order creation timestamp.
+                required: required
+                usage: '2024-12-10T08:45:48.199Z'
+                reference: if any
+              updated_at:
+                description: Order update timestamp.
+                required: required
+                usage: '2024-12-10T08:45:48.199Z'
+                reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: P1
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: F1
+                    reference: if any
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: '1'
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: L1
+                      reference: if any
+      on_status_pending:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_status
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:080
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 91728968-9aea-4d66-94a5-49dc89820af8
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: d6a0d858a293ca97899faae6839a8d7b
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2025-02-10T07:38:14.000Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            id:
+              description: Unique identifier for the order.
+              required: required
+              usage: 2025-02-10-293522
+              reference: if any
+            state:
+              description: Current state of the order.
+              required: required
+              usage: Accepted
+              reference: if any
+            billing:
+              parent: true
+              address:
+                parent: true
+                building:
+                  description: Building name or house number.
+                  required: required
+                  usage: Building 230
+                  reference: if any
+                city:
+                  description: City name.
+                  required: required
+                  usage: Bengaluru
+                  reference: if any
+                state:
+                  description: State name.
+                  required: required
+                  usage: Karnataka
+                  reference: if any
+                country:
+                  description: Country code.
+                  required: required
+                  usage: IND
+                  reference: if any
+                area_code:
+                  description: Postal code.
+                  required: required
+                  usage: '560002'
+                  reference: if any
+                locality:
+                  description: Street name.
+                  required: required
+                  usage: KR Market Pedestrian Subway
+                  reference: if any
+                name:
+                  description: House or floor name.
+                  required: required
+                  usage: Vishakh Chandran T
+                  reference: if any
+              phone:
+                description: Contact number.
+                required: required
+                usage: '09999999999'
+                reference: if any
+              name:
+                description: Name of the buyer.
+                required: required
+                usage: Vishakh Chandran T
+                reference: if any
+              email:
+                description: Contact email.
+                required: required
+                usage: vishakhc@gmail.com
+                reference: if any
+              created_at:
+                description: Order creation timestamp.
+                required: required
+                usage: '2025-02-10T07:27:02.436Z'
+                reference: if any
+              updated_at:
+                description: Order update timestamp.
+                required: required
+                usage: '2025-02-10T07:27:02.436Z'
+                reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: oc_72
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '4'
+                      reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: 05fddb5e0d6bfe1251975d039599c525
+                    reference: if any
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: oc_72
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: c_e1ef592c-5ccf-476b-97c8-85f276f07b53_1
+                    reference: if any
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: oc_22
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: location_15
+                      reference: if any
+      on_status_packed:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_status
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:022
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 553de205-7609-46a3-9cfd-6a8d448705d1
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-10T08:46:38.216Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            id:
+              description: Unique identifier for the order.
+              required: required
+              usage: O1
+              reference: if any
+            state:
+              description: Current state of the order.
+              required: required
+              usage: In-progress
+              reference: if any
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: '1'
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: L1
+                      reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: P1
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: F1
+                    reference: if any
+            billing:
+              parent: true
+              address:
+                parent: true
+                building:
+                  description: Building name or house number.
+                  required: required
+                  usage: my building name or house
+                  reference: if any
+                city:
+                  description: City name.
+                  required: required
+                  usage: Mumbai
+                  reference: if any
+                state:
+                  description: State name.
+                  required: required
+                  usage: Maharashtra
+                  reference: if any
+                country:
+                  description: Country code.
+                  required: required
+                  usage: IND
+                  reference: if any
+                area_code:
+                  description: Postal code.
+                  required: required
+                  usage: '400053'
+                  reference: if any
+                locality:
+                  description: Street name.
+                  required: required
+                  usage: my street name
+                  reference: if any
+                name:
+                  description: House or floor name.
+                  required: required
+                  usage: my house or door or floor
+                  reference: if any
+              phone:
+                description: Contact number.
+                required: required
+                usage: '9898989898'
+                reference: if any
+              name:
+                description: Name of the buyer.
+                required: required
+                usage: ONDC buyer
+                reference: if any
+              email:
+                description: Contact email.
+                required: required
+                usage: nobody@nomail.com
+                reference: if any
+              created_at:
+                description: Order creation timestamp.
+                required: required
+                usage: '2024-12-10T08:46:38.216Z'
+                reference: if any
+              updated_at:
+                description: Order update timestamp.
+                required: required
+                usage: '2024-12-10T08:46:38.216Z'
+                reference: if any
+      on_status_picked:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_status
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:022
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 553de205-7609-46a3-9cfd-6a8d448705d1
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-10T08:48:38.261Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            id:
+              description: Unique identifier for the order.
+              required: required
+              usage: O1
+              reference: if any
+            state:
+              description: Current state of the order.
+              required: required
+              usage: In-progress
+              reference: if any
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: '1'
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: L1
+                      reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: P1
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: F1
+                    reference: if any
+            billing:
+              parent: true
+              address:
+                parent: true
+                building:
+                  description: Building name or house number.
+                  required: required
+                  usage: my building name or house
+                  reference: if any
+                city:
+                  description: City name.
+                  required: required
+                  usage: Mumbai
+                  reference: if any
+                state:
+                  description: State name.
+                  required: required
+                  usage: Maharashtra
+                  reference: if any
+                country:
+                  description: Country code.
+                  required: required
+                  usage: IND
+                  reference: if any
+                area_code:
+                  description: Postal code.
+                  required: required
+                  usage: '400053'
+                  reference: if any
+                locality:
+                  description: Street name.
+                  required: required
+                  usage: my street name
+                  reference: if any
+                name:
+                  description: House or floor name.
+                  required: required
+                  usage: my house or door or floor
+                  reference: if any
+              phone:
+                description: Contact number.
+                required: required
+                usage: '9898989898'
+                reference: if any
+              name:
+                description: Name of the buyer.
+                required: required
+                usage: ONDC buyer
+                reference: if any
+              email:
+                description: Contact email.
+                required: required
+                usage: nobody@nomail.com
+                reference: if any
+              created_at:
+                description: Order creation timestamp.
+                required: required
+                usage: '2024-12-10T08:48:38.261Z'
+                reference: if any
+              updated_at:
+                description: Order update timestamp.
+                required: required
+                usage: '2024-12-10T08:48:38.261Z'
+                reference: if any
+            documents:
+              parent: true
+              list:
+                - url:
+                    description: Document URL.
+                    required: required
+                    usage: https://invoice_url
+                    reference: if any
+                  label:
+                    description: Document label.
+                    required: required
+                    usage: Invoice
+                    reference: if any
+      on_status_out_for_delivery:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_status
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:080
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 91728968-9aea-4d66-94a5-49dc89820af8
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: 0f13ce40e6d955d655bf3c3b64de6cb3
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2025-02-10T07:39:19.000Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            id:
+              description: Unique identifier for the order.
+              required: required
+              usage: 2025-02-10-293522
+              reference: if any
+            state:
+              description: Current state of the order.
+              required: required
+              usage: In-progress
+              reference: if any
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: oc_22
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: location_15
+                      reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: oc_72
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '4'
+                      reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: 05fddb5e0d6bfe1251975d039599c525
+                    reference: if any
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: oc_72
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: c_e1ef592c-5ccf-476b-97c8-85f276f07b53_1
+                    reference: if any
+            billing:
+              parent: true
+              address:
+                parent: true
+                building:
+                  description: Building name or house number.
+                  required: required
+                  usage: Building 230
+                  reference: if any
+                locality:
+                  description: Street name.
+                  required: required
+                  usage: KR Market Pedestrian Subway
+                  reference: if any
+                city:
+                  description: City name.
+                  required: required
+                  usage: Bengaluru
+                  reference: if any
+                state:
+                  description: State name.
+                  required: required
+                  usage: Karnataka
+                  reference: if any
+                country:
+                  description: Country code.
+                  required: required
+                  usage: IND
+                  reference: if any
+                area_code:
+                  description: Postal code.
+                  required: required
+                  usage: '560002'
+                  reference: if any
+                name:
+                  description: Name of the receiver.
+                  required: required
+                  usage: Vishakh Chandran T
+                  reference: if any
+              phone:
+                description: Contact number.
+                required: required
+                usage: '09999999999'
+                reference: if any
+              name:
+                description: Name of the buyer.
+                required: required
+                usage: Vishakh Chandran T
+                reference: if any
+              email:
+                description: Contact email.
+                required: required
+                usage: vishakhc@gmail.com
+                reference: if any
+              created_at:
+                description: Order creation timestamp.
+                required: required
+                usage: '2025-02-10T07:27:02.436Z'
+                reference: if any
+              updated_at:
+                description: Order update timestamp.
+                required: required
+                usage: '2025-02-10T07:27:02.436Z'
+                reference: if any
+            documents:
+              parent: true
+              list:
+                - url:
+                    description: Document URL.
+                    required: required
+                    usage: >-
+                      https://seller.Dummy.ninja/index.php?route=account/order/invoice&order_id=669
+                    reference: if any
+                  label:
+                    description: Document label.
+                    required: required
+                    usage: Invoice
+                    reference: if any
+      on_status_delivered:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET10
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_status
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:022
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 553de205-7609-46a3-9cfd-6a8d448705d1
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: M1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-12-10T08:49:33.284Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            parent: true
+            id:
+              description: Unique identifier for the order.
+              required: required
+              usage: O1
+              reference: if any
+            state:
+              description: Current state of the order.
+              required: required
+              usage: Completed
+              reference: if any
+            provider:
+              parent: true
+              id:
+                description: Unique identifier for the provider.
+                required: required
+                usage: '1'
+                reference: if any
+              locations:
+                parent: true
+                items:
+                  - id:
+                      description: Unique identifier for the location.
+                      required: required
+                      usage: L1
+                      reference: if any
+            items:
+              parent: true
+              list:
+                - id:
+                    description: Unique identifier for the item.
+                    required: required
+                    usage: P1
+                    reference: if any
+                  quantity:
+                    count:
+                      description: Number of items requested.
+                      required: required
+                      usage: '1'
+                      reference: if any
+                  fulfillment_id:
+                    description: Fulfillment identifier.
+                    required: required
+                    usage: F1
+                    reference: if any
+            billing:
+              parent: true
+              address:
+                parent: true
+                building:
+                  description: Building name or house number.
+                  required: required
+                  usage: my building name or house
+                  reference: if any
+                locality:
+                  description: Street name.
+                  required: required
+                  usage: my street name
+                  reference: if any
+                city:
+                  description: City name.
+                  required: required
+                  usage: Mumbai
+                  reference: if any
+                state:
+                  description: State name.
+                  required: required
+                  usage: Maharashtra
+                  reference: if any
+                country:
+                  description: Country code.
+                  required: required
+                  usage: IND
+                  reference: if any
+                area_code:
+                  description: Postal code.
+                  required: required
+                  usage: '400053'
+                  reference: if any
+                name:
+                  description: Name of the receiver.
+                  required: required
+                  usage: my house or door or floor
+                  reference: if any
+              phone:
+                description: Contact number.
+                required: required
+                usage: '9898989898'
+                reference: if any
+              name:
+                description: Name of the buyer.
+                required: required
+                usage: ONDC buyer
+                reference: if any
+              email:
+                description: Contact email.
+                required: required
+                usage: nobody@nomail.com
+                reference: if any
+              created_at:
+                description: Order creation timestamp.
+                required: required
+                usage: '2024-12-10T08:49:33.284Z'
+                reference: if any
+              updated_at:
+                description: Order update timestamp.
+                required: required
+                usage: '2024-12-11T08:49:33.284Z'
+                reference: if any
+            documents:
+              parent: true
+              list:
+                - url:
+                    description: Document URL.
+                    required: required
+                    usage: https://invoice_url
+                    reference: if any
+                  label:
+                    description: Document label.
+                    required: required
+                    usage: Invoice
+                    reference: if any
+      cancel:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET12
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: cancel
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:080
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          bpp_uri:
+            description: Subscriber URI for the seller app.
+            required: required
+            usage: https://sellerNP.com/ondc
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 043e401b-8dc8-457a-b4cd-5a32180c4e05
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: b1b518a9-f81d-4a3f-bfcb-7d3668af3dd1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-08-08T07:41:39.592Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order_id:
+            description: Unique identifier for the order.
+            required: required
+            usage: 2024-08-08-250723
+            reference: if any
+          cancellation_reason_id:
+            description: Reason ID for the order cancellation.
+            required: required
+            usage: '001'
+            reference: if any
+      on_cancel:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET12
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_cancel
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:080
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          bpp_uri:
+            description: Subscriber URI for the seller app.
+            required: required
+            usage: https://sellerNP.com/ondc
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 043e401b-8dc8-457a-b4cd-5a32180c4e05
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: b1b518a9-f81d-4a3f-bfcb-7d3668af3dd1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-08-08T07:41:39.871Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            state:
+              description: Current state of the order.
+              required: required
+              usage: Cancelled
+              reference: if any
+            items:
+              description: List of items in the order.
+              required: required
+              usage:
+                - id: 839cb128-34bd-444d-9ffc-05903e62b35a
+                  quantity:
+                    count: 0
+                  fulfillment_id: c4b2dd74-9ccd-4ec1-b8f8-58d36dd8ce33
+                - id: 839cb128-34bd-444d-9ffc-05903e62b35a
+                  quantity:
+                    count: 1
+                  fulfillment_id: 0b562bd4-57fa-452b-8573-142d18ad326e
+            provider:
+              id: 5b3981a7-512d-4ac4-bd75-ea48eff89a53
+              locations:
+                - id: 668e238e1b106d310473ddb0
+            billing:
+              address:
+                name: Tanishq Mishra
+                building: New_Building
+                locality: 6th Cross Road
+                city: Bengaluru
+                state: Karnataka
+                country: IND
+                area_code: '560027'
+              phone: '9399788618'
+              name: Tanishq Mishra
+              email: mishratanishq619@gmail.com
+              created_at: '2024-08-08T07:40:37.071Z'
+              updated_at: '2024-08-08T07:40:37.071Z'
+            fulfillments:
+              - id: c4b2dd74-9ccd-4ec1-b8f8-58d36dd8ce33
+                '@ondc/org/provider_name': Seller Business
+                '@ondc/org/TAT': PT96H
+                state:
+                  descriptor:
+                    code: Cancelled
+                type: Delivery
+                tracking: false
+                start:
+                  location:
+                    id: 668e238e1b106d310473ddb0
+                    descriptor:
+                      name: Seller Business
+                    gps: 12.92580970146639,77.58362409712942
+                    address:
+                      locality: Jayanagar
+                      city: Bengaluru
+                      area_code: '560011'
+                      state: Karnataka
+                  contact:
+                    email: test@gmail.com
+                    phone: '9876543210'
+                end:
+                  person:
+                    name: Tanishq Mishra
+                  contact:
+                    email: mishratanishq619@gmail.com
+                    phone: '9399788618'
+                  location:
+                    gps: 12.966545,77.592074
+                    address:
+                      name: Tanishq Mishra
+                      building: New_Building
+                      locality: 6th Cross Road
+                      city: Bengaluru
+                      state: Karnataka
+                      country: IND
+                      area_code: '560027'
+                tags:
+                  - code: cancel_request
+                    list:
+                      - code: reason_id
+                        value: '001'
+                      - code: initiated_by
+                        value: buyerNP.com
+                  - code: precancel_state
+                    list:
+                      - code: fulfillment_state
+                        value: Pending
+                      - code: updated_at
+                        value: '2024-08-08T07:41:05.125Z'
+            cancellation:
+              cancelled_by: buyerNP.com
+              reason:
+                id: '001'
+      update_settlement_part_cancel:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET12
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_cancel
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:080
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          bpp_uri:
+            description: Subscriber URI for the seller app.
+            required: required
+            usage: https://sellerNP.com/ondc
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 043e401b-8dc8-457a-b4cd-5a32180c4e05
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: b1b518a9-f81d-4a3f-bfcb-7d3668af3dd1
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2024-08-08T07:41:39.871Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            state:
+              description: Current state of the order.
+              required: required
+              usage: Cancelled
+              reference: if any
+            items:
+              description: List of items in the order.
+              required: required
+              usage:
+                - id: 839cb128-34bd-444d-9ffc-05903e62b35a
+                  quantity:
+                    count: 0
+                  fulfillment_id: c4b2dd74-9ccd-4ec1-b8f8-58d36dd8ce33
+                - id: 839cb128-34bd-444d-9ffc-05903e62b35a
+                  quantity:
+                    count: 1
+                  fulfillment_id: 0b562bd4-57fa-452b-8573-142d18ad326e
+            provider:
+              id: 5b3981a7-512d-4ac4-bd75-ea48eff89a53
+              locations:
+                - id: 668e238e1b106d310473ddb0
+            billing:
+              address:
+                name: Tanishq Mishra
+                building: New_Building
+                locality: 6th Cross Road
+                city: Bengaluru
+                state: Karnataka
+                country: IND
+                area_code: '560027'
+              phone: '9399788618'
+              name: Tanishq Mishra
+              email: mishratanishq619@gmail.com
+              created_at: '2024-08-08T07:40:37.071Z'
+              updated_at: '2024-08-08T07:40:37.071Z'
+            fulfillments:
+              - id: c4b2dd74-9ccd-4ec1-b8f8-58d36dd8ce33
+                '@ondc/org/provider_name': Seller Business
+                '@ondc/org/TAT': PT96H
+                state:
+                  descriptor:
+                    code: Cancelled
+                type: Delivery
+                tracking: false
+                start:
+                  location:
+                    id: 668e238e1b106d310473ddb0
+                    descriptor:
+                      name: Seller Business
+                    gps: 12.92580970146639,77.58362409712942
+                    address:
+                      locality: Jayanagar
+                      city: Bengaluru
+                      area_code: '560011'
+                      state: Karnataka
+                  contact:
+                    email: test@gmail.com
+                    phone: '9876543210'
+                end:
+                  person:
+                    name: Tanishq Mishra
+                  contact:
+                    email: mishratanishq619@gmail.com
+                    phone: '9399788618'
+                  location:
+                    gps: 12.966545,77.592074
+                    address:
+                      name: Tanishq Mishra
+                      building: New_Building
+                      locality: 6th Cross Road
+                      city: Bengaluru
+                      state: Karnataka
+                      country: IND
+                      area_code: '560027'
+                tags:
+                  - code: cancel_request
+                    list:
+                      - code: reason_id
+                        value: '001'
+                      - code: initiated_by
+                        value: buyerNP.com
+                  - code: precancel_state
+                    list:
+                      - code: fulfillment_state
+                        value: Pending
+                      - code: updated_at
+                        value: '2024-08-08T07:41:05.125Z'
+            cancellation:
+              cancelled_by: buyerNP.com
+              reason:
+                id: '001'
+            payment:
+              '@ondc/org/settlement_details':
+                - settlement_counterparty: buyer
+                  settlement_phase: refund
+                  settlement_type: netbanking
+                  settlement_amount: '500'
+                  settlement_timestamp: '2025-02-10T07:32:18.275Z'
+      update_reverse_qc:
+        parent: true
+        context:
+          parent: true
+          domain:
+            description: Updated domain namespace.
+            required: required
+            usage: ONDC:RET12
+            reference: if any
+          action:
+            description: Type of action being performed.
+            required: required
+            usage: on_cancel
+            reference: if any
+          location:
+            parent: true
+            country:
+              code:
+                description: Country code for identifying the country of operation.
+                required: required
+                usage: IND
+                reference: if any
+            city:
+              code:
+                description: City code for search identifying seller locations.
+                required: required
+                usage: std:080
+                reference: if any
+          version:
+            description: API version used.
+            required: required
+            usage: 1.2.0
+            reference: if any
+          bap_id:
+            description: Subscriber ID for the buyer app.
+            required: required
+            usage: buyerNP.com
+            reference: if any
+          bap_uri:
+            description: Subscriber URI for the buyer app.
+            required: required
+            usage: https://buyerNP.com/ondc
+            reference: if any
+          bpp_id:
+            description: Subscriber ID for the seller app.
+            required: required
+            usage: sellerNP.com
+            reference: if any
+          bpp_uri:
+            description: Subscriber URI for the seller app.
+            required: required
+            usage: https://sellerNP.com/ondc
+            reference: if any
+          transaction_id:
+            description: Unique identifier for the transaction.
+            required: required
+            usage: 91728968-9aea-4d66-94a5-49dc89820af8
+            reference: if any
+          message_id:
+            description: Unique identifier for the message.
+            required: required
+            usage: f6af1bf6-da3f-4f29-bf3b-a00fbb89c73e
+            reference: if any
+          timestamp:
+            description: RFC3339 compliant timestamp.
+            required: required
+            usage: '2025-02-10T08:40:49.316Z'
+            reference: if any
+          ttl:
+            description: Validity of the message.
+            required: required
+            usage: PT30S
+            reference: if any
+        message:
+          parent: true
+          order:
+            state:
+              description: Current state of the order.
+              required: required
+              usage: Cancelled
+              reference: if any
+            items:
+              description: List of items in the order.
+              required: required
+              usage:
+                - id: 839cb128-34bd-444d-9ffc-05903e62b35a
+                  quantity:
+                    count: 0
+                  fulfillment_id: c4b2dd74-9ccd-4ec1-b8f8-58d36dd8ce33
+                - id: 839cb128-34bd-444d-9ffc-05903e62b35a
+                  quantity:
+                    count: 1
+                  fulfillment_id: 0b562bd4-57fa-452b-8573-142d18ad326e
+            provider:
+              id: 5b3981a7-512d-4ac4-bd75-ea48eff89a53
+              locations:
+                - id: 668e238e1b106d310473ddb0
+            billing:
+              address:
+                name: Tanishq Mishra
+                building: New_Building
+                locality: 6th Cross Road
+                city: Bengaluru
+                state: Karnataka
+                country: IND
+                area_code: '560027'
+              phone: '9399788618'
+              name: Tanishq Mishra
+              email: mishratanishq619@gmail.com
+              created_at: '2024-08-08T07:40:37.071Z'
+              updated_at: '2024-08-08T07:40:37.071Z'
+            fulfillments:
+              - id: c4b2dd74-9ccd-4ec1-b8f8-58d36dd8ce33
+                '@ondc/org/provider_name': Seller Business
+                '@ondc/org/TAT': PT96H
+                state:
+                  descriptor:
+                    code: Cancelled
+                type: Delivery
+                tracking: false
+                start:
+                  location:
+                    id: 668e238e1b106d310473ddb0
+                    descriptor:
+                      name: Seller Business
+                    gps: 12.92580970146639,77.58362409712942
+                    address:
+                      locality: Jayanagar
+                      city: Bengaluru
+                      area_code: '560011'
+                      state: Karnataka
+                  contact:
+                    email: test@gmail.com
+                    phone: '9876543210'
+                end:
+                  person:
+                    name: Tanishq Mishra
+                  contact:
+                    email: mishratanishq619@gmail.com
+                    phone: '9399788618'
+                  location:
+                    gps: 12.966545,77.592074
+                    address:
+                      name: Tanishq Mishra
+                      building: New_Building
+                      locality: 6th Cross Road
+                      city: Bengaluru
+                      state: Karnataka
+                      country: IND
+                      area_code: '560027'
+                tags:
+                  - code: return_request
+                    list:
+                      - code: id
+                        value: 67a9ad8173aa689a957eaf54
+                      - code: item_id
+                        value: oc_72
+                      - code: parent_item_id
+                        value: ''
+                      - code: item_quantity
+                        value: '1'
+                      - code: reason_id
+                        value: '001'
+                      - code: reason_desc
+                        value: detailed description for return
+                      - code: images
+                        value: >-
+                          https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/2025-02-10-293522/9d13d0d3-6b21-405e-bfc0-b014485adaa2.png
+                      - code: ttl_approval
+                        value: PT24H
+                      - code: ttl_reverseqc
+                        value: P3D
+            cancellation:
+              cancelled_by: buyerNP.com
+              reason:
+                id: '001'
+            payment:
+              '@ondc/org/settlement_details':
+                - settlement_counterparty: buyer
+                  settlement_phase: refund
+                  settlement_type: netbanking
+                  settlement_amount: '500'
+                  settlement_timestamp: '2025-02-10T07:32:18.275Z'
 x-errors:
   - Cancellation:
       - Code: '001'

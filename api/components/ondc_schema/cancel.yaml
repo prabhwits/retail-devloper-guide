@@ -1,0 +1,18 @@
+type: object
+properties:
+  context:
+    $ref: '../beckn_yaml.yaml#/components/schemas/Context'
+  message:
+    type: object
+    properties:
+      order_id:
+        $ref: '../beckn_yaml.yaml#/components/schemas/Order/properties/id'
+      cancellation_reason_id:
+        $ref: '../beckn_yaml.yaml#/components/schemas/Option/properties/id'
+      descriptor:
+        $ref: '../beckn_yaml.yaml#/components/schemas/Descriptor'
+    required:
+      - order_id
+required:
+  - context
+  - message

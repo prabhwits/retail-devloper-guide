@@ -1,0 +1,71 @@
+components:
+  schemas:
+    Order_Select:
+      description: Describes the details of an order
+      type: object
+      properties:
+        provider:
+          type: object
+          properties:
+            id:
+              $ref: '../beckn_yaml.yaml#/components/schemas/Provider/properties/id'
+            locations:
+              type: array
+              maxItems: 1
+              items:
+                type: object
+                properties:
+                  id:
+                    $ref: '../beckn_yaml.yaml#/components/schemas/Location/properties/id'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item_Select'
+        offers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                $ref: '../beckn_yaml.yaml#/components/schemas/Offer/properties/id'
+        fulfillments:
+          type: array
+          items:
+            $ref: "../beckn_yaml.yaml#/components/schemas/Fulfillment"
+    Item_Select:
+      description: Describes a product or a service offered to the end consumer by the provider
+      type: object
+      properties:
+        id:
+          description: This is the most unique identifier of a service item. An example of an Item ID could be the SKU of a product.
+          type: string
+        quantity:
+          count:
+              type: integer
+              minimum: 0
+          measure:
+            $ref: '../beckn_yaml.yaml#/components/schemas/Scalar'
+        location_id:
+          $ref: '../beckn_yaml.yaml#/components/schemas/Location/properties/id'
+        tags:
+          $ref: '../beckn_yaml.yaml#/components/schemas/TagGroup'
+    ItemQuantity:
+      description: Describes count or amount of an item
+      type: object
+      properties:
+        available:
+          type: object
+          properties:
+            count:
+              type: integer
+              minimum: 0
+            measure:
+              $ref: '../beckn_yaml.yaml#/components/schemas/Scalar'
+        maximum:
+          type: object
+          properties:
+            count:
+              type: integer
+              minimum: 1
+            measure:
+              $ref: '../beckn_yaml.yaml#/components/schemas/Scalar'

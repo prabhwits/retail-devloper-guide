@@ -20,18 +20,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    intent:
-                      $ref: '#/components/schemas/Intent'
-              required:
-                - context
-                - message
+              $ref: './ondc_schema/search.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -61,20 +50,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order:
-                      $ref: '#/components/schemas/Order'
-                  required:
-                    - order
-              required:
-                - context
-                - message
+              $ref: './ondc_schema/select.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -104,20 +80,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order:
-                      $ref: '#/components/schemas/Order'
-                  required:
-                    - order
-              required:
-                - context
-                - message
+              $ref: './ondc_schema/init.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -147,20 +110,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order:
-                      $ref: '#/components/schemas/Order'
-                  required:
-                    - order
-              required:
-                - context
-                - message
+              $ref: './ondc_schema/confirm.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -190,20 +140,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order_id:
-                      $ref: '#/components/schemas/Order/properties/id'
-                  required:
-                    - order_id
-              required:
-                - context
-                - message
+              $ref: './ondc_schema/status.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -233,23 +170,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order_id:
-                      $ref: '#/components/schemas/Order/properties/id'
-                    callback_url:
-                      type: string
-                      format: uri
-                  required:
-                    - order_id
-              required:
-                - context
-                - message
+              $ref: './ondc_schema/track.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -279,24 +200,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order_id:
-                      $ref: '#/components/schemas/Order/properties/id'
-                    cancellation_reason_id:
-                      $ref: '#/components/schemas/Option/properties/id'
-                    descriptor:
-                      $ref: '#/components/schemas/Descriptor'
-                  required:
-                    - order_id
-              required:
-                - context
-                - message
+              $ref: './ondc_schema/cancel.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -326,24 +230,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    update_target:
-                      description: 'Comma separated values of order objects being updated. For example: ```"update_target":"item,billing,fulfillment,payment"```'
-                      type: string
-                    order:
-                      $ref: '#/components/schemas/Order'
-                  required:
-                    - update_target
-                    - order
-              required:
-                - context
-                - message
+              $ref: './ondc_schema/update.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -373,19 +260,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    catalog:
-                      $ref: '#/components/schemas/Catalog'
-                  required:
-                    - catalog
-              required:
-                - context
+              $ref: './ondc_schema/on_search.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -415,21 +290,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order:
-                      $ref: '#/components/schemas/Order'
-                  required:
-                    - order
-                error:
-                  $ref: '#/components/schemas/Error'
-              required:
-                - context
+              $ref: './ondc_schema/on_select.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -459,21 +320,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order:
-                      $ref: '#/components/schemas/Order'
-                  required:
-                    - order
-                error:
-                  $ref: '#/components/schemas/Error'
-              required:
-                - context
+              $ref: './ondc_schema/on_init.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -503,21 +350,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order:
-                      $ref: '#/components/schemas/Order'
-                  required:
-                    - order
-                error:
-                  $ref: '#/components/schemas/Error'
-              required:
-                - context
+              $ref: './ondc_schema/on_confirm.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -547,21 +380,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    tracking:
-                      $ref: '#/components/schemas/Tracking'
-                  required:
-                    - tracking
-                error:
-                  $ref: '#/components/schemas/Error'
-              required:
-                - context
+              $ref: './ondc_schema/on_track.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -591,21 +410,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order:
-                      $ref: '#/components/schemas/Order'
-                  required:
-                    - order
-                error:
-                  $ref: '#/components/schemas/Error'
-              required:
-                - context
+              $ref: './ondc_schema/on_cancel.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -635,21 +440,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order:
-                      $ref: '#/components/schemas/Order'
-                  required:
-                    - order
-                error:
-                  $ref: '#/components/schemas/Error'
-              required:
-                - context
+              $ref: './ondc_schema/on_update.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -679,21 +470,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                message:
-                  type: object
-                  properties:
-                    order:
-                      $ref: '#/components/schemas/Order'
-                  required:
-                    - order
-                error:
-                  $ref: '#/components/schemas/Error'
-              required:
-                - context
+              $ref: './ondc_schema/on_status.yaml'
       responses:
         '200':
           description: Acknowledgement of message received
@@ -1294,14 +1071,6 @@ components:
       description: Describes count or amount of an item
       type: object
       properties:
-        allocated:
-          type: object
-          properties:
-            count:
-              type: integer
-              minimum: 0
-            measure:
-              $ref: '#/components/schemas/Scalar'
         available:
           type: object
           properties:
@@ -1316,14 +1085,6 @@ components:
             count:
               type: integer
               minimum: 1
-            measure:
-              $ref: '#/components/schemas/Scalar'
-        minimum:
-          type: object
-          properties:
-            count:
-              type: integer
-              minimum: 0
             measure:
               $ref: '#/components/schemas/Scalar'
         selected:
@@ -1737,6 +1498,8 @@ components:
         "@ondc/org/settlement_window":
           description: settlement window for the counterparty in ISO8601 durations format e.g. 'PT48H' indicates 48 hour return window
           type: string
+        tags:
+          $ref: '#/components/schemas/TagGroup'
         "@ondc/org/settlement_details":
           type: array
           items:
