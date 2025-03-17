@@ -6,7 +6,7 @@ properties:
     type: object
     properties:
       order:
-        $ref: '../beckn_yaml.yaml#/components/schemas/Order'
+        $ref: './components.yaml#/components/schemas/Order_On_Select'
     required:
       - order
   error:

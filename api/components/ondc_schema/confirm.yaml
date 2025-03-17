@@ -5,7 +5,6 @@ properties:
   message:
     type: object
     properties:
-      properties:
       order:
         description: Describes the details of an order
         type: object

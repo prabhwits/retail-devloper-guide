@@ -103,13 +103,11 @@ paths:
                                   be the SKU of a product.
                                 type: string
                               quantity:
-                                count:
-                                  type: integer
-                                  minimum: 0
-                                measure:
-                                  $ref: '#/components/schemas/Scalar'
-                              location_id:
-                                $ref: '#/components/schemas/Location/properties/id'
+                                type: object
+                                properties:
+                                  count:
+                                    type: integer
+                                    minimum: 0
                               tags:
                                 $ref: '#/components/schemas/TagGroup'
                         offers:
@@ -119,10 +117,17 @@ paths:
                             properties:
                               id:
                                 $ref: '#/components/schemas/Offer/properties/id'
+                              tags:
+                                $ref: '#/components/schemas/TagGroup'
                         fulfillments:
                           type: array
                           items:
-                            $ref: '#/components/schemas/Fulfillment'
+                            type: object
+                            properties:
+                              end:
+                                $ref: '#/components/schemas/Location'
+                        payment:
+                          $ref: '#/components/schemas/Payment/properties/type'
                   required:
                     - order
               required:
@@ -207,7 +212,6 @@ paths:
                 message:
                   type: object
                   properties:
-                    properties: null
                     order:
                       description: Describes the details of an order
                       type: object
@@ -538,7 +542,136 @@ paths:
                   type: object
                   properties:
                     order:
-                      $ref: '#/components/schemas/Order'
+                      description: Describes the details of an order
+                      type: object
+                      properties:
+                        provider:
+                          type: object
+                          properties:
+                            id:
+                              $ref: '#/components/schemas/Provider/properties/id'
+                            locations:
+                              type: array
+                              maxItems: 1
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    $ref: >-
+                                      #/components/schemas/Location/properties/id
+                        items:
+                          type: array
+                          items:
+                            description: >-
+                              Describes a product or a service offered to the
+                              end consumer by the provider
+                            type: object
+                            properties:
+                              id:
+                                description: >-
+                                  This is the most unique identifier of a
+                                  service item. An example of an Item ID could
+                                  be the SKU of a product.
+                                type: string
+                              fulfillments:
+                                properties:
+                                  id:
+                                    type: string
+                                    description: >-
+                                      Unique reference ID to the fulfillment of
+                                      an order
+                              fulfillment_ids:
+                                properties:
+                                  id:
+                                    type: string
+                                    description: >-
+                                      Unique reference ID to the fulfillment of
+                                      an order
+                              tags:
+                                $ref: '#/components/schemas/TagGroup'
+                        offers:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                $ref: '#/components/schemas/Offer/properties/id'
+                              tags:
+                                $ref: '#/components/schemas/TagGroup'
+                        fulfillments:
+                          type: array
+                          items:
+                            description: >-
+                              Describes how a single product/service will be
+                              rendered/fulfilled to the end customer
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                description: >-
+                                  Unique reference ID to the fulfillment of an
+                                  order
+                              type:
+                                type: string
+                                description: >-
+                                  This describes the type of fulfillment
+                                  ("Pickup" - Buyer picks up from store by
+                                  themselves or through their logistics
+                                  provider; "Delivery" - seller delivers to
+                                  buyer)
+                                enum:
+                                  - Delivery
+                                  - Pickup
+                                  - Delivery and Pickup
+                                  - Reverse QC
+                              '@ondc/org/category':
+                                type: string
+                                description: Fulfillment Category
+                              '@ondc/org/TAT':
+                                description: >-
+                                  fulfillment turnaround time in ISO8601
+                                  durations format e.g. 'PT24H' indicates 24
+                                  hour TAT
+                                type: string
+                              state:
+                                $ref: '#/components/schemas/State'
+                              tracking:
+                                type: boolean
+                                description: >-
+                                  Indicates whether the fulfillment allows
+                                  tracking
+                                default: false
+                              end:
+                                description: Details on the end of fulfillment
+                                type: object
+                                properties:
+                                  location:
+                                    $ref: '#/components/schemas/Location'
+                                  time:
+                                    description: >-
+                                      Describes time in its various forms. It
+                                      can be a single point in time; duration;
+                                      or a structured timetable of operations
+                                    type: object
+                                    properties:
+                                      range:
+                                        type: object
+                                        properties:
+                                          start:
+                                            type: string
+                                            format: date-time
+                                          end:
+                                            type: string
+                                            format: date-time
+                              tags:
+                                $ref: '#/components/schemas/TagGroup'
+                            required:
+                              - id
+                              - type
+                        quote:
+                          $ref: '#/components/schemas/Quotation'
+                        payment:
+                          $ref: '#/components/schemas/Payment/properties/type'
                   required:
                     - order
                 error:
@@ -1509,24 +1642,18 @@ components:
             count:
               type: integer
               minimum: 0
-            measure:
-              $ref: '#/components/schemas/Scalar'
         maximum:
           type: object
           properties:
             count:
               type: integer
               minimum: 1
-            measure:
-              $ref: '#/components/schemas/Scalar'
         selected:
           type: object
           properties:
             count:
               type: integer
               minimum: 0
-            measure:
-              $ref: '#/components/schemas/Scalar'
         unitized:
           description: This represents the quantity available in a single unit of the item
           type: object
@@ -1535,8 +1662,6 @@ components:
               type: integer
               minimum: 1
               maximum: 1
-            measure:
-              $ref: '#/components/schemas/Scalar'
     Item:
       description: >-
         Describes a product or a service offered to the end consumer by the
@@ -1566,6 +1691,11 @@ components:
               - $ref: '#/components/schemas/Category/properties/id'
         fulfillment_id:
           $ref: '#/components/schemas/Fulfillment/properties/id'
+        fulfillment_ids:
+          properties:
+            id:
+              type: string
+              description: Unique reference ID to the fulfillment of an order
         rating:
           $ref: '#/components/schemas/Rating/properties/value'
         location_id:
@@ -1950,7 +2080,6 @@ components:
           type: string
           enum:
             - ON-ORDER
-            - PRE-FULFILLMENT
             - ON-FULFILLMENT
             - POST-FULFILLMENT
         status:
@@ -2164,7 +2293,15 @@ components:
                   - misc
                   - discount
               item:
-                $ref: '#/components/schemas/Item'
+                properties:
+                  quantity:
+                    properties:
+                      available:
+                        $ref: '#/components/schemas/ItemQuantity/properties/available'
+                      maximum:
+                        $ref: '#/components/schemas/ItemQuantity/properties/maximum'
+                  tags:
+                    $ref: '#/components/schemas/TagGroup'
               title:
                 type: string
               price:
@@ -80323,16 +80460,6 @@ x-flows:
                   id: P1
                   locations:
                     - id: L1
-                fulfillments-old:
-                  - id: F1
-                    type: Delivery
-                    '@ondc/org/provider_name': LSP or Provider Name
-                    tracking: true
-                    '@ondc/org/category': Immediate Delivery
-                    '@ondc/org/TAT': PT60M
-                    state:
-                      descriptor:
-                        code: Serviceable
                 fulfillments:
                   - id: F1
                     type: Delivery
@@ -80422,7 +80549,9 @@ x-flows:
                   ttl: P1D
                 items:
                   - id: I1
-                    fulfillment_id: F1
+                    fulfillment_ids:
+                      - F1
+                      - F2
       - summary: >-
           Buyer initiate the product and send the updated fulfillment id with
           the desired slot

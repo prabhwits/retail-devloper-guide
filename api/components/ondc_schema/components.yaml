@@ -8,7 +8,7 @@ components:
           type: object
           properties:
             id:
-              $ref: '../beckn_yaml.yaml#/components/schemas/Provider/properties/id'
+              $ref: "../beckn_yaml.yaml#/components/schemas/Provider/properties/id"
             locations:
               type: array
               maxItems: 1
@@ -16,22 +16,29 @@ components:
                 type: object
                 properties:
                   id:
-                    $ref: '../beckn_yaml.yaml#/components/schemas/Location/properties/id'
+                    $ref: "../beckn_yaml.yaml#/components/schemas/Location/properties/id"
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Item_Select'
+            $ref: "#/components/schemas/Item_Select"
         offers:
           type: array
           items:
             type: object
             properties:
               id:
-                $ref: '../beckn_yaml.yaml#/components/schemas/Offer/properties/id'
+                $ref: "../beckn_yaml.yaml#/components/schemas/Offer/properties/id"
+              tags:
+                $ref: "../beckn_yaml.yaml#/components/schemas/TagGroup"
         fulfillments:
           type: array
           items:
-            $ref: "../beckn_yaml.yaml#/components/schemas/Fulfillment"
+            type: object
+            properties:
+              end:
+                $ref: "../beckn_yaml.yaml#/components/schemas/Fulfillment/properties/end/properties/location"
+        payment:
+          $ref: "../beckn_yaml.yaml#/components/schemas/Payment/properties/type"
     Item_Select:
       description: Describes a product or a service offered to the end consumer by the provider
       type: object
@@ -40,15 +47,13 @@ components:
           description: This is the most unique identifier of a service item. An example of an Item ID could be the SKU of a product.
           type: string
         quantity:
-          count:
+          type: object
+          properties:
+            count:
               type: integer
               minimum: 0
-          measure:
-            $ref: '../beckn_yaml.yaml#/components/schemas/Scalar'
-        location_id:
-          $ref: '../beckn_yaml.yaml#/components/schemas/Location/properties/id'
         tags:
-          $ref: '../beckn_yaml.yaml#/components/schemas/TagGroup'
+          $ref: "../beckn_yaml.yaml#/components/schemas/TagGroup"
     ItemQuantity:
       description: Describes count or amount of an item
       type: object
@@ -59,8 +64,6 @@ components:
             count:
               type: integer
               minimum: 0
-            measure:
-              $ref: '../beckn_yaml.yaml#/components/schemas/Scalar'
         maximum:
           type: object
           properties:
@@ -68,4 +71,112 @@ components:
               type: integer
               minimum: 1
             measure:
-              $ref: '../beckn_yaml.yaml#/components/schemas/Scalar'
+              $ref: "../beckn_yaml.yaml#/components/schemas/Scalar"
+    Order_On_Select:
+      description: Describes the details of an order
+      type: object
+      properties:
+        provider:
+          type: object
+          properties:
+            id:
+              $ref: "../beckn_yaml.yaml#/components/schemas/Provider/properties/id"
+            locations:
+              type: array
+              maxItems: 1
+              items:
+                type: object
+                properties:
+                  id:
+                    $ref: "../beckn_yaml.yaml#/components/schemas/Location/properties/id"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item_On_Select"
+        offers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                $ref: "../beckn_yaml.yaml#/components/schemas/Offer/properties/id"
+              tags:
+                $ref: "../beckn_yaml.yaml#/components/schemas/TagGroup"
+        fulfillments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Fulfillment_On_Select"
+        quote:
+          $ref: "../beckn_yaml.yaml#/components/schemas/Quotation"
+        payment:
+          $ref: "../beckn_yaml.yaml#/components/schemas/Payment/properties/type"
+    Item_On_Select:
+      description: Describes a product or a service offered to the end consumer by the provider
+      type: object
+      properties:
+        id:
+          description: This is the most unique identifier of a service item. An example of an Item ID could be the SKU of a product.
+          type: string
+        fulfillments:
+          properties:
+            id:
+              type: string
+              description: Unique reference ID to the fulfillment of an order
+        fulfillment_ids:
+          properties:
+            id:
+              type: string
+              description: Unique reference ID to the fulfillment of an order
+        tags:
+          $ref: "../beckn_yaml.yaml#/components/schemas/TagGroup"
+    Fulfillment_On_Select:
+      description: Describes how a single product/service will be rendered/fulfilled to the end customer
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique reference ID to the fulfillment of an order
+        type:
+          type: string
+          description: This describes the type of fulfillment ("Pickup" - Buyer picks up from store by themselves or through their logistics provider; "Delivery" - seller delivers to buyer)
+          enum:
+            - Delivery
+            - Pickup
+            - Delivery and Pickup
+            - Reverse QC
+        "@ondc/org/category":
+          type: string
+          description: Fulfillment Category
+        "@ondc/org/TAT":
+          description: fulfillment turnaround time in ISO8601 durations format e.g. 'PT24H' indicates 24 hour TAT
+          type: string
+        state:
+          $ref: "../beckn_yaml.yaml#/components/schemas/State"
+        tracking:
+          type: boolean
+          description: Indicates whether the fulfillment allows tracking
+          default: false
+        end:
+          description: Details on the end of fulfillment
+          type: object
+          properties:
+            location:
+              $ref: "../beckn_yaml.yaml#/components/schemas/Location"
+            time:
+              description: Describes time in its various forms. It can be a single point in time; duration; or a structured timetable of operations
+              type: object
+              properties:
+                range:
+                  type: object
+                  properties:
+                    start:
+                      type: string
+                      format: date-time
+                    end:
+                      type: string
+                      format: date-time
+        tags:
+          $ref: "../beckn_yaml.yaml#/components/schemas/TagGroup"
+      required:
+        - id
+        - type
