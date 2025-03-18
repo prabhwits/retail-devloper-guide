@@ -583,6 +583,9 @@ components:
       description: Describes a billing event
       type: object
       properties:
+        tax_number:
+          description: Tax identification number for billing
+          type: string
         name:
           description: Personal details of the customer needed for billing.
           type: string
@@ -635,7 +638,7 @@ components:
         fulfillment_state:
           description: The state of fulfillment during which these terms are applicable.
           allOf:
-            - $ref: "#/components/schemas/State"
+            - $ref: "#/components/schemas/FulfillmentState"
         cancellation_fee:
           $ref: "#/components/schemas/Fee"
         external_ref:
@@ -668,6 +671,9 @@ components:
           $ref: "#/components/schemas/Descriptor"
         time:
           $ref: "#/components/schemas/Time"
+        image:
+          description: "Image of an object. <br/><br/> A url based image will look like <br/><br/>```uri:http://path/to/image``` <br/><br/> An image can also be sent as a data string. For example : <br/><br/> ```data:js87y34ilhriuho84r3i4```"
+          type: string
         tags:
           $ref: "#/components/schemas/TagGroup"
     IntentCategory:
@@ -812,9 +818,6 @@ components:
       properties:
         id:
           type: string
-        type:
-          type: string
-          default: VerifiableCredential
         descriptor:
           $ref: "#/components/schemas/Descriptor"
         url:
@@ -852,6 +855,8 @@ components:
         code:
           type: string
         name:
+          type: string
+        short_desc:
           type: string
     Dimensions:
       description: Describes the dimensions of a real-world object
@@ -1054,6 +1059,12 @@ components:
           type: string
         "@ondc/org/provider_name":
           type: string
+        provider_id:
+          type: string
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        agent:
+          $ref: '#/components/schemas/Agent'
         rating:
           $ref: "#/components/schemas/Rating/properties/value"
         state:
@@ -1094,8 +1105,6 @@ components:
               $ref: "#/components/schemas/Person"
             authorization:
               $ref: "#/components/schemas/Authorization"
-        rateable:
-          $ref: "#/components/schemas/Rateable"
         tags:
           $ref: "#/components/schemas/TagGroup"
       required:
@@ -1143,12 +1152,6 @@ components:
             count:
               type: integer
               minimum: 1
-        selected:
-          type: object
-          properties:
-            count:
-              type: integer
-              minimum: 0
         unitized:
           description: This represents the quantity available in a single unit of the item
           type: object
@@ -1157,6 +1160,12 @@ components:
               type: integer
               minimum: 1
               maximum: 1
+            measure:
+              properties:
+                unit:
+                  type: string
+                value:
+                  type: string
     Item:
       description: Describes a product or a service offered to the end consumer by the provider
       type: object
@@ -1165,7 +1174,8 @@ components:
           description: This is the most unique identifier of a service item. An example of an Item ID could be the SKU of a product.
           type: string
         parent_item_id:
-          $ref: "#/components/schemas/Item/properties/id"
+          description: This is the most unique identifier of a service item. An example of an Item ID could be the SKU of a product.
+          type: string
         descriptor:
           $ref: "#/components/schemas/Descriptor"
         price:
@@ -1194,20 +1204,28 @@ components:
         fulfillment_id:
           $ref: "#/components/schemas/Fulfillment/properties/id"
         fulfillment_ids:
+          type: array
           properties:
             id:
               type: string
-              description: Unique reference ID to the fulfillment of an order 
+              description: Unique reference ID to the fulfillment of an order
+        replacement_terms:
+          type: array
+          items:
+            type: object
+            properties:
+              replace_within:
+                type: object
+                properties:
+                  duration: 
+                    type: string
+                    description: The duration within which the item can be replaced
         rating:
           $ref: "#/components/schemas/Rating/properties/value"
         location_id:
           $ref: "#/components/schemas/Location/properties/id"
         time:
           $ref: "#/components/schemas/Time"
-        rateable:
-          $ref: "#/components/schemas/Rateable"
-        matched:
-          type: boolean
         related:
           type: boolean
         recommended:
@@ -1291,22 +1309,20 @@ components:
         id:
           description: This is the most unique identifier of a service item. An example of an Item ID could be the SKU of a product.
           type: string
-        fulfillments:
-          properties:
-            id:
-              type: string
-              description: Unique reference ID to the fulfillment of an order
+        fulfillment_id:
+          type: string
+          description: Unique reference ID to the fulfillment of an order
+        fulfillment_ids:
+          type: array
+          items:
+            type: string
+            description: Unique reference ID to the fulfillment of an order
         quantity:
           type: object
           properties:
             count:
               type: integer
               minimum: 0
-        fulfillment_ids:
-          properties:
-            id:
-              type: string
-              description: Unique reference ID to the fulfillment of an order
         tags:
           $ref: "#/components/schemas/TagGroup"
     Language:
@@ -1353,6 +1369,24 @@ components:
           $ref: "#/components/schemas/Gps"
         address:
           $ref: "#/components/schemas/Address"
+    TrackLocation:
+      description: Describes the location of a runtime object.
+      type: object
+      properties:
+        id:
+          type: string
+        gps:
+          $ref: "#/components/schemas/Gps"
+        time:
+          type: object
+          properties:
+            timestamp:
+              type: string
+              format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          
     Name:
       type: string
       description: "Describes the name of a person in format: ./{given_name}/{honorific_prefix}/{first_name}/{middle_name}/{last_name}/{honorific_suffix}"
@@ -1387,9 +1421,11 @@ components:
           items:
             $ref: "#/components/schemas/Location/properties/id"
         category_ids:
+          description: Categories this item can be listed under
           type: array
           items:
-            $ref: "#/components/schemas/Category/properties/id"
+            allOf:
+              - $ref: "#/components/schemas/Category/properties/id"
         item_ids:
           type: array
           items:
@@ -1442,6 +1478,18 @@ components:
                 properties:
                   id:
                     $ref: "#/components/schemas/Location/properties/id"
+            creds:
+              type: array
+              items:
+                type: object
+                properties:
+                  descriptor:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      short_desc:
+                        type: string
         items:
           type: array
           items:
@@ -1453,6 +1501,8 @@ components:
             properties:
               id:
                 $ref: "#/components/schemas/Offer/properties/id"
+              tags:
+                $ref: "#/components/schemas/TagGroup"
         documents:
           type: array
           items:
@@ -1689,12 +1739,7 @@ components:
         locations:
           type: array
           items:
-            allOf:
-              - $ref: "#/components/schemas/Location"
-              - type: object
-                properties:
-                  rateable:
-                    $ref: "#/components/schemas/Rateable"
+            $ref: "#/components/schemas/Location"
         offers:
           type: array
           items:
@@ -1706,8 +1751,6 @@ components:
         ttl:
           type: string
           description: Validity of catalog in ISO8601 durations format after which it has to be refreshed e.g. 'P7D' indicates validity of 7 days; value of 0 indicates catalog is not cacheable
-        rateable:
-          $ref: "#/components/schemas/Rateable"
         tags:
           $ref: "#/components/schemas/TagGroup"
     Quotation:
@@ -1724,7 +1767,7 @@ components:
               "@ondc/org/item_id":
                 $ref: "#/components/schemas/Item/properties/id"
               "@ondc/org/item_quantity":
-                $ref: "#/components/schemas/ItemQuantity/properties/selected"
+                $ref: "#/components/schemas/ItemQuantity/properties/available"
               "@ondc/org/title_type":
                 type: string
                 enum:
@@ -1952,7 +1995,7 @@ components:
         location:
           description: "In case there is no real-time tracking endpoint available, this field will contain the latest location of the entity being tracked. The BPP will update this value everytime the BAP calls the track API."
           allOf:
-            - $ref: "#/components/schemas/Location"
+            - $ref: "#/components/schemas/TrackLocation"
         status:
           description: "This value indicates if the tracking is currently active or not. If this value is `active`, then the BAP can begin tracking the order. If this value is `inactive`, the tracking URL is considered to be expired and the BAP should stop tracking the order."
           type: string

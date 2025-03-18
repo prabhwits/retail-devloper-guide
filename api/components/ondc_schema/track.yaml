@@ -7,9 +7,6 @@ properties:
     properties:
       order_id:
         $ref: '../beckn_yaml.yaml#/components/schemas/Order/properties/id'
-      callback_url:
-        type: string
-        format: uri
     required:
       - order_id
 required:

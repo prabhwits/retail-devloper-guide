@@ -10,7 +10,15 @@ properties:
       cancellation_reason_id:
         $ref: '../beckn_yaml.yaml#/components/schemas/Option/properties/id'
       descriptor:
-        $ref: '../beckn_yaml.yaml#/components/schemas/Descriptor'
+        description: Describes the description of a real-world object.
+        type: object
+        properties:
+          name:
+            type: string
+          short_desc:
+            type: string
+          tags:
+            $ref: "../beckn_yaml.yaml#/components/schemas/TagGroup"
     required:
       - order_id
 required:

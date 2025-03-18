@@ -9,7 +9,7 @@ properties:
         description: 'Comma separated values of order objects being updated. For example: ```"update_target":"item,billing,fulfillment,payment"```'
         type: string
       order:
-        $ref: '../beckn_yaml.yaml#/components/schemas/Order'
+        $ref: './components.yaml#/components/schemas/Order_Update'
     required:
       - update_target
       - order

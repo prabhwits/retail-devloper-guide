@@ -117,16 +117,14 @@ components:
         id:
           description: This is the most unique identifier of a service item. An example of an Item ID could be the SKU of a product.
           type: string
-        fulfillments:
-          properties:
-            id:
-              type: string
-              description: Unique reference ID to the fulfillment of an order
+        fulfillment_id:
+          type: string
+          description: Unique reference ID to the fulfillment of an order
         fulfillment_ids:
-          properties:
-            id:
-              type: string
-              description: Unique reference ID to the fulfillment of an order
+          type: array
+          items:
+            type: string
+            description: Unique reference ID to the fulfillment of an order
         tags:
           $ref: "../beckn_yaml.yaml#/components/schemas/TagGroup"
     Fulfillment_On_Select:
@@ -156,8 +154,25 @@ components:
           type: boolean
           description: Indicates whether the fulfillment allows tracking
           default: false
-        end:
+        start:
           description: Details on the end of fulfillment
+          type: object
+          properties:
+            time:
+              description: Describes time in its various forms. It can be a single point in time; duration; or a structured timetable of operations
+              type: object
+              properties:
+                range:
+                  type: object
+                  properties:
+                    start:
+                      type: string
+                      format: date-time
+                    end:
+                      type: string
+                      format: date-time
+        end:
+          description: Details on the start of fulfillment
           type: object
           properties:
             location:
@@ -180,3 +195,81 @@ components:
       required:
         - id
         - type
+    Order_Update:
+      description: Describes the details of an order
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for Order across the network
+        items:
+          type: array
+          items:
+            $ref: "../beckn_yaml.yaml#/components/schemas/OrderItem"
+        fulfillments:
+          type: array
+          items:
+            description: Describes how a single product/service will be rendered/fulfilled to the end customer
+            type: object
+            properties:
+              id:
+                type: string
+                description: Unique reference ID to the fulfillment of an order
+              type:
+                type: string
+                description: This describes the type of fulfillment ("Pickup" - Buyer picks up from store by themselves or through their logistics provider; "Delivery" - seller delivers to buyer)
+                enum:
+                  - Delivery
+                  - Return
+              tags:
+                $ref: "../beckn_yaml.yaml#/components/schemas/TagGroup"
+        payment:
+          description: Describes a payment
+          type: object
+          properties:
+            collected_by:
+              type: string
+              enum:
+                - BAP
+                - BPP
+            status:
+              type: string
+              enum:
+                - PAID
+                - NOT-PAID
+            time:
+              type: object
+              properties:
+                timestamp:
+                  type: string
+                  format: date-time
+            "@ondc/org/settlement_details":
+              type: array
+              items:
+                type: object
+                properties:
+                  settlement_counterparty:
+                    type: string
+                    enum:
+                      - buyer
+                      - buyer-app
+                      - seller-app
+                      - logistics-provider
+                  settlement_phase:
+                    type: string
+                    enum:
+                      - sale-amount
+                      - withholding-amount
+                      - refund
+                  settlement_amount:
+                    type: integer
+                  settlement_type:
+                    type: string
+                    enum:
+                      - neft
+                      - rtgs
+                      - upi
+                  settlement_timestamp:
+                    description: Settlement transaction timestamp
+                    type: string
+                    format: date-time
