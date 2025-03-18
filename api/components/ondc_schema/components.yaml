@@ -36,7 +36,7 @@ components:
             type: object
             properties:
               end:
-                $ref: "../beckn_yaml.yaml#/components/schemas/Fulfillment/properties/end/properties/location"
+                $ref: "../beckn_yaml.yaml#/components/schemas/OrderFulfillment/properties/end/properties/location"
         payment:
           $ref: "../beckn_yaml.yaml#/components/schemas/Payment/properties/type"
     Item_Select:

@@ -125,7 +125,7 @@ paths:
                             type: object
                             properties:
                               end:
-                                $ref: '#/components/schemas/Location'
+                                $ref: '#/components/schemas/FulfillmentLocation'
                         payment:
                           $ref: '#/components/schemas/Payment/properties/type'
                   required:
@@ -1170,6 +1170,13 @@ components:
           $ref: '#/components/schemas/Time'
         tags:
           $ref: '#/components/schemas/TagGroup'
+    IntentCategory:
+      description: Describes a category
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id of the category
     Circle:
       description: Describes a circular area on the map
       type: object
@@ -1305,6 +1312,16 @@ components:
         code:
           type: string
           description: Country code as per ISO 3166 Alpha-3 code format
+    CountryState:
+      description: Describes a state.
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the state
+        code:
+          type: string
+          description: State code as per ISO 3166 Alpha-2 code format
     Credential:
       description: Describes a credential of an entity - Person or Organization
       type: object
@@ -1344,8 +1361,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Image'
-        tags:
-          $ref: '#/components/schemas/TagGroup'
+    FulfillmentDescriptor:
+      description: Describes the description of a real-world object.
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
     Dimensions:
       description: Describes the dimensions of a real-world object
       type: object
@@ -1537,23 +1560,67 @@ components:
             - Delivery
             - Pickup
             - Delivery and Pickup
-            - Reverse QC
-        '@ondc/org/category':
+      required:
+        - id
+        - type
+    IntentFulfillment:
+      description: >-
+        Describes how a single product/service will be rendered/fulfilled to the
+        end customer
+      type: object
+      properties:
+        type:
           type: string
-          description: Fulfillment Category
+          description: >-
+            This describes the type of fulfillment ("Pickup" - Buyer picks up
+            from store by themselves or through their logistics provider;
+            "Delivery" - seller delivers to buyer)
+          enum:
+            - Delivery
+            - Pickup
+            - Delivery and Pickup
+        end:
+          description: Details on the end of fulfillment
+          type: object
+          properties:
+            location:
+              description: Describes an address
+              type: object
+              properties:
+                area_code:
+                  type: string
+                  description: Area code. This can be Pincode, ZIP code or any equivalent
+    OrderFulfillment:
+      description: >-
+        Describes how a single product/service will be rendered/fulfilled to the
+        end customer
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique reference ID to the fulfillment of an order
+        type:
+          type: string
+          description: >-
+            This describes the type of fulfillment ("Pickup" - Buyer picks up
+            from store by themselves or through their logistics provider;
+            "Delivery" - seller delivers to buyer)
+          enum:
+            - Delivery
+            - Pickup
+            - Delivery and Pickup
+            - Reverse QC
         '@ondc/org/TAT':
           description: >-
             fulfillment turnaround time in ISO8601 durations format e.g. 'PT24H'
             indicates 24 hour TAT
           type: string
-        provider_id:
-          $ref: '#/components/schemas/Provider/properties/id'
         '@ondc/org/provider_name':
           type: string
         rating:
           $ref: '#/components/schemas/Rating/properties/value'
         state:
-          $ref: '#/components/schemas/State'
+          $ref: '#/components/schemas/FulfillmentState'
         tracking:
           type: boolean
           description: Indicates whether the fulfillment allows tracking
@@ -1563,7 +1630,7 @@ components:
           type: object
           properties:
             location:
-              $ref: '#/components/schemas/Location'
+              $ref: '#/components/schemas/FulfillmentLocation'
             time:
               $ref: '#/components/schemas/Time'
             instructions:
@@ -1579,7 +1646,7 @@ components:
           type: object
           properties:
             location:
-              $ref: '#/components/schemas/Location'
+              $ref: '#/components/schemas/FulfillmentLocation'
             time:
               $ref: '#/components/schemas/Time'
             instructions:
@@ -1616,22 +1683,21 @@ components:
         amount in "@ondc/org/buyer_app_finder_fee_amount"
       type: object
       properties:
-        descriptor:
-          $ref: '#/components/schemas/Descriptor'
-        provider:
-          $ref: '#/components/schemas/Provider'
         fulfillment:
-          $ref: '#/components/schemas/Fulfillment'
+          $ref: '#/components/schemas/IntentFulfillment'
         payment:
-          $ref: '#/components/schemas/Payment'
+          $ref: '#/components/schemas/IntentPayment'
         category:
-          $ref: '#/components/schemas/Category'
-        offer:
-          $ref: '#/components/schemas/Offer'
+          $ref: '#/components/schemas/IntentCategory'
         item:
-          $ref: '#/components/schemas/Item'
-        tags:
-          $ref: '#/components/schemas/TagGroup'
+          description: Describes a item
+          type: object
+          properties:
+            descriptor:
+              type: object
+              properties:
+                name:
+                  type: string
     ItemQuantity:
       description: Describes count or amount of an item
       type: object
@@ -1678,7 +1744,18 @@ components:
         descriptor:
           $ref: '#/components/schemas/Descriptor'
         price:
-          $ref: '#/components/schemas/Price'
+          description: Describes the price of an item. Allows for domain extension.
+          type: object
+          properties:
+            currency:
+              type: string
+              description: ISO 4217 alphabetic currency code e.g. 'INR'
+            value:
+              $ref: '#/components/schemas/DecimalValue'
+            maximum_value:
+              $ref: '#/components/schemas/DecimalValue'
+            tags:
+              $ref: '#/components/schemas/TagGroup'
         quantity:
           $ref: '#/components/schemas/ItemQuantity'
         category_id:
@@ -1741,6 +1818,12 @@ components:
           type: object
           description: mandatory for category_id "Packaged Commodities"
           properties:
+            common_or_generic_name_of_commodity:
+              description: common or generic name of commodity
+              type: string
+            month_year_of_manufacture_packing_import:
+              description: month and year of manufacture or packing or import
+              type: string
             manufacturer_or_packer_name:
               description: >-
                 name of manufacturer or packer (in case manufacturer is not the
@@ -1754,9 +1837,6 @@ components:
             mfg_license_no:
               description: manufacturing license no
               type: string
-            common_or_generic_name_of_commodity:
-              description: common or generic name of commodity
-              type: string
             multiple_products_name_number_or_qty:
               description: >-
                 for packages with multiple products, the name and number of
@@ -1768,9 +1848,6 @@ components:
                 net quantity of commodity in terms of standard unit of weight or
                 measure of commodity contained in package
               type: string
-            month_year_of_manufacture_packing_import:
-              description: month and year of manufacture or packing or import
-              type: string
             expiry_date:
               description: month and year of expiry
               type: string
@@ -1778,13 +1855,6 @@ components:
           type: object
           description: mandatory for category_id "Packaged food"
           properties:
-            ingredients_info:
-              description: >-
-                list of ingredients (except single ingredient foods), can be
-                shown as ingredient (with percentage); ingredient (with
-                percentage);..) e.g. "Puffed Rice (40%); Split Green Gram (20%);
-                Ground Nuts (20%);.."
-              type: string
             nutritional_info:
               description: >-
                 nutritional info (can be shown as nutritional info (with unit,
@@ -1798,20 +1868,6 @@ components:
                 International Numbering System (can be shown as additive1-name
                 or number;additive2-name or number;..)
               type: string
-            manufacturer_or_packer_name:
-              description: name of manufacturer or packer (for non-retail containers)
-              type: string
-            manufacturer_or_packer_address:
-              description: address of manufacturer or packer (for non-retail containers)
-              type: string
-            brand_owner_address:
-              description: address of brand owner
-              type: string
-            brand_owner_FSSAI_logo:
-              description: >-
-                FSSAI logo of brand owner (url based image e.g.
-                uri:http://path/to/image)
-              type: string
             brand_owner_FSSAI_license_no:
               description: FSSAI license no of brand owner
               type: string
@@ -1820,43 +1876,38 @@ components:
                 FSSAI license no of manufacturer or marketer or packer or
                 bottler if different from brand owner
               type: string
-            net_quantity:
-              description: net quantity
-              type: string
-            importer_name:
-              description: name of importer
-              type: string
-            importer_address:
-              description: address of importer
-              type: string
-            importer_FSSAI_logo:
-              description: >-
-                FSSAI logo of importer (url based image e.g.
-                uri:http://path/to/image)
-              type: string
             importer_FSSAI_license_no:
               description: FSSAI license no of importer
               type: string
-            imported_product_country_of_origin:
-              description: >-
-                country of origin for imported products (ISO 3166 Alpha-3 code
-                format)
+        tags:
+          $ref: '#/components/schemas/TagGroup'
+    OrderItem:
+      description: >-
+        Describes a product or a service offered to the end consumer by the
+        provider
+      type: object
+      properties:
+        id:
+          description: >-
+            This is the most unique identifier of a service item. An example of
+            an Item ID could be the SKU of a product.
+          type: string
+        fulfillments:
+          properties:
+            id:
               type: string
-            other_importer_name:
-              description: >-
-                name of importer for product manufactured outside but packaged
-                or bottled in India
+              description: Unique reference ID to the fulfillment of an order
+        quantity:
+          type: object
+          properties:
+            count:
+              type: integer
+              minimum: 0
+        fulfillment_ids:
+          properties:
+            id:
               type: string
-            other_importer_address:
-              description: >-
-                address of importer for product manufactured outside but
-                packaged or bottled in India
-              type: string
-            other_premises:
-              description: >-
-                premises where product manufactured outside are packaged or
-                bottled in India
-              type: string
+              description: Unique reference ID to the fulfillment of an order
         tags:
           $ref: '#/components/schemas/TagGroup'
     Language:
@@ -1881,14 +1932,30 @@ components:
           $ref: '#/components/schemas/Address'
         city:
           $ref: '#/components/schemas/City'
-        country:
-          $ref: '#/components/schemas/Country'
-        circle:
-          $ref: '#/components/schemas/Circle'
-        polygon:
-          type: string
+        state:
+          $ref: '#/components/schemas/CountryState'
         time:
           $ref: '#/components/schemas/Time'
+    IntentLocation:
+      description: Describes the location of a runtime object.
+      type: object
+      properties:
+        gps:
+          $ref: '#/components/schemas/Gps'
+        address:
+          $ref: '#/components/schemas/Address'
+    FulfillmentLocation:
+      description: Describes the location of a runtime object.
+      type: object
+      properties:
+        id:
+          type: string
+        descriptor:
+          $ref: '#/components/schemas/FulfillmentDescriptor'
+        gps:
+          $ref: '#/components/schemas/Gps'
+        address:
+          $ref: '#/components/schemas/Address'
     Name:
       type: string
       description: >-
@@ -1985,7 +2052,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Item'
+            $ref: '#/components/schemas/OrderItem'
         offers:
           type: array
           items:
@@ -2002,7 +2069,7 @@ components:
         fulfillments:
           type: array
           items:
-            $ref: '#/components/schemas/Fulfillment'
+            $ref: '#/components/schemas/OrderFulfillment'
         cancellation_terms:
           description: >-
             The cancellation terms of this order. This can be overriden at the
@@ -2167,9 +2234,6 @@ components:
               beneficiary_name:
                 description: Beneficiary Name
                 type: string
-              beneficiary_address:
-                description: Beneficiary Address
-                type: string
               settlement_status:
                 type: string
                 enum:
@@ -2179,6 +2243,14 @@ components:
                 description: Settlement transaction timestamp
                 type: string
                 format: date-time
+    IntentPayment:
+      '@ondc/org/buyer_app_finder_fee_type':
+        type: string
+        enum:
+          - Amount
+          - Percent
+      '@ondc/org/buyer_app_finder_fee_amount':
+        $ref: '#/components/schemas/DecimalValue'
     Person:
       description: Describes a person.
       type: object
@@ -2377,6 +2449,15 @@ components:
         updated_by:
           type: string
           description: ID of entity which changed the state
+    FulfillmentState:
+      description: Describes a state
+      type: object
+      properties:
+        descriptor:
+          $ref: '#/components/schemas/FulfillmentDescriptor'
+        updated_at:
+          type: string
+          format: date-time
     Subscriber:
       type: object
       description: >-
